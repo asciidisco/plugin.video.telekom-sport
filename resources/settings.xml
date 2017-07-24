@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32001">
+        <setting id="logout" type="action" label="32002" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=logout)"/>
+        <setting id="switch_account" type="action" label="32003" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=switch_account)"/>
+        <setting label="device_id" type="text" id="device_id" default="" visible="false"/>
+        <setting label="email" type="text" id="email" default="" visible="false"/>
+        <setting label="password" type="text" id="password" default="" visible="false"/>
+    </category>
+</settings>

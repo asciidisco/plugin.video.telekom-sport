@@ -1,0 +1,67 @@
+# Kodi Media Center language file
+# Addon Name: Telekom Sport
+# Addon id: plugin.video.telekom-sport
+# Addon version: 1.0.0
+# Addon Provider: asciidisco
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2017-01-01 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Telekom Sport"
+msgstr "Telekom Sport"
+
+msgctxt "Addon Description"
+msgid "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue &amp; womans football matches."
+msgstr "Telekom Sport ist ein Portal für Live Eishockey, Basketball, 3. Liga & Frauenfußball Bundesliga Übertragungen."
+
+msgctxt "Addon Disclaimer"
+msgid "Unofficial Addon - Use at your own risk"
+msgstr "Inoffizielles Addon - Benutzung auf eigene Gefahr"
+
+msgctxt "#32001"
+msgid "Account"
+msgstr "Account"
+
+msgctxt "#32002"
+msgid "Logout"
+msgstr "Logout"
+
+msgctxt "#32003"
+msgid "Change user account"
+msgstr "Accoutdaten ändern"
+
+msgctxt "#32004"
+msgid "Enter password"
+msgstr "Passwort eingeben"
+
+msgctxt "#32005"
+msgid "Enter e-mail"
+msgstr "E-Mail eingeben"
+
+msgctxt "#32006"
+msgid "Login failed"
+msgstr "Login fehlgeschlagen"
+
+msgctxt "#32007"
+msgid "Check your credentials"
+msgstr "Bitte überprüfen sie ihre Nutzerdaten"
+
+msgctxt "#32008"
+msgid "Error fetching device id"
+msgstr "Device ID konnte nicht geladen werden"
+
+
+msgctxt "#32009"
+msgid "Match not yet available"
+msgstr "Das Spiel ist zur Zeit (noch) nicht verfügbar"

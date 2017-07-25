@@ -29,7 +29,6 @@ epg_url = base_url + '/api/v1/epg/1'
 stream_definition_url = base_url + '/service/player/streamAccess?videoId=%VIDEO_ID%&label=2780_hls'
 
 # setup plugin base stuff
-
 plugin_handle = int(sys.argv[1])
 kodi_base_url = sys.argv[0]
 
@@ -145,7 +144,7 @@ def get_epg(_session):
                     page_tree.get(element_date).append({
                         'hash': generateHash(event.get('target_url')),
                         'url': base_url + event.get('target_url'),
-                        'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' ' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr'
+                        'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)'
                     })
     add_cached_item('epg', page_tree)
     return page_tree
@@ -209,6 +208,7 @@ def get_addon_data():
     return dict(
         plugin = addon.getAddonInfo('name'),
         version = addon.getAddonInfo('version'),
+        fanart = addon.getAddonInfo('fanart'),
         base_data_path = base_data_path,
         cookie_path = base_data_path + 'COOKIE'
     )
@@ -249,29 +249,41 @@ def add_cached_item(cache_id, contents):
 
 def show_date_list(_session):
     log('Main menu')
+    addon_data = get_addon_data()
     epg = get_epg(_session)
     for date in epg.keys():
-        log('DATE: ' + str(date))
+        title = ''
+        items = epg.get(date)
+        for item in items:
+            title = title + str(' '.join(item.get('title').replace('Uhr', '').split(' ')[:-2]).encode('utf-8')) + '\n\n'
         url = build_url({'date': date})
         li = xbmcgui.ListItem(label=date)
-        li.setInfo('video', {'date': date})
+        li.setProperty('fanart_image', addon_data.get('fanart'))
+        li.setInfo('video', {
+            'date': date,
+            'title': title,
+            'plot': title,
+        })
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 def show_matches_list(_session, game_date):
     log('Games list')
+    addon_data = get_addon_data()
     epg = get_epg(_session)
     date = epg.get(game_date)
     for item in date:
         url = build_url({'hash': item.get('hash'), 'date': game_date})
         li = xbmcgui.ListItem(label=item.get('title'))
+        li.setProperty('fanart_image', addon_data.get('fanart'))        
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 def show_match_details(_session, game_hash, game_date):
     log('Game details')
+    addon_data = get_addon_data()    
     epg = get_epg(_session)
     date = epg.get(game_date)
     for item in date:
@@ -283,6 +295,7 @@ def show_match_details(_session, game_hash, game_date):
             for stream in streams:
                 url = build_url({'hash': item.get('hash'), 'date': game_date, 'stream': stream})
                 li = xbmcgui.ListItem(label=stream)
+                li.setProperty('fanart_image', addon_data.get('fanart'))                  
                 li.setProperty('IsPlayable', 'true')
                 li.setInfo('video', {'title': stream, 'genre': 'Sports'})
                 xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=False)

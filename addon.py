@@ -25,8 +25,42 @@ from bs4 import BeautifulSoup
 base_url = 'https://www.telekomsport.de'
 login_link = base_url + '/service/auth/web/login?headto=https://www.telekomsport.de/info'
 login_endpoint = 'https://accounts.login.idm.telekom.com/sso'
-epg_url = base_url + '/api/v1/epg/1'
+epg_url = base_url + '/api/v1/'
 stream_definition_url = base_url + '/service/player/streamAccess?videoId=%VIDEO_ID%&label=2780_hls'
+
+# images
+sports = {
+    'liga3': {
+        'image': 'https://www.telekomsport.de/images/packete/3liga.png',
+        'name': '3. Liga',
+        'epg': 'epg/1'
+    },
+    'del': {
+        'image': 'https://www.telekomsport.de/images/packete/del.png',
+        'name': 'Deutsche Eishockey Liga',
+        'epg': 'epg/52'
+    },
+    #'ffb': {
+    #    'image': 'https://www.telekomsport.de/images/packete/frauenbundesliga.png',
+    #    'name': 'Frauen-Bundesliga',
+    #    'epg': '67'
+    #},
+    'fcb': {
+        'image': 'https://www.telekomsport.de/images/packete/fcbayerntv.png',
+        'name': 'FC Bayern.TV',
+        'epg': 'components/eventLane/136'
+    },
+    'bbl': {
+        'image': 'https://www.telekomsport.de/images/packete/easyCredit.png',
+        'name': 'Basketball Bundesliga',
+        'epg': 'components/eventLane/39'
+    },   
+    'bel': {
+        'image': 'https://www.telekomsport.de/images/packete/euroleague.png',
+        'name': 'Basketball Euroleague',
+        'epg': 'components/eventLane/170'
+    },   
+}
 
 # setup plugin base stuff
 plugin_handle = int(sys.argv[1])
@@ -124,29 +158,49 @@ def login(_session, user, password):
     else:
         return False
 
-def get_epg(_session):
+def get_epg(_session, _for):
     # check for cached epg data
-    cached_epg = get_cached_item('epg')
+    cached_epg = get_cached_item('epg' + _for)
+    _epg_url = epg_url + sports.get(_for).get('epg')
     if cached_epg is not None:
         return cached_epg
     page_tree = {}
-    epg = json.loads(_session.get(epg_url).text)
+    epg = json.loads(_session.get(_epg_url).text)
+    use_slots = True
     if epg.get('status') == 'success':
         elements = epg.get('data').get('elements')
+        if elements is None:
+            elements = epg.get('data').get('data')
+            use_slots = False
         for element in elements:
-            element_date = date.fromtimestamp(float(element.get('date').get('utc_timestamp'))).strftime('%d.%m.%Y')
-            if page_tree.get(element_date) is None:
-                page_tree[element_date] = []
-            slots = element.get('slots')
-            for slot in slots:
-                events = slot.get('events')
-                for event in events:
-                    page_tree.get(element_date).append({
-                        'hash': generateHash(event.get('target_url')),
-                        'url': base_url + event.get('target_url'),
-                        'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)'
-                    })
-    add_cached_item('epg', page_tree)
+            if use_slots is True:
+                element_date = date.fromtimestamp(float(element.get('date').get('utc_timestamp'))).strftime('%d.%m.%Y')
+                if page_tree.get(element_date) is None:
+                    page_tree[element_date] = []
+                slots = element.get('slots')
+                for slot in slots:
+                    events = slot.get('events')
+                    for event in events:
+                        page_tree.get(element_date).append({
+                            'hash': generateHash(event.get('target_url')),
+                            'url': base_url + event.get('target_url'),
+                            'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)',
+                            'shorts': (event.get('metadata').get('details').get('home').get('name_mini'), event.get('metadata').get('details').get('away').get('name_mini')),
+                        })
+            else:
+                element_date = date.fromtimestamp(float(element.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%d.%m.%Y')
+                if page_tree.get(element_date) is None:
+                    page_tree[element_date] = []
+                title = element.get('metadata').get('title', '')
+                if title == '':
+                    title = element.get('metadata').get('details').get('home').get('name_full') + ' - ' + element.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(element.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)'
+                page_tree.get(element_date).append({
+                    'hash': generateHash(element.get('target_url')),
+                    'url': base_url + element.get('target_url'),
+                    'title': title,
+                    'shorts': None,
+                })
+    add_cached_item('epg' + _for, page_tree)
     return page_tree
 
 def get_player_ids(src):
@@ -247,16 +301,36 @@ def add_cached_item(cache_id, contents):
     cached_items.update({cache_id: contents})
     xbmcgui.Window(xbmcgui.getCurrentWindowId()).setProperty('memcache', pickle.dumps(cached_items))
 
-def show_date_list(_session):
+def show_sport_selection():
+    log('Sport selection')
+    addon_data = get_addon_data()
+    for sport in sports:
+        url = build_url({'for': sport})
+        li = xbmcgui.ListItem(label=sports.get(sport).get('name'))
+        li.setProperty('fanart_image', addon_data.get('fanart'))
+        try:
+            li.setArt({
+                'poster': sports.get(sport).get('image'),
+                'landscape': sports.get(sport).get('image'),
+                'thumb': sports.get(sport).get('image'),
+                'fanart': sports.get(sport).get('image')
+            })
+        except Exception as e:
+            log('Kodi version does not implement setArt')
+        xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
+        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.endOfDirectory(plugin_handle)    
+
+def show_date_list(_session, _for):
     log('Main menu')
     addon_data = get_addon_data()
-    epg = get_epg(_session)
+    epg = get_epg(_session, _for)
     for date in epg.keys():
         title = ''
         items = epg.get(date)
         for item in items:
             title = title + str(' '.join(item.get('title').replace('Uhr', '').split(' ')[:-2]).encode('utf-8')) + '\n\n'
-        url = build_url({'date': date})
+        url = build_url({'date': date, 'for': _for})
         li = xbmcgui.ListItem(label=date)
         li.setProperty('fanart_image', addon_data.get('fanart'))
         li.setInfo('video', {
@@ -268,23 +342,23 @@ def show_date_list(_session):
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
-def show_matches_list(_session, game_date):
-    log('Games list')
+def show_matches_list(_session, game_date, _for):
+    log('Matches list')
     addon_data = get_addon_data()
-    epg = get_epg(_session)
+    epg = get_epg(_session, _for)
     date = epg.get(game_date)
     for item in date:
-        url = build_url({'hash': item.get('hash'), 'date': game_date})
+        url = build_url({'hash': item.get('hash'), 'date': game_date, 'for': _for})
         li = xbmcgui.ListItem(label=item.get('title'))
         li.setProperty('fanart_image', addon_data.get('fanart'))        
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
-def show_match_details(_session, game_hash, game_date):
-    log('Game details')
+def show_match_details(_session, game_hash, game_date, _for):
+    log('Matches details')
     addon_data = get_addon_data()    
-    epg = get_epg(_session)
+    epg = get_epg(_session, _for)
     date = epg.get(game_date)
     for item in date:
         if game_hash == item.get('hash'):
@@ -293,7 +367,7 @@ def show_match_details(_session, game_hash, game_date):
                 show_not_available_dialog()
                 return
             for stream in streams:
-                url = build_url({'hash': item.get('hash'), 'date': game_date, 'stream': stream})
+                url = build_url({'hash': item.get('hash'), 'date': game_date, 'stream': stream, 'for': _for})
                 li = xbmcgui.ListItem(label=stream)
                 li.setProperty('fanart_image', addon_data.get('fanart'))                  
                 li.setProperty('IsPlayable', 'true')
@@ -302,9 +376,9 @@ def show_match_details(_session, game_hash, game_date):
                 xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
-def play(_session, name, game_hash, game_date):
-    log('Play video: ' + str(name))
-    epg = get_epg(_session)
+def play(_session, name, game_hash, game_date, _for):
+    log('Play video: ' + str(name) + ' ' + _for)
+    epg = get_epg(_session, _for)
     date = epg.get(game_date)
     for item in date:
         if game_hash == item.get('hash'):
@@ -344,17 +418,20 @@ def router(paramstring, _session, user, password):
         return True
     if login(_session, user, password) is True:
         if len(keys) == 0:
-            show_date_list(_session)
+            show_sport_selection()
             return True
         if params.get('stream', None) is not None:
-            play(_session, params.get('stream', None), params.get('hash', None), params.get('date', None))
+            play(_session, params.get('stream', None), params.get('hash', None), params.get('date', None), params.get('for', None))
             return True   
         if params.get('hash', None) is not None:
-            show_match_details(_session, params.get('hash', None), params.get('date', None))
+            show_match_details(_session, params.get('hash', None), params.get('date', None), params.get('for', None))
             return True    
         if params.get('date', None) is not None:
-            show_matches_list(_session, params.get('date', None))
+            show_matches_list(_session, params.get('date', None), params.get('for', None))
             return True
+        if params.get('for', None) is not None:
+            show_date_list(_session, params.get('for', None))
+            return True        
     else:
         show_login_failed_notification()
 

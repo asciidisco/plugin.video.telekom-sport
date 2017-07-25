@@ -251,10 +251,12 @@ def show_date_list(_session):
     log('Main menu')
     epg = get_epg(_session)
     for date in epg.keys():
+        log('DATE: ' + str(date))
         url = build_url({'date': date})
         li = xbmcgui.ListItem(label=date)
+        li.setInfo('video', {'date': date})
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
-        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 def show_matches_list(_session, game_date):
@@ -265,7 +267,7 @@ def show_matches_list(_session, game_date):
         url = build_url({'hash': item.get('hash'), 'date': game_date})
         li = xbmcgui.ListItem(label=item.get('title'))
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
-        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 def show_match_details(_session, game_hash, game_date):
@@ -282,8 +284,9 @@ def show_match_details(_session, game_hash, game_date):
                 url = build_url({'hash': item.get('hash'), 'date': game_date, 'stream': stream})
                 li = xbmcgui.ListItem(label=stream)
                 li.setProperty('IsPlayable', 'true')
+                li.setInfo('video', {'title': stream, 'genre': 'Sports'})
                 xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=False)
-                xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
+                xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
 def play(_session, name, game_hash, game_date):

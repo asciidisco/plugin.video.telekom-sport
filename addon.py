@@ -301,6 +301,37 @@ def add_cached_item(cache_id, contents):
     cached_items.update({cache_id: contents})
     xbmcgui.Window(xbmcgui.getCurrentWindowId()).setProperty('memcache', pickle.dumps(cached_items))
 
+def get_kodi_version():
+    # retrieve current installed version
+    json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Application.GetProperties", "params": {"properties": ["version", "name"]}, "id": 1 }')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = json.loads(json_query)
+    version_installed = 17
+    if json_query.get('result', {}).has_key('version'):
+        version_installed  = json_query['result']['version'].get('major', 17)
+    return version_installed
+
+def get_inputstream_version():
+    # construct the payload
+    payload = {
+        'jsonrpc': '2.0',
+        'id': 1,
+        'method': 'Addons.GetAddonDetails',
+        'params': {
+            'addonid': 'inputstream.adaptive',
+            'properties': ['enabled', 'version']
+        }
+    }
+    # execute the request
+    response = xbmc.executeJSONRPC(json.dumps(payload))
+    data = json.loads(response)
+    if 'error' not in data.keys():
+        result = data.get('result', {})
+        addon = result.get('addon', {})
+        if addon.get('enabled', False) is True:
+            return addon.get('version', '1.0.0')
+    return '1.0.0'
+
 def show_sport_selection():
     log('Sport selection')
     addon_data = get_addon_data()
@@ -376,7 +407,7 @@ def show_match_details(_session, game_hash, game_date, _for):
                 xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.endOfDirectory(plugin_handle)
 
-def play(_session, name, game_hash, game_date, _for):
+def play(_session, name, game_hash, game_date, _for, use_inputstream):
     log('Play video: ' + str(name) + ' ' + _for)
     epg = get_epg(_session, _for)
     date = epg.get(game_date)
@@ -386,7 +417,11 @@ def play(_session, name, game_hash, game_date, _for):
             for stream in streams:
                 if stream == name:
                     log(streams.get(stream))
-                    xbmcplugin.setResolvedUrl(plugin_handle, True, xbmcgui.ListItem(path=get_m3u_url(_session, streams.get(stream))))
+                    play_item = xbmcgui.ListItem(path=get_m3u_url(_session, streams.get(stream)))
+                    if use_inputstream is True:
+                        play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+                        play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+                    xbmcplugin.setResolvedUrl(plugin_handle, True, play_item)
 
 def has_credentials(user, password):
     return user != '' or password != ''
@@ -407,7 +442,7 @@ def switch_account():
     clear_session()
     set_credentials()
 
-def router(paramstring, _session, user, password):
+def router(paramstring, _session, user, password, use_inputstream):
     params = dict(parse_qsl(paramstring))
     keys = params.keys()
     if params.get('action', None) is not None:
@@ -421,7 +456,7 @@ def router(paramstring, _session, user, password):
             show_sport_selection()
             return True
         if params.get('stream', None) is not None:
-            play(_session, params.get('stream', None), params.get('hash', None), params.get('date', None), params.get('for', None))
+            play(_session, params.get('stream', None), params.get('hash', None), params.get('date', None), params.get('for', None), use_inputstream)
             return True   
         if params.get('hash', None) is not None:
             show_match_details(_session, params.get('hash', None), params.get('date', None), params.get('for', None))
@@ -440,6 +475,14 @@ if __name__ == '__main__':
     addon = get_addon()
     addon_data = get_addon_data()
     log('Started (Version ' + addon_data.get('version') + ')')
+    kodi_version = int(get_kodi_version())
+    inputstream_version = int(get_inputstream_version().replace('.', ''))
+    log('Kodi Version: ' + str(kodi_version))
+    log('Inputstream Version: ' + str(inputstream_version))
+    # determine if we can use inputstream for HLS
+    use_inputstream = False
+    if kodi_version >= 18 and inputstream_version >= 207:
+        use_inputstream = True
     # setup in memory cache for epg data
     setup_memcache()
     # check if we have userdata settings
@@ -453,4 +496,4 @@ if __name__ == '__main__':
     _session = get_session()
     # Call the router function and pass the plugin call parameters to it.
     # We use string slicing to trim the leading '?' from the plugin call paramstring
-    router(sys.argv[2][1:], _session, user, password)
+    router(sys.argv[2][1:], _session, user, password, use_inputstream)

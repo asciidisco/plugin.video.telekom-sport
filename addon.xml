@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.telekom-sport" version="1.0.3" name="Telekom Sport" provider-name="asciidisco">
+<addon id="plugin.video.telekom-sport" version="1.0.4" name="Telekom Sport" provider-name="asciidisco">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.pydes" version="2.0.1"/>
@@ -29,8 +29,7 @@
         <email>[public] at [asciidisco] dot [com]</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
         <news>
-- Fixes sorting of main menu date folders
-- Fixes playability on Kodi 18
+- Adds abbility to play the streams via inputstream.adaptive if version is 2.0.7 or higher &amp; Kodi version is 18 or higher
         </news>        
     </extension>    
 </addon>

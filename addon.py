@@ -181,12 +181,13 @@ def get_epg(_session, _for):
                 for slot in slots:
                     events = slot.get('events')
                     for event in events:
-                        page_tree.get(element_date).append({
-                            'hash': generateHash(event.get('target_url')),
-                            'url': base_url + event.get('target_url'),
-                            'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)',
-                            'shorts': (event.get('metadata').get('details').get('home').get('name_mini'), event.get('metadata').get('details').get('away').get('name_mini')),
-                        })
+                        if event.get('metadata', {}).get('details', {}).get('home') is not None:
+                            page_tree.get(element_date).append({
+                                'hash': generateHash(event.get('target_url')),
+                                'url': base_url + event.get('target_url'),
+                                'title': event.get('metadata').get('details').get('home').get('name_full') + ' - ' + event.get('metadata').get('details').get('away').get('name_full') + ' (' + datetime.fromtimestamp(float(event.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%H:%M') + ' Uhr)',
+                                'shorts': (event.get('metadata').get('details').get('home').get('name_mini'), event.get('metadata').get('details').get('away').get('name_mini')),
+                            })
             else:
                 element_date = date.fromtimestamp(float(element.get('metadata').get('scheduled_start').get('utc_timestamp'))).strftime('%d.%m.%Y')
                 if page_tree.get(element_date) is None:
@@ -416,7 +417,6 @@ def play(_session, name, game_hash, game_date, _for, use_inputstream):
             streams = get_stream_urls(_session, item.get('url'))
             for stream in streams:
                 if stream == name:
-                    log(streams.get(stream))
                     play_item = xbmcgui.ListItem(path=get_m3u_url(_session, streams.get(stream)))
                     if use_inputstream is True:
                         play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
@@ -481,7 +481,7 @@ if __name__ == '__main__':
     log('Inputstream Version: ' + str(inputstream_version))
     # determine if we can use inputstream for HLS
     use_inputstream = False
-    if kodi_version >= 18 and inputstream_version >= 207:
+    if kodi_version >= 17 and inputstream_version >= 207:
         use_inputstream = True
     # setup in memory cache for epg data
     setup_memcache()

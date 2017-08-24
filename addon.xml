@@ -28,9 +28,8 @@
         <website>https://www.telekomsport.de/</website>
         <email>[public] at [asciidisco] dot [com]</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
-        <news>v1.0.5 (2017-08-17)
-        - Fixes issues with non standard game maps
-        - Enables inputstream usage for Kodi 17 
+        <news>v1.0.6 (2017-08-24)
+        - Fixes issues with Inputstream versiond etection
         </news>      
     </extension>    
 </addon>

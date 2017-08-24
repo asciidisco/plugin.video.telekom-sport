@@ -477,11 +477,13 @@ if __name__ == '__main__':
     log('Started (Version ' + addon_data.get('version') + ')')
     kodi_version = int(get_kodi_version())
     inputstream_version = int(get_inputstream_version().replace('.', ''))
+    if inputstream_version < 999:
+        inputstream_version = inputstream_version * 10
     log('Kodi Version: ' + str(kodi_version))
     log('Inputstream Version: ' + str(inputstream_version))
     # determine if we can use inputstream for HLS
     use_inputstream = False
-    if kodi_version >= 17 and inputstream_version >= 207:
+    if kodi_version >= 17 and inputstream_version >= 2070:
         use_inputstream = True
     # setup in memory cache for epg data
     setup_memcache()

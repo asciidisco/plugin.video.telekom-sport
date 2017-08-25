@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.telekom-sport" version="1.0.6" name="Telekom Sport" provider-name="asciidisco">
+<addon id="plugin.video.telekom-sport" version="1.0.9" name="Telekom Sport" provider-name="asciidisco">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
-        <import addon="script.module.pydes" version="2.0.1"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-        <import addon="script.module.requests" version="2.12.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -28,8 +26,8 @@
         <website>https://www.telekomsport.de/</website>
         <email>[public] at [asciidisco] dot [com]</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
-        <news>v1.0.6 (2017-08-24)
-        - Fixes issues with Inputstream versiond etection
+        <news>v1.0.9 (2017-08-25)
+- Test build
         </news>      
     </extension>    
 </addon>

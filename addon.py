@@ -591,7 +591,7 @@ def router(paramstring, use_inputstream=False):
         show_sport_selection()
         return True
     if params.get('video_id', None) is not None:
-        play(video_id=params.get('video_id'), is_livestream=params.get('is_livestream'), use_inputstream)
+        play(video_id=params.get('video_id'), is_livestream=params.get('is_livestream'), use_inputstream=use_inputstream)
     if params.get('target', None) is not None:
         show_event_details(sport=params.get('for'), lane=params.get('lane'), target=params.get('target'))
         return True
@@ -617,7 +617,7 @@ if __name__ == '__main__':
     # Load addon data & start plugin
     addon = get_addon()
     addon_data = get_addon_data()
-       log('Started (Version ' + addon_data.get('version') + ')')
+    log('Started (Version ' + addon_data.get('version') + ')')
     kodi_version = int(get_kodi_version())
     inputstream_version = int(get_inputstream_version().replace('.', ''))
     if inputstream_version < 999:

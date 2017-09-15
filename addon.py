@@ -1,36 +1,25 @@
-#!/usr/bin/env python
-# coding: utf8
-from __future__ import unicode_literals
 try:
    import cPickle as pickle
 except:
    import pickle
-import hashlib
-import urllib2
+import hashlib   
 import urllib
 import base64
-import random
-import string
-import uuid
 import json
 import time
-import sys
+import uuid
 import re
-import md5
 import xml.etree.ElementTree as ET
-from datetime import date, datetime
-from cookielib import CookieJar
-from urlparse import parse_qsl
 from os import path, remove
-
+from datetime import date, datetime
+from urlparse import parse_qsl
+import pyDes
 import xbmcplugin
-import xbmcaddon
-import xbmcvfs
 import xbmcgui
 import xbmc
-
+from xbmcaddon import Addon
+from requests import session, utils
 from bs4 import BeautifulSoup
-
 
 # urls for login & data retrival
 base_url = 'https://www.telekomsport.de'
@@ -39,6 +28,7 @@ login_endpoint = 'https://accounts.login.idm.telekom.com/sso'
 epg_url = base_url + '/api/v1/'
 stream_definition_url = base_url + '/service/player/streamAccess?videoId=%VIDEO_ID%&label=2780_hls'
 
+# images
 # core event types
 sports = {
     'liga3': {
@@ -46,91 +36,152 @@ sports = {
         'name': '3. Liga',
         'indicators': ['3. Liga'],
         'page': 'fussball/3-liga',
+        'epg': '',
     },
     'del': {
         'image': 'https://www.telekomsport.de/images/packete/del.png',
         'name': 'Deutsche Eishockey Liga',
         'indicators': [''],
         'page': 'eishockey/del',
+        'epg': '',        
     },
     'ffb': {
         'image': 'https://www.telekomsport.de/images/packete/frauenbundesliga.png',
         'name': 'Frauen-Bundesliga',
         'indicators': [''],
         'page': 'fussball/frauen-bundesliga',
+        'epg': '',        
     },
-    'fcb': {
-        'image': 'https://www.telekomsport.de/images/packete/fcbayerntv.png',
-        'name': 'FC Bayern.TV',
-        'indicators': [''],
-        'page': 'fc-bayern-tv-live',
-    },
+#    'fcb': {
+#        'image': 'https://www.telekomsport.de/images/packete/fcbayerntv.png',
+#        'name': 'FC Bayern.TV',
+#        'indicators': [''],
+#        'page': 'fc-bayern-tv-live',
+#        'epg': '',        
+#    },
     'bbl': {
         'image': 'https://www.telekomsport.de/images/packete/easyCredit.png',
         'name': 'Easycredit BBL',
         'indicators': [''],
         'page': 'basketball/bbl',
+        'epg': '',        
     },   
     'bel': {
         'image': 'https://www.telekomsport.de/images/packete/euroleague.png',
         'name': 'Basketball Turkish Airlines Euroleague',
         'indicators': [''],
         'page': 'basketball/euroleague',
+        'epg': '',        
     },
     'eurobasket': {
         'image': 'http://www.fiba.basketball/img/12104_logo_landscape.png',
         'name': 'FIBA Eurobasket',
         'indicators': [''],
         'page': 'basketball/eurobasket2017',
+        'epg': '',        
     },    
     'skybuli': {
         'image': 'https://www.telekomsport.de/images/packete/sky-bundesliga.png',
-        'name': 'Sky Fußball Bundesliga',
+        'name': 'Sky Bundesliga',
         'indicators': [''],
         'page': 'sky/bundesliga',
+        'epg': '',        
     },
     'skychamp': {
         'image': 'https://www.telekomsport.de/images/packete/sky-cl.png',
         'name': 'Sky Champions League',
         'indicators': [''],
         'page': 'sky/champions-league',
+        'epg': '',        
     },           
     'skyhandball': {
         'image': 'https://www.telekomsport.de/images/packete/DKB.png',
         'name': 'Handball Bundesliga',
         'indicators': [''],
         'page': 'sky/handball-bundesliga',
+        'epg': '',        
     },           
+}
+
+statics = {
+    'liga3': {
+        'categories': [{
+                'name': 'Alle Spieltage',
+                'id': 'spieltage',
+            },{
+                'name': 'Suche nach Datum',
+                'id': 'bydate',
+            }
+        ]
+    }
 }
 
 # setup plugin base stuff
 plugin_handle = int(sys.argv[1])
 kodi_base_url = sys.argv[0]
 
+def get_session():
+    addon_data = get_addon_data()
+    return load_session(addon_data.get('cookie_path'))
+
+def clear_session():
+    addon_data = get_addon_data()
+    file = addon_data.get('cookie_path')
+    if path.isfile(file):
+        remove(file)
+
+def generateHash(text):
+    return hashlib.sha224(text).hexdigest()
+
+def uniq_id(t=1):
+    mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+    if not ":" in mac_addr: mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+    # hack response busy
+    i = 0
+    while not ":" in mac_addr and i < 3:
+        i += 1
+        time.sleep(t)
+        mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+    if ":" in mac_addr and t == 1:
+        device_id = str(uuid.UUID(md5(str(mac_addr.decode('utf-8'))).hexdigest()))
+        addon.setSetting('device_id', device_id)
+        return True
+    elif ":" in mac_addr and t == 2:
+        return uuid.uuid5(uuid.NAMESPACE_DNS, str(mac_addr)).bytes
+    else:
+        log("[%s] error: failed to get device id (%s)" % (addon_id, str(mac_addr)))
+        dialog.ok(addon_name, get_local_string(32008))
+        return False
+
 def encode(data):
-    enc = []
-    key = getmac()    
-    for i in range(len(clear)):
-        key_c = key[i % len(key)]
-        enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
-        enc.append(enc_c)
-    return base64.urlsafe_b64encode(''.join(enc))
+    k = pyDes.triple_des(uniq_id(t=2), pyDes.CBC, "\0\0\0\0\0\0\0\0", padmode=pyDes.PAD_PKCS5)
+    d = k.encrypt(data)
+    return base64.b64encode(d)
 
 def decode(data):
-    dec = []
-    key = getmac()
-    enc = base64.urlsafe_b64decode(enc)
-    for i in range(len(enc)):
-        key_c = key[i % len(key)]
-        dec_c = chr((256 + ord(enc[i]) - ord(key_c)) % 256)
-        dec.append(dec_c)
-    return ''.join(dec)
+    k = pyDes.triple_des(uniq_id(t=2), pyDes.CBC, "\0\0\0\0\0\0\0\0", padmode=pyDes.PAD_PKCS5)
+    d = k.decrypt(base64.b64decode(data))
+    return d
 
-def getmac():
-    mac = uuid.getnode()
-    if (mac >> 40) % 2:
-        mac = node()
-    return uuid.uuid5(uuid.NAMESPACE_DNS, str(mac)).bytes
+def capitalize(sentence):
+    cap = ''
+    words = sentence.decode('utf-8').split(' ')
+    for word in words:
+        cap += word[:1].upper() + word[1:].lower()
+        cap += ' '
+    return cap.encode('utf-8')
+
+def save_session(_session, file):
+    with open(file, 'w') as f:
+        pickle.dump(utils.dict_from_cookiejar(_session.cookies), f)
+
+def load_session(file):
+    _session = session()
+    if path.isfile(file): 
+        with open(file, 'r') as f:
+            _cookies = utils.cookiejar_from_dict(pickle.load(f))
+            _session.cookies = _cookies
+    return _session
 
 def login(_session, user, password):
     payload = {}
@@ -152,8 +203,8 @@ def login(_session, user, password):
         if item.attrs.get('name', None) is not None:
             payload[item.attrs.get('name', None)] = item.attrs.get('value', '')
     # overwrite user & password fields with our settings data
-    payload['pw_usr'] = decode(user)
-    payload['pw_pwd'] = decode(password)
+    payload['pw_usr'] = user
+    payload['pw_pwd'] = password
     # persist the session
     #payload['persist_session'] = 1
     # add empyt sumbit field (it is the value of the button in the page...)
@@ -215,8 +266,28 @@ def get_epg(_session, _for):
     add_cached_item('epg' + _for, page_tree)
     return page_tree
 
+def get_player_ids(src):
+    stream_id = re.search('stream-id=.*', src)
+    if stream_id is None:
+        return (None, None)
+    return (re.search('stream-id=.*', src).group(0).split('"')[1], re.search('customer-id=.*', src).group(0).split('"')[1])
+
+def get_stream_urls(_session, video_id):
+    stream_urls = {}
+    stream_access = json.loads(_session.post(stream_definition_url.replace('%VIDEO_ID%', str(video_id))).text)
+    if stream_access.get('status') == 'success':
+        stream_urls['Live'] = 'https:' + stream_access.get('data').get('stream-access')[1]
+    return stream_urls
+
+def get_m3u_url(_session, stream_url):
+    m3u_url = ''
+    root = ET.fromstring(_session.get(stream_url).text)
+    for child in root:
+        m3u_url = child.attrib.get('url') + '?hdnea=' + child.attrib.get('auth')
+    return m3u_url
+
 def get_addon():
-    return xbmcaddon.Addon()
+    return Addon()
 
 def show_password_dialog():
     dlg = xbmcgui.Dialog()
@@ -331,70 +402,13 @@ def show_sport_selection():
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.endOfDirectory(plugin_handle)    
 
-def has_credentials(user, password):
-    return user != '' or password != ''
-
-def set_credentials():
-    raw_user = show_email_dialog()
-    raw_password = show_password_dialog()
-    user = encode(raw_user)
-    password = encode(raw_password)
-    addon.setSetting('email', user)
-    addon.setSetting('password', password)
-    return (user, password)
-
-def logout():
-    clear_session()
-
-def switch_account():
-    clear_session()
-    set_credentials()
-
-"""def router(paramstring, _session, user, password, use_inputstream):
-    params = dict(parse_qsl(paramstring))
-    keys = params.keys()
-    if params.get('action', None) is not None:
-        if params.get('action', None) == 'logout':
-            logout()
-        else:
-            switch_account()
-        return True
-    if login(_session, user, password) is True:
-        if len(keys) == 0:
-            show_sport_selection()
-            return True
-        if params.get('stream', None) is not None:
-            play(_session, params.get('stream', None), params.get('hash', None), params.get('date', None), params.get('for', None), use_inputstream)
-            return True   
-        if params.get('hash', None) is not None:
-            show_match_details(_session, params.get('hash', None), params.get('date', None), params.get('for', None))
-            return True    
-        if params.get('date', None) is not None:
-            show_matches_list(_session, params.get('date', None), params.get('for', None))
-            return True
-        if params.get('for', None) is not None:
-            show_date_list(_session, params.get('for', None))
-            return True        
-    else:
-        show_login_failed_notification()"""
-
-def capitalize(sentence):
-    cap = ''
-    words = sentence.decode('utf-8').split(' ')
-    for word in words:
-        cap += word[:1].upper() + word[1:].lower()
-        cap += ' '
-    return cap.encode('utf-8')
-
-def show_sport_categories(sport):
+def show_sport_categories(_session, sport):
     log('(' + sport + ') Main Menu')
     addon_data = get_addon_data()
 
     # load sport page from telekom
     url = base_url + '/' + sports.get(sport, {}).get('page')
-    response = urllib2.urlopen(url)
-    html = response.read()
-    response.close()
+    html = _session.get(url).text
 
     # parse sport page data
     events = []
@@ -420,18 +434,49 @@ def show_sport_categories(sport):
         except Exception as e:
             log('Kodi version does not implement setArt')
         xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
-        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
+        
+    # add static folder items (if available)
+    #if statics.get(sport):
+    #    static_lanes = statics.get(sport)
+    #    if static_lanes.get('categories'):
+    #        lanes = static_lanes.get('categories')
+    #        for lane in lanes:
+    #            url = build_url({'for': sport, 'static': True, 'lane': lane.get('id')})
+    #            li = xbmcgui.ListItem(label=lane.get('name'))
+    #            li.setProperty('fanart_image', addon_data.get('fanart'))
+    #            xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
+                
+    xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(plugin_handle)  
 
-def show_event_lane(sport, lane):
+def show_date_list(_session, _for):
+    log('Main menu')
+    addon_data = get_addon_data()
+    epg = get_epg(_session, _for)
+    for date in epg.keys():
+        title = ''
+        items = epg.get(date)
+        for item in items:
+            title = title + str(' '.join(item.get('title').replace('Uhr', '').split(' ')[:-2]).encode('utf-8')) + '\n\n'
+        url = build_url({'date': date, 'for': _for})
+        li = xbmcgui.ListItem(label=date)
+        li.setProperty('fanart_image', addon_data.get('fanart'))
+        li.setInfo('video', {
+            'date': date,
+            'title': title,
+            'plot': title,
+        })
+        xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
+        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.endOfDirectory(plugin_handle)
+
+def show_event_lane(_session, sport, lane):
     log('(' + sport + ') Lane ' + lane)
     addon_data = get_addon_data()
 
     # load sport page from telekom
     url = epg_url + '/' + lane
-    response = urllib2.urlopen(url)
-    raw_data = response.read()
-    response.close()
+    raw_data = _session.get(url).text
     
     # parse data
     data = json.loads(raw_data)
@@ -532,88 +577,117 @@ def set_art(li, sport, item=None):
                     log('Kodi version does not implement setArt')
     return li 
 
-def show_event_details(sport, lane, target):
-    log('(' + sport + ') Lane ' + lane + ' Target ' + target)
+def show_matches_list(_session, game_date, _for):
+    log('Matches list')
     addon_data = get_addon_data()
+    epg = get_epg(_session, _for)
+    date = epg.get(game_date)
+    for item in date:
+        url = build_url({'hash': item.get('hash'), 'date': game_date, 'for': _for})
+        li = xbmcgui.ListItem(label=item.get('title'))
+        li.setProperty('fanart_image', addon_data.get('fanart'))        
+        xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
+        xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
+    xbmcplugin.endOfDirectory(plugin_handle)
 
+def show_match_details(_session, target, lane, _for):
+    log('Matches details')
     # load sport page from telekom
     url = epg_url + '/' + target
-    response = urllib2.urlopen(url)
-    raw_data = response.read()
-    response.close()
+    raw_data = _session.get(url).text
     
     # parse data
     data = json.loads(raw_data)
     data = data.get('data', [])
 
     if data.get('content'):
-        for videos in data.get('content', []):
-            vids = videos.get('group_elements', [{}])[0].get('data')
-            for video in vids:
-                if type(video) is dict:
-                    if 'videoID' in video.keys() and 'video_type' in video.keys():
-                        log(json.dumps(video))
-                        li = xbmcgui.ListItem(label=video.get('title'))
-                        li = set_art(li, sport, video)
-                        li.setProperty('IsPlayable', 'true')
-                        is_livestream = 'False'
-                        if video.get('islivestream', False) is True:
-                            is_livestream = 'True'
-                        url = build_url({'for': sport, 'lane': lane, 'target': target, 'is_livestream': is_livestream, 'video_id': str(video.get('videoID'))})
-                        xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=False)
+            for videos in data.get('content', []):
+                vids = videos.get('group_elements', [{}])[0].get('data')
+                for video in vids:
+                    if type(video) is dict:
+                        if 'videoID' in video.keys() and 'video_type' in video.keys():
+                            log(json.dumps(video))
+                            li = xbmcgui.ListItem(label=video.get('title'))
+                            li = set_art(li, _for, video)
+                            li.setProperty('IsPlayable', 'true')
+                            is_livestream = 'False'
+                            if video.get('islivestream', False) is True:
+                                is_livestream = 'True'
+                            url = build_url({'for': _for, 'lane': lane, 'target': target, 'is_livestream': is_livestream, 'video_id': str(video.get('videoID'))})
+                            xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=False)
     xbmcplugin.endOfDirectory(plugin_handle)
 
-def play(video_id, is_livestream='False', use_inputstream=False):
-    log('Play video: ' + video_id)
-    videoid = video_id
-    partnerid = '2780'
-    unassecret = 'aXHi21able'
-    timestamp = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-    ident = str(random.randint(10000000, 99999999)) + str(int(time.time()))
-    streamtype = 'live' if is_livestream == 'True' else 'vod'
-    auth = md5.new(videoid + partnerid + timestamp + unassecret).hexdigest()
-    url = 'https://streamaccess.unas.tv/hdflash2/' + streamtype + '/' + partnerid + '/' + videoid + '.xml?format=iphone&streamid=' + videoid + '&partnerid=' + partnerid + '&ident=' + ident + '&timestamp=' + timestamp + '&auth=' + auth
-    response = urllib.urlopen(url).read()
-    xmlroot = ET.ElementTree(ET.fromstring(response))
-    playlisturl = xmlroot.find('token').get('url')
-    auth = xmlroot.find('token').get('auth')
-    listitem = xbmcgui.ListItem(path=playlisturl + "?hdnea=" + auth)
-    if use_inputstream is True:
-        play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
-        play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')    
-    xbmcplugin.setResolvedUrl(plugin_handle, True, listitem)
+def play(_session, video_id, use_inputstream):
+    log('Play video: ' + str(video_id))
+    streams = get_stream_urls(_session, video_id)
+    for stream in streams:
+        play_item = xbmcgui.ListItem(path=get_m3u_url(_session, streams.get(stream)))
+        if use_inputstream is True:
+            play_item.setProperty('inputstream.adaptive.manifest_type', 'hls')
+            play_item.setProperty('inputstreamaddon', 'inputstream.adaptive')
+        xbmcplugin.setResolvedUrl(plugin_handle, True, play_item)
+        return
 
-def router(paramstring, use_inputstream=False):
+def has_credentials():
+    user = addon.getSetting('email')
+    password = addon.getSetting('password') 
+    return user != '' or password != ''
+
+def set_credentials():
+    raw_user = show_email_dialog()
+    raw_password = show_password_dialog()
+    user = encode(raw_user)
+    password = encode(raw_password)
+    addon.setSetting('email', user)
+    addon.setSetting('password', password)
+    return (raw_user, raw_password)
+
+def get_credentials():
+    raw_user = addon.getSetting('email')
+    raw_password = addon.getSetting('password')
+    user = decode(raw_user)
+    password = decode(raw_password)
+    return (user, password)
+
+def logout():
+    clear_session()
+
+def switch_account():
+    clear_session()
+    set_credentials()
+
+def router(paramstring, _session, user, password, use_inputstream):
     params = dict(parse_qsl(paramstring))
     keys = params.keys()
-    log(params)
-    if len(keys) == 0:
-        show_sport_selection()
+    if params.get('action', None) is not None:
+        if params.get('action', None) == 'logout':
+            logout()
+        else:
+            switch_account()
         return True
-    if params.get('video_id', None) is not None:
-        play(video_id=params.get('video_id'), is_livestream=params.get('is_livestream'), use_inputstream=use_inputstream)
-    if params.get('target', None) is not None:
-        show_event_details(sport=params.get('for'), lane=params.get('lane'), target=params.get('target'))
-        return True
-    if params.get('lane', None) is not None:
-        show_event_lane(sport=params.get('for'), lane=params.get('lane'))
-        return True
-    if params.get('for', None) is not None:
-        show_sport_categories(sport=params.get('for'))
-        return True
-
+    if login(_session, user, password) is True:
+        if len(keys) == 0:
+            show_sport_selection()
+            return True
+        if params.get('video_id', None) is not None:
+            play(_session=_session, video_id=params.get('video_id', None), use_inputstream=use_inputstream)
+            return True   
+        if params.get('target', None) is not None:
+            show_match_details(_session, params.get('target', None), params.get('lane', None), params.get('for', None))
+            return True    
+        if params.get('date', None) is not None:
+            show_matches_list(_session, params.get('date', None), params.get('for', None))
+            return True
+        if params.get('lane', None) is not None:
+            show_event_lane(_session=_session, sport=params.get('for'), lane=params.get('lane'))
+            return True
+        if params.get('for', None) is not None:
+            show_sport_categories(_session=_session, sport=params.get('for', None))
+            return True        
+    else:
+        show_login_failed_notification()
 
 if __name__ == '__main__':
-    # urllib ssl fix
-    import ssl
-    from functools import wraps
-    def sslwrap(func):
-        @wraps(func)
-        def bar(*args, **kw):
-            kw['ssl_version'] = ssl.PROTOCOL_TLSv1
-            return func(*args, **kw)
-        return bar
-    ssl.wrap_socket = sslwrap(ssl.wrap_socket)    
     # Load addon data & start plugin
     addon = get_addon()
     addon_data = get_addon_data()
@@ -630,16 +704,14 @@ if __name__ == '__main__':
         use_inputstream = True
     # setup in memory cache for epg data
     setup_memcache()
-    # check if we have userdata settings
-    #user = addon.getSetting('email')
-    #password = addon.getSetting('password')
     # show user settings dialog if settings are not complete
     # store the credentials if user added them
-    #if not has_credentials(user, password):
-    #    user, password = set_credentials()
+    if has_credentials():
+        user, password = get_credentials() 
+    else:   
+        user, password = set_credentials()
     # start request session to pass around
-    #_session = get_session()
+    _session = get_session()
     # Call the router function and pass the plugin call parameters to it.
     # We use string slicing to trim the leading '?' from the plugin call paramstring
-    #router(sys.argv[2][1:], _session, user, password, use_inputstream)
-    router(sys.argv[2][1:], use_inputstream)
+    router(sys.argv[2][1:], _session, user, password, use_inputstream)

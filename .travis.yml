@@ -5,7 +5,9 @@ python:
 
 script:
   - python setup.py develop
-  - make test
+  - nosetests --version
+  - nosetests --help
+  - nosetests --nocapture --verbose --debug=DEBUG
 after_sucess:
   - codeclimate-test-reporter
 

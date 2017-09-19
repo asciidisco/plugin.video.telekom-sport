@@ -9,16 +9,12 @@
 import re
 import os
 import shutil
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import find_packages, setup, Command
 
-this_dir = os.path.dirname(os.path.abspath(__file__))
-
+here = os.path.abspath(os.path.dirname(__file__))
 
 def get_version():
-    with open(os.path.join(this_dir, 'addon.xml'), 'rb') as addon_xml:
+    with open(os.path.join(here, 'addon.xml'), 'rb') as addon_xml:
         return re.search(r'(?<!xml )version="(.+?)"', addon_xml.read()).group(1)
 
 
@@ -30,5 +26,5 @@ setup(
     author_email='public@asciidisco.com',
     url='https://github.com/asciidisco/plugin.video.telekom-sport',
     license='MIT',
-    py_modules=[],
+    packages=find_packages(exclude=('test',)),
     zip_safe=False)

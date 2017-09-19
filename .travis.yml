@@ -4,7 +4,7 @@ python:
   - "2.7"
 
 script:
-  - nosetests -w --nocapture ./resources/test/
+  - make all
 after_sucess:
   - codeclimate-test-reporter
 

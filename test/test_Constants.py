@@ -8,13 +8,8 @@
 
 import sys
 from os import path
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))) + '/resources')
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))) + '/resources/lib')
-print sys.path
-
+from resources import *
 import unittest
-from resources.lib.Constants import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""

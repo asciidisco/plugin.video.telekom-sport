@@ -1,3 +1,5 @@
+.PHONY: all test clean
+
 SOURCEDIR = ./resources/lib
 TEST_DIR = ./test
 COVERAGE_DIR = ./coverage

@@ -7,9 +7,12 @@
 """Tests for the `Constants` module"""
 
 import sys
-import os
+from os import path
+sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+print sys.path
+
 import unittest
-from resources.lib import Constants
+from resources.lib.Constants import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""

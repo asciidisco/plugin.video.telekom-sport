@@ -26,5 +26,5 @@ setup(
     author_email='public@asciidisco.com',
     url='https://github.com/asciidisco/plugin.video.telekom-sport',
     license='MIT',
-    packages=find_packages(exclude=('test',)),
+    packages=find_packages(),
     zip_safe=False)

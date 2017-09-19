@@ -3,6 +3,8 @@ language: python
 python:
   - "2.7"
 
+before_install:
+  - cd .. && mv ./plugin.video.telekom-sport ./pvts && cd pvts
 script:
   - python setup.py develop
   - python test.py

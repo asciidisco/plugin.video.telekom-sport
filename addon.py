@@ -19,8 +19,12 @@ from resources.lib.Utils import Utils
 
 
 # setup plugin base stuff
-PLUGIN_HANDLE = int(argv[1])
-KODI_BASE_URL = argv[0]
+try:
+    PLUGIN_HANDLE = int(argv[1])
+    KODI_BASE_URL = argv[0]
+except ValueError as e:
+    pass
+
 
 # init plugin object structure
 CONSTANTS = Constants()

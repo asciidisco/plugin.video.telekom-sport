@@ -10,7 +10,7 @@
 import sys, os
 import unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from resources.lib.Constants import Constants
+from test import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""

@@ -19,7 +19,7 @@ class ConstantsTestCase(unittest.TestCase):
 
     def test_get_login_link(self):
         """ADD ME"""
-        from resources.lib.Constants import Constants
+        from lib.Constants import Constants
         constants = Constants()
         self.assertEqual(constants.get_login_link(), 'https://www.telekomsport.de/service/auth/web/login?headto=https://www.telekomsport.de/info')
 
@@ -31,7 +31,7 @@ class ConstantsTestCase(unittest.TestCase):
 
     def test_get_sports_list(self):
         """ADD ME"""
-        from resources.lib.Constants import Constants
+        from Constants import Constants
         constants = Constants()
         sports = constants.get_sports_list()
         sports_keys = sports.keys()

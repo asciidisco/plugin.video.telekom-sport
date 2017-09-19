@@ -6,9 +6,8 @@
 
 """Tests for the `Constants` module"""
 
-import sys
-from os import path
-from resources import *
+import tests
+from resources.lib.Constants import Constants
 import unittest
 
 class ConstantsTestCase(unittest.TestCase):

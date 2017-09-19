@@ -9,8 +9,8 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm {} +
 
 test:
-	nosetests $(TEST_DIR) -s --nocapture --cover-package=resources.lib.Constants --cover-erase --with-coverage --cover-html --cover-branches --cover-html-dir=$(COVERAGE_DIR)
-	nosetests $(TEST_DIR) --quiet -s --cover-package=resources.lib.Constants --cover-erase --with-coverage --cover-branches
+	nosetests $(TEST_DIR) -s --nocapture --cover-erase --with-coverage --cover-html --cover-branches --cover-html-dir=$(COVERAGE_DIR)
+	nosetests $(TEST_DIR) --quiet -s --cover-erase --with-coverage --cover-branches
 
 
 help:

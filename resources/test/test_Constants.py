@@ -15,7 +15,7 @@ sys.path.append(path.dirname(path.dirname(path.abspath(__file__))) + '/lib')
 print sys.path
 
 import unittest
-from ..lib.Constants import Constants
+from resources.lib.Constants import Constants
 
 
 class ConstantsTestCase(unittest.TestCase):

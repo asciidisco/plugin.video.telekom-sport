@@ -13,7 +13,7 @@ class ConstantsTestCase(unittest.TestCase):
 
     def test_get_base_url(self):
         """ADD ME"""
-        from resources.lib.Constants import Constants
+        from Constants import Constants
         constants = Constants()
         self.assertEqual(constants.get_base_url(), 'https://www.telekomsport.de')
 

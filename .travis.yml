@@ -5,6 +5,7 @@ python:
 
 before_install:
   - cd .. && mv ./plugin.video.telekom-sport ./pvts && cd pvts
+  - mv .test/test_Constants.py ./test_Constants.py
 script:
   - python setup.py develop
   - python test.py

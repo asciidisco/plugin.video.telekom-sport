@@ -14,7 +14,7 @@ sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
 print sys.path
 
 import unittest
-from resources.lib.Constants import Constants
+from resources.lib import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""

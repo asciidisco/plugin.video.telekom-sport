@@ -1,2 +1,2 @@
-from lib.Constants import Constants
-__all__ = ['Constants']
+from lib import *
+__all__ = ['lib']

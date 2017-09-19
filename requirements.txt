@@ -1,4 +1,3 @@
-plugin.video.telekom-sport
 codeclimate-test-reporter==0.2.1
 nose==1.3.7
 pylint==1.6.5

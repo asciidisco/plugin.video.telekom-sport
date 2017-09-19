@@ -7,7 +7,7 @@ script:
   - python setup.py develop
   - nosetests --version
   - nosetests --help
-  - nosetests --nocapture --verbose --debug=DEBUG
+  - nosetests --nocapture --verbose --debug=DEBUG --no-path-adjustment
 after_sucess:
   - codeclimate-test-reporter
 

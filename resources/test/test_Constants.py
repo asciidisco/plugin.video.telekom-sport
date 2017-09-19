@@ -10,6 +10,8 @@ import sys
 from os import path
 sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
 
+print sys.path
+
 import unittest
 from resources.lib.Constants import Constants
 

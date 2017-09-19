@@ -9,6 +9,8 @@
 import sys
 from os import path
 sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))) + '/resources')
+sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))) + '/resources/lib')
 print sys.path
 
 import unittest

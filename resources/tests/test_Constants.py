@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Module: Constants
 # Author: asciidisco
@@ -6,32 +7,32 @@
 
 """Tests for the `Constants` module"""
 
+import sys, os
 import unittest
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
+from resources.lib.Constants import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""
 
     def test_get_base_url(self):
         """ADD ME"""
-        from Constants import Constants
         constants = Constants()
         self.assertEqual(constants.get_base_url(), 'https://www.telekomsport.de')
 
     def test_get_login_link(self):
         """ADD ME"""
-        from lib.Constants import Constants
         constants = Constants()
         self.assertEqual(constants.get_login_link(), 'https://www.telekomsport.de/service/auth/web/login?headto=https://www.telekomsport.de/info')
 
     def test_get_login_endpoint(self):
         """ADD ME"""
-        from resources.lib.Constants import Constants
+
         constants = Constants()
         self.assertEqual(constants.get_login_endpoint(), 'https://accounts.login.idm.telekom.com/sso')
 
     def test_get_sports_list(self):
         """ADD ME"""
-        from pvts.resources.lib.Constants import Constants
         constants = Constants()
         sports = constants.get_sports_list()
         sports_keys = sports.keys()
@@ -44,3 +45,6 @@ class ConstantsTestCase(unittest.TestCase):
         self.assertIn('skybuli', sports_keys)
         self.assertIn('skychamp', sports_keys)
         self.assertIn('skyhandball', sports_keys)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -6,6 +6,10 @@
 
 """Tests for the `Constants` module"""
 
+import sys
+from os import path
+sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
+
 import unittest
 from resources.lib.Constants import Constants
 

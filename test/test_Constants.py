@@ -6,7 +6,7 @@
 
 """Tests for the `Constants` module"""
 
-import tests
+import ..tests
 from resources.lib.Constants import Constants
 import unittest
 

@@ -31,7 +31,7 @@ class ConstantsTestCase(unittest.TestCase):
 
     def test_get_sports_list(self):
         """ADD ME"""
-        from Constants import Constants
+        from pvts.resources.lib.Constants import Constants
         constants = Constants()
         sports = constants.get_sports_list()
         sports_keys = sports.keys()

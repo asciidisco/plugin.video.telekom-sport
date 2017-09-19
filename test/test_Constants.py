@@ -8,12 +8,16 @@
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), '/resources/lib'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '/resources/lib'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)) + '/resources'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__) + '/resources'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)) + '/resources/lib'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__) + '/resources/lib'))
 print sys.path
 
 import unittest
-from Constants import Constants
+from resources.lib.Constants import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""

@@ -10,7 +10,9 @@ from setuptools import Command
 from setuptools.command.test import test as TestCommand
 from datetime import datetime
 
+print 'Find PACKAGES'
 print find_packages()
+print 'Find PACKAGES'
 
 NAME = 'python-boilerplate'
 VERSION = '0.1'

@@ -4,16 +4,19 @@ Flask RESTful Quick Start Setup
 
 import sys
 import os
+from setuptools import find_packages
 from setuptools import setup
 from setuptools import Command
 from setuptools.command.test import test as TestCommand
 from datetime import datetime
 
+print find_packages()
+
 NAME = 'python-boilerplate'
 VERSION = '0.1'
 AUTHOR = 'Keath Milligan'
 REQUIRED_PYTHON_VERSION = (2, 7)
-PACKAGES = ['resources', '.resources.lib']
+PACKAGES = find_packages()
 INSTALL_DEPENDENCIES = []
 SETUP_DEPENDENCIES = []
 TEST_DEPENDENCIES = [

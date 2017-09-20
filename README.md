@@ -18,7 +18,7 @@ please open an issue & we can provide you with some help to get started
 
 Open issues & planned enhancements can be found [here](https://github.com/asciidisco/plugin.video.telekom-sport/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20)
 
-More detailed information on the development process can be found [here](CONTRIBUTING.md)
+More detailed information on the development process can be found [here](Contributing.md)
 ## Something doesn't work
 
 If something doesn't work for you, please:

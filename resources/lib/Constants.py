@@ -2,7 +2,7 @@
 # Module: Constants
 # Author: asciidisco
 # Created on: 24.07.2017
-# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
+# License: MIT https://goo.gl/xF5sC4
 
 """Static links & list of sports"""
 
@@ -11,10 +11,12 @@ ADDON_ID = 'plugin.video.telekom-sport'
 
 # urls for login & data retrival
 BASE_URL = 'https://www.telekomsport.de'
-LOGIN_LINK = BASE_URL + '/service/auth/web/login?headto=https://www.telekomsport.de/info'
+LOGIN_LINK = BASE_URL + '/service/auth/web/login?headto=' + BASE_URL + '/info'
 LOGIN_ENDPOINT = 'https://accounts.login.idm.telekom.com/sso'
 EPG_URL = BASE_URL + '/api/v1/'
-STREAM_DEFINITON_URL = BASE_URL + '/service/player/streamAccess?videoId=%VIDEO_ID%&label=2780_hls'
+STREAM_ROUTE = '/service/player/streamAccess'
+STREAM_PARAMS = 'videoId=%VIDEO_ID%&label=2780_hls'
+STREAM_DEFINITON_URL = BASE_URL + STREAM_ROUTE + '?' + STREAM_PARAMS
 
 # core event types
 SPORTS = {
@@ -90,7 +92,7 @@ SPORTS = {
     },
 }
 
-# static menu items for 
+# static menu items for various lists
 STATICS = {
     'liga3': {
         'categories': [
@@ -104,6 +106,7 @@ STATICS = {
         ]
     }
 }
+
 
 class Constants(object):
     """Access methods for static links & list of sports"""

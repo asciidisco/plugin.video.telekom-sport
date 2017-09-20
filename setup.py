@@ -2,7 +2,7 @@
 # Module: default
 # Author: asciidisco
 # Created on: 24.07.2017
-# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
+# License: MIT https://goo.gl/xF5sC4
 
 """Setup"""
 
@@ -35,40 +35,49 @@ EXTRA_DEPENDENCIES = {
         'Kodistubs',
         'httpretty',
         'mock',
+        'requests',
+        'beautifulsoup4',
+        'pyDes',
     ]
 }
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def get_author():
-    """Loads the Kodi plugin author/provider"""
-    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
-        return re.search(r'(?<!xml )provider-name="(.+?)"', addon_xml.read()).group(1)
+def get_addon_data():
+    """Loads the Kodi plugin data from addon.xml"""
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    pathname = os.path.join(root_dir, 'addon.xml')
+    with open(pathname, 'rb') as addon_xml:
+        author = re.search(
+            r'(?<!xml )provider-name="(.+?)"',
+            addon_xml.read()).group(1)
+        name = re.search(
+            r'(?<!xml )name="(.+?)"',
+            addon_xml.read()).group(1)
+        version = re.search(
+            r'(?<!xml )version="(.+?)"',
+            addon_xml.read()).group(1)
+        desc = re.search(
+            r'(?<!xml )description lang="en_GB">(.+?)<',
+            addon_xml.read()).group(1)
+        return {
+            'author': author,
+            'name': name,
+            'version': version,
+            'desc': desc,
+        }
 
-def get_name():
-    """Loads the Kodi plugin name"""
-    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
-        return re.search(r'(?<!xml )name="(.+?)"', addon_xml.read()).group(1)
-
-def get_version():
-    """Loads the Kodi plugin version"""
-    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
-        return re.search(r'(?<!xml )version="(.+?)"', addon_xml.read()).group(1)
-
-def get_description():
-    """Loads the Kodi plugin description"""
-    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
-        return re.search(r'(?<!xml )description lang="en_GB">(.+?)<', addon_xml.read()).group(1)
 
 if sys.version_info < REQUIRED_PYTHON_VERSION:
     sys.exit('Python >= 2.7 is required. Your version:\n' + sys.version)
 
+ADDON_DATA = get_addon_data()
+
 setup(
-    name=get_name(),
-    version=get_version(),
-    author=get_author(),
+    name=ADDON_DATA.get('name'),
+    version=ADDON_DATA.get('version'),
+    author=ADDON_DATA.get('author'),
     author_email=AUTHOR_EMAIL,
-    description=get_description(),
+    description=ADDON_DATA.get('desc'),
     packages=PACKAGES,
     include_package_data=True,
     install_requires=INSTALL_DEPENDENCIES,

@@ -2,7 +2,7 @@
 # Module: default
 # Author: asciidisco
 # Created on: 24.07.2017
-# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
+# License: MIT https://goo.gl/xF5sC4
 
 """Kodi plugin for Telekom Sport (https://telekomsport.de)"""
 
@@ -38,6 +38,7 @@ CONTENT_LOADER = ContentLoader(
     cache=CACHE,
     plugin_handle=PLUGIN_HANDLE)
 
+
 def router(paramstring, user, password):
     """
     Converts paramstrings into dicts & decide which
@@ -51,43 +52,53 @@ def router(paramstring, user, password):
     """
     params = dict(parse_qsl(paramstring))
     keys = params.keys()
+    processed = False
     # settings action routes
     if params.get('action') is not None:
         if params.get('action') == 'logout':
             SESSION.logout()
         else:
             SESSION.switch_account()
-        return True
+        processed = True
     # plugin list & video routes
     if SESSION.login(user, password) is True:
         # show main menue, selection of sport categories
-        if len(keys) == 0:
+        if len(keys) == 0 and processed is False:
             CONTENT_LOADER.show_sport_selection()
-            return True
+            processed = True
         # play a video
-        if params.get('video_id') is not None:
+        if params.get('video_id') is not None and processed is False:
             CONTENT_LOADER.play(video_id=params.get('video_id'))
-            return True
+            processed = True
         # show details of the match found (gamereport, relive, interviews...)
-        if params.get('target') is not None:
-            CONTENT_LOADER.show_match_details(params.get('target'), params.get('lane'), params.get('for'))
-            return True
+        if params.get('target') is not None and processed is False:
+            CONTENT_LOADER.show_match_details(
+                params.get('target'),
+                params.get('lane'),
+                params.get('for'))
+            processed = True
         # show list of found matches/videos
-        if params.get('date') is not None:
-            CONTENT_LOADER.show_matches_list(params.get('date'), params.get('for'))
-            return True
+        if params.get('date') is not None and processed is False:
+            CONTENT_LOADER.show_matches_list(
+                params.get('date'),
+                params.get('for'))
+            processed = True
         # show contents scraped from the api (with website scraped id)
-        if params.get('lane') is not None:
-            CONTENT_LOADER.show_event_lane(sport=params.get('for'), lane=params.get('lane'))
-            return True
+        if params.get('lane') is not None and processed is False:
+            CONTENT_LOADER.show_event_lane(
+                sport=params.get('for'),
+                lane=params.get('lane'))
+            processed = True
         # show contents (lanes) scraped from the website
-        if params.get('for') is not None:
-            CONTENT_LOADER.show_sport_categories(sport=params.get('for'))
-            return True
+        if params.get('for') is not None and processed is False:
+            CONTENT_LOADER.show_sport_categories(
+                sport=params.get('for'))
+            processed = True
     else:
         # show login failed dialog if login didn't succeed
         DIALOGS.show_login_failed_notification()
-        return False
+        return processed
+
 
 if __name__ == '__main__':
     # Load addon data & start plugin
@@ -100,6 +111,8 @@ if __name__ == '__main__':
         USER, PASSWORD = SETTINGS.get_credentials()
     else:
         USER, PASSWORD = SETTINGS.set_credentials()
-    # Call the router function and pass the plugin call parameters to it.
-    # We use string slicing to trim the leading '?' from the plugin call paramstring
+    # Call the router function and pass
+    # the plugin call parameters to it.
+    # We use string slicing to trim the
+    # leading '?' from the plugin call paramstring
     router(argv[2][1:], user=USER, password=PASSWORD)

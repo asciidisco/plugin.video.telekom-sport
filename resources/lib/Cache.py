@@ -19,13 +19,13 @@ class Cache(object):
     def __init__(self):
         """Setup in memory cache & stores window instance in memory"""
         self.setup_memcache()
-        self.window = self.__get_window_instance()
 
     def setup_memcache(self):
         """Setup in memory cache"""
-        cached_items = self.window.getProperty('memcache')
+        window = self.__get_window_instance()
+        cached_items = window.getProperty('memcache')
         if len(cached_items) < 1:
-            self.window.setProperty('memcache', pickle.dumps({}))
+            window.setProperty('memcache', pickle.dumps({}))
 
     def has_cached_item(self, cache_id):
         """
@@ -35,7 +35,8 @@ class Cache(object):
         :type cache_id: str.
         :returns:  bool -- Matching item found
         """
-        cached_items = pickle.loads(self.window.getProperty('memcache'))
+        window = self.__get_window_instance()
+        cached_items = pickle.loads(window.getProperty('memcache'))
         return cache_id in cached_items.keys()
 
     def get_cached_item(self, cache_id):
@@ -46,7 +47,8 @@ class Cache(object):
         :type cache_id: str.
         :returns:  mixed -- Cached item
         """
-        cached_items = pickle.loads(self.window.getProperty('memcache'))
+        window = self.__get_window_instance()
+        cached_items = pickle.loads(window.getProperty('memcache'))
         if self.has_cached_item(cache_id) is not True:
             return None
         return cached_items[cache_id]
@@ -60,9 +62,10 @@ class Cache(object):
         :param contents: Contents to be cached
         :type contents: mixed
         """
-        cached_items = pickle.loads(self.window.getProperty('memcache'))
+        window = self.__get_window_instance()
+        cached_items = pickle.loads(window.getProperty('memcache'))
         cached_items.update({cache_id: contents})
-        self.window.setProperty('memcache', pickle.dumps(cached_items))
+        window.setProperty('memcache', pickle.dumps(cached_items))
 
     @classmethod
     def __get_window_instance(cls):

@@ -1,71 +1,79 @@
-"""
-Flask RESTful Quick Start Setup
-"""
+# -*- coding: utf-8 -*-
+# Module: default
+# Author: asciidisco
+# Created on: 24.07.2017
+# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
 
-import sys
+"""Setup"""
+
 import os
-from setuptools import find_packages
-from setuptools import setup
-from setuptools import Command
-from setuptools.command.test import test as TestCommand
-from datetime import datetime
+import re
+import sys
+from setuptools import find_packages, setup
 
-print 'Find PACKAGES'
-print find_packages()
-print 'Find PACKAGES'
-
-NAME = 'python-boilerplate'
-VERSION = '0.1'
-AUTHOR = 'Keath Milligan'
+AUTHOR_EMAIL = 'public@asciidisco.com'
+URL = 'https://github.com/asciidisco/plugin.video.telekom-sport'
 REQUIRED_PYTHON_VERSION = (2, 7)
 PACKAGES = find_packages()
 INSTALL_DEPENDENCIES = []
 SETUP_DEPENDENCIES = []
 TEST_DEPENDENCIES = [
-    'pytest'
+    'nose',
+    'Kodistubs',
+    'httpretty',
+    'mock',
 ]
 EXTRA_DEPENDENCIES = {
     'dev': [
-        'pytest',
+        'nose',
         'flake8',
+        'codeclimate-test-reporter',
+        'pylint',
+        'mccabe',
+        'pycodestyle',
+        'pyflakes',
+        'Kodistubs',
+        'httpretty',
+        'mock',
     ]
 }
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def get_author():
+    """Loads the Kodi plugin author/provider"""
+    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
+        return re.search(r'(?<!xml )provider-name="(.+?)"', addon_xml.read()).group(1)
+
+def get_name():
+    """Loads the Kodi plugin name"""
+    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
+        return re.search(r'(?<!xml )name="(.+?)"', addon_xml.read()).group(1)
+
+def get_version():
+    """Loads the Kodi plugin version"""
+    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
+        return re.search(r'(?<!xml )version="(.+?)"', addon_xml.read()).group(1)
+
+def get_description():
+    """Loads the Kodi plugin description"""
+    with open(os.path.join(ROOT_DIR, 'addon.xml'), 'rb') as addon_xml:
+        return re.search(r'(?<!xml )description lang="en_GB">(.+?)<', addon_xml.read()).group(1)
+
 if sys.version_info < REQUIRED_PYTHON_VERSION:
-    sys.exit('Python >= 2.7 is required. Your version:\n'+sys.version)
-
-
-class PyTest(TestCommand):
-    """
-    Use pytest to run tests
-    """
-    user_options = [('pytest-args=', 'a', "Arguments to pass into py.test")]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.pytest_args = []
-
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        import pytest
-        errno = pytest.main(self.pytest_args)
-        sys.exit(errno)
+    sys.exit('Python >= 2.7 is required. Your version:\n' + sys.version)
 
 setup(
-    name=NAME,
-    version=VERSION,
-    author=AUTHOR,
+    name=get_name(),
+    version=get_version(),
+    author=get_author(),
+    author_email=AUTHOR_EMAIL,
+    description=get_description(),
     packages=PACKAGES,
     include_package_data=True,
     install_requires=INSTALL_DEPENDENCIES,
     setup_requires=SETUP_DEPENDENCIES,
     tests_require=TEST_DEPENDENCIES,
     extras_require=EXTRA_DEPENDENCIES,
-    cmdclass={
-        'test': PyTest
-    }
+    test_suite='nose.collector',
 )

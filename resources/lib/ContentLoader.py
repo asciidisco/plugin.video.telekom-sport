@@ -1,12 +1,11 @@
 """ADD ME"""
 
-import urllib
-import json
 import re
+import json
 import xml.etree.ElementTree as ET
 from datetime import date, datetime
-import xbmcplugin
 import xbmcgui
+import xbmcplugin
 from bs4 import BeautifulSoup
 
 class ContentLoader(object):
@@ -18,7 +17,7 @@ class ContentLoader(object):
         self.cache = cache
         self.session = session
         self.item_helper = item_helper
-        self.plugin_handle = plugin_handle  
+        self.plugin_handle = plugin_handle
 
     def get_epg(self, _for):
         """ADD ME"""
@@ -115,7 +114,7 @@ class ContentLoader(object):
                 self.utils.log('Kodi version does not implement setArt')
             xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
             xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_DATE)
-        xbmcplugin.endOfDirectory(plugin_handle)    
+        xbmcplugin.endOfDirectory(plugin_handle)
 
     def show_sport_categories(self, sport):
         """ADD ME"""
@@ -154,7 +153,7 @@ class ContentLoader(object):
             except Exception as e:
                 self.utils.log('Kodi version does not implement setArt')
             xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
-            
+
         # add static folder items (if available)
         #if statics.get(sport):
         #    static_lanes = statics.get(sport)
@@ -165,9 +164,9 @@ class ContentLoader(object):
         #            li = xbmcgui.ListItem(label=lane.get('name'))
         #            li.setProperty('fanart_image', addon_data.get('fanart'))
         #            xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
-                    
+
         xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_LABEL)
-        xbmcplugin.endOfDirectory(plugin_handle)  
+        xbmcplugin.endOfDirectory(plugin_handle)
 
     def show_date_list(self, _for):
         """ADD ME"""
@@ -203,7 +202,7 @@ class ContentLoader(object):
         # load sport page from telekom
         url = epg_url + '/' + lane
         raw_data = _session.get(url).text
-        
+
         # parse data
         data = json.loads(raw_data)
         data = data.get('data', [])
@@ -218,7 +217,7 @@ class ContentLoader(object):
             li.setInfo('video', info)
             xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
 
-        xbmcplugin.endOfDirectory(plugin_handle)  
+        xbmcplugin.endOfDirectory(plugin_handle)
 
     def show_matches_list(self, game_date, _for):
         """ADD ME"""
@@ -230,7 +229,7 @@ class ContentLoader(object):
         for item in date:
             url = self.utils.build_url({'hash': item.get('hash'), 'date': game_date, 'for': _for})
             li = xbmcgui.ListItem(label=item.get('title'))
-            li.setProperty('fanart_image', addon_data.get('fanart'))        
+            li.setProperty('fanart_image', addon_data.get('fanart'))
             xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=True)
             xbmcplugin.addSortMethod(handle=plugin_handle, sortMethod=xbmcplugin.SORT_METHOD_NONE)
         xbmcplugin.endOfDirectory(plugin_handle)
@@ -244,7 +243,7 @@ class ContentLoader(object):
         # load sport page from telekom
         url = epg_url + '/' + target
         raw_data = _session.get(url).text
-        
+
         # parse data
         data = json.loads(raw_data)
         data = data.get('data', [])
@@ -254,7 +253,7 @@ class ContentLoader(object):
                     vids = videos.get('group_elements', [{}])[0].get('data')
                     for video in vids:
                         if type(video) is dict:
-                            if 'videoID' in video.keys() and 'video_type' in video.keys():
+                            if 'videoID' in video.keys():
                                 li = xbmcgui.ListItem(label=video.get('title'))
                                 li = self.item_helper.set_art(li, _for, video)
                                 li.setProperty('IsPlayable', 'true')
@@ -262,6 +261,7 @@ class ContentLoader(object):
                                 if video.get('islivestream', False) is True:
                                     is_livestream = 'True'
                                 url = self.utils.build_url({'for': _for, 'lane': lane, 'target': target, 'is_livestream': is_livestream, 'video_id': str(video.get('videoID'))})
+
                                 xbmcplugin.addDirectoryItem(handle=plugin_handle, url=url, listitem=li, isFolder=False)
         xbmcplugin.endOfDirectory(plugin_handle)
 

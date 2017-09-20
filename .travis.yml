@@ -4,4 +4,16 @@ python:
   - "2.7"
 
 script:
-  - python setup.py test
+  - make all
+after_sucess:
+  - codeclimate-test-reporter
+
+addons:
+  apt:
+    packages:
+      - make
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always

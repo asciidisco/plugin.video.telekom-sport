@@ -11,7 +11,7 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm {} +
 
 test:
-	nosetests -w $(TEST_DIR) --nocapture --cover-erase --with-coverage --cover-html --cover-branches --cover-html-dir=$(COVERAGE_DIR)
+	nosetests $(TEST_DIR) --nocapture --cover-erase --with-coverage --cover-html --cover-branches --cover-html-dir=$(COVERAGE_DIR)
 	nosetests $(TEST_DIR) --quiet --cover-erase --with-coverage --cover-branches
 
 

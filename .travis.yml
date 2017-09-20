@@ -1,6 +1,19 @@
 language: python
 
 python:
-  - "2.7.10"
-script: python -m unittest discover
-sudo: false
+  - "2.7"
+
+script:
+  - python setup.py test
+after_sucess:
+  - codeclimate-test-reporter
+
+addons:
+  apt:
+    packages:
+      - make
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always

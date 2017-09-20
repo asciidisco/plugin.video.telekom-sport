@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Module: Constants
 # Author: asciidisco
@@ -7,10 +6,8 @@
 
 """Tests for the `Constants` module"""
 
-import sys, os
 import unittest
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
-from test import Constants
+from resources.lib.Constants import Constants
 
 class ConstantsTestCase(unittest.TestCase):
     """Tests for the `Constants` module"""
@@ -27,7 +24,6 @@ class ConstantsTestCase(unittest.TestCase):
 
     def test_get_login_endpoint(self):
         """ADD ME"""
-
         constants = Constants()
         self.assertEqual(constants.get_login_endpoint(), 'https://accounts.login.idm.telekom.com/sso')
 
@@ -45,6 +41,3 @@ class ConstantsTestCase(unittest.TestCase):
         self.assertIn('skybuli', sports_keys)
         self.assertIn('skychamp', sports_keys)
         self.assertIn('skyhandball', sports_keys)
-
-if __name__ == '__main__':
-    unittest.main()

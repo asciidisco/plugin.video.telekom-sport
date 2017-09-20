@@ -1,30 +1,67 @@
-# -*- coding: utf-8 -*-
-# Module: default
-# Author: asciidisco
-# Created on: 24.07.2017
-# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
+"""
+Flask RESTful Quick Start Setup
+"""
 
-"""Kodi plugin for Telekom Sport (https://telekomsport.de)"""
-
-import re
+import sys
 import os
-import shutil
-from setuptools import find_packages, setup, Command
+from setuptools import setup
+from setuptools import Command
+from setuptools.command.test import test as TestCommand
+from datetime import datetime
 
-here = os.path.abspath(os.path.dirname(__file__))
+NAME = 'python-boilerplate'
+VERSION = '0.1'
+AUTHOR = 'Keath Milligan'
+REQUIRED_PYTHON_VERSION = (2, 7)
+PACKAGES = ['resources']
+INSTALL_DEPENDENCIES = []
+SETUP_DEPENDENCIES = [
+]
+TEST_DEPENDENCIES = [
+    'pytest'
+]
+EXTRA_DEPENDENCIES = {
+    'dev': [
+        'pytest',
+        'flake8',
+    ]
+}
 
-def get_version():
-    with open(os.path.join(here, 'addon.xml'), 'rb') as addon_xml:
-        return re.search(r'(?<!xml )version="(.+?)"', addon_xml.read()).group(1)
+if sys.version_info < REQUIRED_PYTHON_VERSION:
+    sys.exit('Python >= 2.7 is required. Your version:\n'+sys.version)
 
+
+class PyTest(TestCommand):
+    """
+    Use pytest to run tests
+    """
+    user_options = [('pytest-args=', 'a', "Arguments to pass into py.test")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
 
 setup(
-    name='Telekom Sport',
-    version=get_version(),
-    description='Kodi plugin for Telekom Sport',
-    author='asciidisco',
-    author_email='public@asciidisco.com',
-    url='https://github.com/asciidisco/plugin.video.telekom-sport',
-    license='MIT',
-    packages=find_packages(),
-    zip_safe=False)
+    name=NAME,
+    version=VERSION,
+    author=AUTHOR,
+    packages=PACKAGES,
+    include_package_data=True,
+    install_requires=INSTALL_DEPENDENCIES,
+    setup_requires=SETUP_DEPENDENCIES,
+    tests_require=TEST_DEPENDENCIES,
+    extras_require=EXTRA_DEPENDENCIES,
+    cmdclass={
+        'test': PyTest
+    }
+)

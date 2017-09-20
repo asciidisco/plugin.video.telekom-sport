@@ -5,7 +5,6 @@ python:
 
 script:
   - make all
-after_sucess:
   - codeclimate-test-reporter
 
 addons:

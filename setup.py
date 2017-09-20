@@ -13,10 +13,9 @@ NAME = 'python-boilerplate'
 VERSION = '0.1'
 AUTHOR = 'Keath Milligan'
 REQUIRED_PYTHON_VERSION = (2, 7)
-PACKAGES = ['resources']
+PACKAGES = ['resources', 'resources.lib', 'resources.lib.Constants']
 INSTALL_DEPENDENCIES = []
-SETUP_DEPENDENCIES = [
-]
+SETUP_DEPENDENCIES = []
 TEST_DEPENDENCIES = [
     'pytest'
 ]

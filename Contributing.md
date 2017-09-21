@@ -8,11 +8,17 @@ the developers managing and developing this open source project. In return,
 they should reciprocate that respect in addressing your issue, assessing
 changes, and helping you finalize your pull requests.
 
-As for everything else in the project, the contributions are governed by our [Code of Conduct](Code_of_Conduct.md).
+As for everything else in the project, the contributions are governed by our
+[Code of Conduct](Code_of_Conduct.md).
 
 ## Using the issue tracker
 
-First things first: **Do NOT report security vulnerabilities in public issues!** Please disclose responsibly by letting [us](mailto:public@asciidisco.com?subject=NFXSecurity) know upfront. We will assess the issue as soon as possible on a best-effort basis and will give you an estimate for when we have a fix and release available for an eventual public disclosure.
+First things first: **Do NOT report security vulnerabilities in public issues!**
+Please disclose responsibly by letting
+[us](mailto:public@asciidisco.com?subject=TelekomPluginSecurity) know upfront.
+We will assess the issue as soon as possible on a best-effort basis and will
+give you an estimate for when we have a fix and release available for an
+eventual public disclosure.
 
 The issue tracker is the preferred channel for [bug reports](#bugs),
 [features requests](#features) and [submitting pull
@@ -23,7 +29,6 @@ requests](#pull-requests), but please respect the following restrictions:
 * Please **do not** derail or troll issues. Keep the discussion on topic and
   respect the opinions of others.
 
-
 ## Bug reports
 
 A bug is a _demonstrable problem_ that is caused by the code in the repository.
@@ -31,12 +36,8 @@ Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
-1. **Use the GitHub issue search** &mdash; check if the issue has already been
-   reported.
-
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using the
-   latest `master` branch in the repository.
-
+1. **Use the GitHub issue search** &mdash; check if the issue has already been reported.
+2. **Check if the issue has been fixed** &mdash; try to reproduce it using `master`.
 3. **Isolate the problem** &mdash; ideally create a reduced test case.
 
 A good bug report shouldn't leave others needing to chase you up for more
@@ -49,7 +50,8 @@ Example:
 
 > Short and descriptive example bug report title
 >
-> A summary of the issue and the Kodi & Inputsream commit hashes & the OS/Processor Arch environment in which it occurs. If
+> A summary of the issue and the Kodi & the OS/Processor Arch
+> environment in which it occurs. If
 > suitable, include the steps required to reproduce the bug.
 >
 > 1. This is the first step
@@ -63,14 +65,12 @@ Example:
 > causing the bug, and potential solutions (and your opinions on their
 > merits).
 
-
 ## Feature requests
 
 Feature requests are welcome. But take a moment to find out whether your idea
 fits with the scope and aims of the project. It's up to *you* to make a strong
 case to convince the project's developers of the merits of this feature. Please
 provide as much detail and context as possible.
-
 
 ## Pull requests
 
@@ -85,20 +85,21 @@ into the project.
 
 ### For new Contributors
 
-If you never created a pull request before, welcome :tada: :smile: [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
+If you never created a pull request before, welcome :tada: :smile:
+[Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 on how to send one :)
 
 1. [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork,
    and configure the remotes:
 
-   ```bash
-   # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/<repo-name>
-   # Navigate to the newly cloned directory
-   cd <repo-name>
-   # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/asciidisco/plugin.video.telekom-sport
-   ```
+```bash
+# Clone your fork of the repo into the current directory
+git clone https://github.com/<your-username>/<repo-name>
+# Navigate to the newly cloned directory
+cd <repo-name>
+# Assign the original repo to a remote called "upstream"
+git remote add upstream https://github.com/asciidisco/plugin.video.telekom-sport
+```
 
 2. If you cloned a while ago, get the latest changes from upstream:
 
@@ -116,7 +117,8 @@ on how to send one :)
 
 4. Make sure to update, or add to the tests when appropriate. Patches and
    features will not be accepted without tests. Run `make test` to check that
-   all tests pass after you've made changes.Run `make lint` to ensure that your code meets our guildelines (PEP-8)
+   all tests pass after you've made changes.Run `make lint` to ensure
+   that your code meets our guildelines (PEP-8)
 
 5. If you added or changed a feature, make sure to document it accordingly in
    the `README.md` file.
@@ -150,23 +152,24 @@ complicated, we can help you out and teach you as we go :)
    [semantic-release](https://github.com/semantic-release/semantic-release) to
    automatically determine the new version and release to npm. In a nutshell:
 
-   #### Commit Message Conventions
+#### Commit Message Conventions
 
-   - Commit test files with `test: ...` or `test(scope): ...` prefix
-   - Commit bug fixes with `fix: ...` or `fix(scope): ...` prefix
-   - Commit breaking changes by adding `BREAKING CHANGE: ` in the commit body
-     (not the subject line)
-   - Commit changes to `package.json`, `.gitignore` and other meta files with
-     `chore(filenamewithoutext): ...`
-   - Commit changes to README files or comments with `docs: ...`
-   - Cody style changes with `style: standard`
+* Commit test files with `test: ...` or `test(scope): ...` prefix
+* Commit bug fixes with `fix: ...` or `fix(scope): ...` prefix
+* Commit breaking changes by adding `BREAKING CHANGE:` in the commit body
+    (not the subject line)
+* Commit changes to `package.json`, `.gitignore` and other meta files with
+    `chore(filenamewithoutext): ...`
+* Commit changes to README files or comments with `docs: ...`
+* Cody style changes with `style: standard`
 
 **IMPORTANT**: By submitting a patch, you agree to license your work under the
 same license as that used by the project.
 
 ## Maintainers
 
-If you have commit access, please follow this process for merging patches and cutting new releases.
+If you have commit access, please follow this process for
+merging patches and cutting new releases.
 
 ### Reviewing changes
 
@@ -190,7 +193,7 @@ If you have commit access, please follow this process for merging patches and cu
       commit message. This is _very important_, better look twice :)
    2. Make sure there are `fix: ...` or `feat: ...` commits depending on whether
       a bug was fixed or a feature was added. **Gotcha:** look for spaces before
-      the prefixes of ` fix:` and ` feat:`, these get ignored by semantic-release.
+      the prefixes of `fix:` and `feat:`, these get ignored by semantic-release.
    3. Use the "Rebase and merge" button to merge the pull request.
    4. Done! You are awesome! Thanks so much for your help 🤗
 
@@ -209,7 +212,7 @@ looks like this:
 
 ### Reviewing and merging changes locally
 
-```
+```bash
 git checkout master # or the main branch configured on github
 git pull # get latest changes
 git checkout feature-branch # replace name with your branch
@@ -224,7 +227,7 @@ When merging PRs from forked repositories, we recommend you install the
 
 This allows you to do:
 
-```
+```bash
 hub checkout link-to-pull-request
 ```
 

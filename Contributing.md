@@ -89,8 +89,7 @@ If you never created a pull request before, welcome :tada: :smile:
 [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 on how to send one :)
 
-1. [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork,
-   and configure the remotes:
+* [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork, and configure the remotes:
 
 ```bash
 # Clone your fork of the repo into the current directory
@@ -101,35 +100,35 @@ cd <repo-name>
 git remote add upstream https://github.com/asciidisco/plugin.video.telekom-sport
 ```
 
-2. If you cloned a while ago, get the latest changes from upstream:
+* If you cloned a while ago, get the latest changes from upstream:
 
    ```bash
    git checkout master
    git pull upstream master
    ```
 
-3. Create a new topic branch (off the main project development branch) to
+* Create a new topic branch (off the main project development branch) to
    contain your feature, change, or fix:
 
    ```bash
    git checkout -b <topic-branch-name>
    ```
 
-4. Make sure to update, or add to the tests when appropriate. Patches and
+* Make sure to update, or add to the tests when appropriate. Patches and
    features will not be accepted without tests. Run `make test` to check that
    all tests pass after you've made changes.Run `make lint` to ensure
    that your code meets our guildelines (PEP-8)
 
-5. If you added or changed a feature, make sure to document it accordingly in
+* If you added or changed a feature, make sure to document it accordingly in
    the `README.md` file.
 
-6. Push your topic branch up to your fork:
+* Push your topic branch up to your fork:
 
    ```bash
    git push origin <topic-branch-name>
    ```
 
-8. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
+* [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
     with a clear title and description.
 
 ### Addendum
@@ -137,7 +136,7 @@ git remote add upstream https://github.com/asciidisco/plugin.video.telekom-sport
 Optionally, you can help us with these things. But don’t worry if they are too
 complicated, we can help you out and teach you as we go :)
 
-1. Update your branch to the latest changes in the upstream master branch. You
+* Update your branch to the latest changes in the upstream master branch. You
    can do that locally with
 
    ```bash
@@ -146,7 +145,7 @@ complicated, we can help you out and teach you as we go :)
 
    Afterwards force push your changes to your remote feature branch.
 
-2. Once a pull request is good to go, you can tidy up your commit messages using
+* Once a pull request is good to go, you can tidy up your commit messages using
    Git's [interactive rebase](https://help.github.com/articles/interactive-rebase).
    Please follow our commit message conventions shown below, as they are used by
    [semantic-release](https://github.com/semantic-release/semantic-release) to
@@ -173,39 +172,39 @@ merging patches and cutting new releases.
 
 ### Reviewing changes
 
-1. Check that a change is within the scope and philosophy of the component.
-2. Check that a change has any necessary tests.
-3. Check that a change has any necessary documentation.
-4. If there is anything you don’t like, leave a comment below the respective
+* Check that a change is within the scope and philosophy of the component.
+* Check that a change has any necessary tests.
+* Check that a change has any necessary documentation.
+* If there is anything you don’t like, leave a comment below the respective
    lines and submit a "Request changes" review. Repeat until everything has
    been addressed.
-5. If you are not sure about something, mention `@asciidisco` or specific
+* If you are not sure about something, mention `@asciidisco` or specific
    people for help in a comment.
-6. If there is only a tiny change left before you can merge it and you think
+* If there is only a tiny change left before you can merge it and you think
    it’s best to fix it yourself, you can directly commit to the author’s fork.
    Leave a comment about it so the author and others will know.
-7. Once everything looks good, add an "Approve" review. Don’t forget to say
+* Once everything looks good, add an "Approve" review. Don’t forget to say
    something nice 👏🐶💖✨
-8. If the commit messages follow [our conventions](@commit-message-conventions)
+* If the commit messages follow [our conventions](@commit-message-conventions)
 
-   1. If there is a breaking change, make sure that `BREAKING CHANGE:` with
-      _exactly_ that spelling (incl. the ":") is in body of the according
-      commit message. This is _very important_, better look twice :)
-   2. Make sure there are `fix: ...` or `feat: ...` commits depending on whether
-      a bug was fixed or a feature was added. **Gotcha:** look for spaces before
-      the prefixes of `fix:` and `feat:`, these get ignored by semantic-release.
-   3. Use the "Rebase and merge" button to merge the pull request.
-   4. Done! You are awesome! Thanks so much for your help 🤗
+* If there is a breaking change, make sure that `BREAKING CHANGE:` with
+    _exactly_ that spelling (incl. the ":") is in body of the according
+    commit message. This is _very important_, better look twice :)
+* Make sure there are `fix: ...` or `feat: ...` commits depending on whether
+    a bug was fixed or a feature was added. **Gotcha:** look for spaces before
+    the prefixes of `fix:` and `feat:`, these get ignored by semantic-release.
+* Use the "Rebase and merge" button to merge the pull request.
+* Done! You are awesome! Thanks so much for your help 🤗
 
-9. If the commit messages _do not_ follow our conventions
+* If the commit messages _do not_ follow our conventions
 
-   1. Use the "squash and merge" button to clean up the commits and merge at
-      the same time: ✨🎩
-   2. Is there a breaking change? Describe it in the commit body. Start with
-      _exactly_ `BREAKING CHANGE:` followed by an empty line. For the commit
-      subject:
-   3. Was a new feature added? Use `feat: ...` prefix in the commit subject
-   4. Was a bug fixed? Use `fix: ...` in the commit subject
+* Use the "squash and merge" button to clean up the commits and merge at
+    the same time: ✨🎩
+* Is there a breaking change? Describe it in the commit body. Start with
+    _exactly_ `BREAKING CHANGE:` followed by an empty line. For the commit
+    subject:
+* Was a new feature added? Use `feat: ...` prefix in the commit subject
+* Was a bug fixed? Use `fix: ...` in the commit subject
 
 Sometimes there might be a good reason to merge changes locally. The process
 looks like this:

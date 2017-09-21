@@ -2,7 +2,7 @@
 # Module: Constants
 # Author: asciidisco
 # Created on: 24.07.2017
-# License: MIT https://github.com/asciidisco/plugin.video.telekom-sport/master/LICENSE
+# License: MIT https://goo.gl/xF5sC4
 
 """Tests for the `Constants` module"""
 

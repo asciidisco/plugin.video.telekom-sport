@@ -26,8 +26,8 @@ clean-coverage:
 
 lint:
 	flake8 --filename=./addon.py,./setup.py,./resources/lib/Constants.py
-	pylint resources --output-format=html > ./report/lint.html || exit 0
-	pylint resources --output-format=colorized
+	pylint addon setup resources --output-format=html > ./report/lint.html || exit 0
+	pylint addon setup resources --output-format=colorized
 
 test:
 	nosetests $(TEST_DIR) -s --cover-package=resources.lib.Cache --cover-package=resources.lib.Constants --cover-package=resources.lib.ContentLoader --cover-package=resources.lib.Dialogs --cover-package=resources.lib.ItemHelper --cover-package=resources.lib.Session --cover-package=resources.lib.Settings --cover-package=resources.lib.Utils --cover-erase --with-coverage --cover-html --cover-branches --cover-html-dir=$(COVERAGE_DIR)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Module: Dialogs
+# Module: ItemHelper
 # Author: asciidisco
 # Created on: 24.07.2017
 # License: MIT https://goo.gl/xF5sC4

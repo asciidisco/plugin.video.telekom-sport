@@ -27,9 +27,9 @@ If something doesn't work for you, please:
 - Enable verbose logging in the plugin settings
 - Enable the Debug log in your Kodi settings
 - Open an issue with a titles that summarises your problems and include:
-    - Kodi version
-    - Your OS and OS version
-    - A Kodi debug log that represents your issue
+    * Kodi version
+    * Your OS and OS version
+    * A Kodi debug log that represents your issue
 
 Solved issues can be found [here](https://github.com/asciidisco/plugin.video.telekom-sport/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20) please check them first before open an issue
 

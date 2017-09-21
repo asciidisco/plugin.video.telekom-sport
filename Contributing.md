@@ -89,8 +89,7 @@ If you never created a pull request before, welcome :tada: :smile:
 [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 on how to send one :)
 
-* [Fork](http://help.github.com/fork-a-repo/) the project,
-clone your fork, and configure the remotes:
+* [Fork](http://help.github.com/fork-a-repo/), clone, and configure the remotes:
 
 ```bash
 # Clone your fork of the repo into the current directory

@@ -54,9 +54,9 @@ Example:
 > environment in which it occurs. If
 > suitable, include the steps required to reproduce the bug.
 >
-> * This is the first step
-> * This is the second step
-> * Further steps, etc.
+> `This is the first step`
+> `This is the second step`
+> `Further steps, etc.`
 >
 > `<log>` - a link to the Kodi debug log
 >

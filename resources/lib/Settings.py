@@ -6,7 +6,6 @@
 
 """ADD ME"""
 
-import hashlib
 import base64
 import uuid
 import time
@@ -26,16 +25,7 @@ class Settings(object):
 
     def uniq_id(self, delay=1):
         """ADD ME"""
-        addon = self.utils.get_addon()
-        mac_addr = xbmc.getInfoLabel('Network.MacAddress')
-        if ':' not in mac_addr:
-            mac_addr = xbmc.getInfoLabel('Network.MacAddress')
-        # hack response busy
-        i = 0
-        while ':' not in mac_addr and i < 3:
-            i += 1
-            time.sleep(delay)
-            mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+        mac_addr = self.__get_mac_address(delay=delay)
         if ':' in mac_addr and delay == 2:
             return uuid.uuid5(uuid.NAMESPACE_DNS, str(mac_addr)).bytes
         else:
@@ -47,20 +37,23 @@ class Settings(object):
     def encode(self, data):
         """ADD ME"""
         key_handle = pyDes.triple_des(
-            self.uniq_id(delay=2),
-            pyDes.CBC, '\0\0\0\0\0\0\0\0',
+            key=self.uniq_id(delay=2),
+            mode=pyDes.CBC,
+            pad='\0\0\0\0\0\0\0\0',
             padmode=pyDes.PAD_PKCS5)
-        encrypted = key_handle.encrypt(data)
-        return base64.b64encode(encrypted)
+        encrypted = key_handle.encrypt(
+            data=data)
+        return base64.b64encode(s=encrypted)
 
     def decode(self, data):
         """ADD ME"""
         key_handle = pyDes.triple_des(
-            self.uniq_id(delay=2),
-            pyDes.CBC,
-            '\0\0\0\0\0\0\0\0',
+            key=self.uniq_id(delay=2),
+            mode=pyDes.CBC,
+            pad='\0\0\0\0\0\0\0\0',
             padmode=pyDes.PAD_PKCS5)
-        decrypted = key_handle.decrypt(base64.b64decode(data))
+        decrypted = key_handle.decrypt(
+            data=base64.b64decode(s=data))
         return decrypted
 
     def has_credentials(self):
@@ -85,3 +78,15 @@ class Settings(object):
         user = addon.getSetting('email')
         password = addon.getSetting('password')
         return (self.decode(user), self.decode(password))
+
+    @classmethod
+    def __get_mac_address(cls, delay):
+        """ADD ME"""
+        mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+        # hack response busy
+        i = 0
+        while ':' not in mac_addr and i < 3:
+            i += 1
+            time.sleep(delay)
+            mac_addr = xbmc.getInfoLabel('Network.MacAddress')
+        return mac_addr

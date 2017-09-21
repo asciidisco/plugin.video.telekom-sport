@@ -1,9 +1,12 @@
 engines:
   pep8:
     enabled: true
+  markdownlint:
+    enabled: true
 ratings:
    paths:
    - "**.py"
+   - "**.md"
 exclude_paths:
   - "resources/test/"
   - "resources/language/"

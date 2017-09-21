@@ -36,13 +36,7 @@ class Settings(object):
             i += 1
             time.sleep(delay)
             mac_addr = xbmc.getInfoLabel('Network.MacAddress')
-        if ':' in mac_addr and delay == 1:
-            md5 = hashlib.md5()
-            md5.update(str(mac_addr.decode('utf-8')))
-            device_id = str(uuid.UUID(md5.hexdigest()))
-            addon.setSetting('device_id', device_id)
-            return True
-        elif ':' in mac_addr and delay == 2:
+        if ':' in mac_addr and delay == 2:
             return uuid.uuid5(uuid.NAMESPACE_DNS, str(mac_addr)).bytes
         else:
             error_msg = '[%s] error: failed to get device id (%s)'

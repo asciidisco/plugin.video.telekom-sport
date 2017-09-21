@@ -39,7 +39,7 @@ CONTENT_LOADER = ContentLoader(
 
 def router(paramstring, user, password):
     """
-    Converts paramstrings into dicts & decide which
+    Converts paramstrings into dicts & decides which
     method should be called in order to display contents
 
     :param user: Telekom account email address or user id

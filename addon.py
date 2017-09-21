@@ -31,12 +31,10 @@ ITEM_HELPER = ItemHelper(constants=CONSTANTS, utils=UTILS)
 SETTINGS = Settings(utils=UTILS, dialogs=DIALOGS, constants=CONSTANTS)
 SESSION = Session(constants=CONSTANTS, util=UTILS, settings=SETTINGS)
 CONTENT_LOADER = ContentLoader(
-    utils=UTILS,
-    constants=CONSTANTS,
     session=SESSION,
     item_helper=ITEM_HELPER,
     cache=CACHE,
-    plugin_handle=PLUGIN_HANDLE)
+    handle=PLUGIN_HANDLE)
 
 
 def router(paramstring, user, password):

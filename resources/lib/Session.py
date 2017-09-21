@@ -1,12 +1,19 @@
+# -*- coding: utf-8 -*-
+# Module: Session
+# Author: asciidisco
+# Created on: 24.07.2017
+# License: MIT https://goo.gl/xF5sC4
+
 """ADD ME"""
 
 try:
-   import cPickle as pickle
-except:
-   import pickle
+    import cPickle as pickle
+except ImportError:
+    import pickle
 from os import path, remove
 from requests import session, utils
 from bs4 import BeautifulSoup
+
 
 class Session(object):
     """ADD ME"""
@@ -30,15 +37,21 @@ class Session(object):
 
     def save_session(self):
         """ADD ME"""
-        with open(self.session_file, 'w') as f:
-            pickle.dump(utils.dict_from_cookiejar(self._session.cookies), f)
+        with open(self.session_file, 'w') as handle:
+            pickle.dump(
+                utils.dict_from_cookiejar(self._session.cookies),
+                handle)
 
     def load_session(self):
         """ADD ME"""
         _session = session()
+        _session.headers.update({
+            'User-Agent': self.utils.get_user_agent(),
+            'Accept-Encoding': 'gzip'
+        })
         if path.isfile(self.session_file):
-            with open(self.session_file, 'r') as f:
-                _cookies = utils.cookiejar_from_dict(pickle.load(f))
+            with open(self.session_file, 'r') as handle:
+                _cookies = utils.cookiejar_from_dict(pickle.load(handle))
                 _session.cookies = _cookies
         return _session
 
@@ -60,18 +73,20 @@ class Session(object):
         soup = BeautifulSoup(login_page_html, 'html.parser')
         # find all <input/> items in the login form & grep their data
         for item in soup.find(id='login').find_all('input'):
-            if item.attrs.get('name', None) is not None:
-                payload[item.attrs.get('name', None)] = item.attrs.get('value', '')
+            if item.attrs.get('name') is not None:
+                payload[item.attrs.get('name')] = item.attrs.get('value', '')
         # overwrite user & password fields with our settings data
         payload['pw_usr'] = user
         payload['pw_pwd'] = password
         # persist the session
-        #payload['persist_session'] = 1
+        # payload['persist_session'] = 1
         # add empyt sumbit field (it is the value of the button in the page...)
         payload['pw_submit'] = ''
-        # do the login & read the incoming html <title/> 
+        # do the login & read the incoming html <title/>
         # attribute to determine of the login was successfull
-        login_res = _session.post(self.constants.get_login_endpoint(), data=payload)
+        login_res = _session.post(
+            self.constants.get_login_endpoint(),
+            data=payload)
         soup = BeautifulSoup(login_res.text, 'html.parser')
         success = 'Sport' in soup.find('title').get_text()
         if success:

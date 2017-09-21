@@ -1,5 +1,12 @@
+# -*- coding: utf-8 -*-
+# Module: Utils
+# Author: asciidisco
+# Created on: 24.07.2017
+# License: MIT https://goo.gl/xF5sC4
+
 """ADD ME"""
 
+import platform
 import hashlib
 import urllib
 import json
@@ -46,7 +53,8 @@ class Utils(object):
     def use_inputstream(self):
         """ADD ME"""
         kodi_version = int(self.get_kodi_version())
-        inputstream_version = int(self.get_inputstream_version().replace('.', ''))
+        inputstream_version_raw = self.get_inputstream_version()
+        inputstream_version = int(inputstream_version_raw.replace('.', ''))
         if inputstream_version < 999:
             inputstream_version = inputstream_version * 10
         self.log('Kodi Version: ' + str(kodi_version))
@@ -80,13 +88,23 @@ class Utils(object):
     @classmethod
     def get_kodi_version(cls):
         """ADD ME"""
-        json_query = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Application.GetProperties", "params": {"properties": ["version", "name"]}, "id": 1 }')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = json.loads(json_query)
-        version_installed = 17
-        if json_query.get('result', {}).has_key('version'):
-            version_installed = json_query['result']['version'].get('major', 17)
-        return version_installed
+        version = 17
+        payload = {
+            'jsonrpc': '2.0',
+            'method': 'Application.GetProperties',
+            'params': {
+                'properties': ['version', 'name']
+            },
+            'id': 1
+        }
+        response = xbmc.executeJSONRPC(json.dumps(payload))
+        responses_uni = unicode(response, 'utf-8', errors='ignore')
+        response_serialized = json.loads(responses_uni)
+        if 'error' not in response_serialized.keys():
+            result = response_serialized.get('result', {})
+            version_raw = result.get('version', {})
+            version = version_raw.get('major', 17)
+        return version
 
     @classmethod
     def get_inputstream_version(cls):
@@ -102,10 +120,35 @@ class Utils(object):
         }
         # execute the request
         response = xbmc.executeJSONRPC(json.dumps(payload))
-        data = json.loads(response)
-        if 'error' not in data.keys():
-            result = data.get('result', {})
+        responses_uni = unicode(response, 'utf-8', errors='ignore')
+        response_serialized = json.loads(responses_uni)
+        if 'error' not in response_serialized.keys():
+            result = response_serialized.get('result', {})
             addon = result.get('addon', {})
             if addon.get('enabled', False) is True:
                 return addon.get('version', '1.0.0')
         return '1.0.0'
+
+    @classmethod
+    def get_user_agent(cls):
+        """Determines the user agent string for the current platform
+
+        :returns:  str -- User agent string
+        """
+        chrome_version = 'Chrome/59.0.3071.115'
+        base = 'Mozilla/5.0 '
+        base += '%PL% '
+        base += 'AppleWebKit/537.36 (KHTML, like Gecko) '
+        base += '%CH_VER% Safari/537.36'.replace('%CH_VER%', chrome_version)
+        system = platform.system()
+        # Mac OSX
+        if system == 'Darwin':
+            return base.replace('%PL%', '(Macintosh; Intel Mac OS X 10_10_1)')
+        # Windows
+        if system == 'Windows':
+            return base.replace('%PL%', '(Windows NT 6.1; WOW64)')
+        # ARM based Linux
+        if platform.machine().startswith('arm'):
+            return base.replace('%PL%', '(X11; CrOS armv7l 7647.78.0)')
+        # x86 Linux
+        return base.replace('%PL%', '(X11; Linux x86_64)')

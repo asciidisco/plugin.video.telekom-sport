@@ -36,9 +36,9 @@ Good bug reports are extremely helpful - thank you!
 
 Guidelines for bug reports:
 
-1. **Use the GitHub issue search** &mdash; check if the issue has already been reported.
-2. **Check if the issue has been fixed** &mdash; try to reproduce it using `master`.
-3. **Isolate the problem** &mdash; ideally create a reduced test case.
+* **Use the GitHub issue search** &mdash; check if the issue has already been reported.
+* **Check if the issue has been fixed** &mdash; try to reproduce it using `master`.
+* **Isolate the problem** &mdash; ideally create a reduced test case.
 
 A good bug report shouldn't leave others needing to chase you up for more
 information. Please try to be as detailed as possible in your report. What is
@@ -54,9 +54,9 @@ Example:
 > environment in which it occurs. If
 > suitable, include the steps required to reproduce the bug.
 >
-> 1. This is the first step
-> 2. This is the second step
-> 3. Further steps, etc.
+> * This is the first step
+> * This is the second step
+> * Further steps, etc.
 >
 > `<log>` - a link to the Kodi debug log
 >
@@ -89,7 +89,8 @@ If you never created a pull request before, welcome :tada: :smile:
 [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 on how to send one :)
 
-* [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork, and configure the remotes:
+* [Fork](http://help.github.com/fork-a-repo/) the project,
+clone your fork, and configure the remotes:
 
 ```bash
 # Clone your fork of the repo into the current directory

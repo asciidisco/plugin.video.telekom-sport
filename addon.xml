@@ -2,9 +2,9 @@
 <addon id="plugin.video.telekom-sport" version="1.2.0" name="Telekom Sport" provider-name="asciidisco">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
-        <import addon="script.module.pydes" version="2.0.1"/>        
+        <import addon="script.module.pydes" version="2.0.1"/>
         <import addon="script.module.beautifulsoup4" version="4.3.2"/>
-        <import addon="script.module.requests" version="2.12.4"/>        
+        <import addon="script.module.requests" version="2.12.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -15,21 +15,24 @@
             <fanart>resources\fanart.jpg</fanart>
             <screenshot>resources\screen_1.png</screenshot>
             <screenshot>resources\screen_2.png</screenshot>
-            <screenshot>resources\screen_3.png</screenshot>            
+            <screenshot>resources\screen_3.png</screenshot>
         </assets>
         <summary lang="de_DE">Telekom Sport</summary>
-        <description lang="de_DE">Telekom Sport ist ein Portal für Live Eishockey, Basketball, 3. Liga &amp; Frauenfußball Bundesliga Übertragungen.</description>
-        <disclaimer lang="de_DE">Inoffizielles Addon - Benutzung auf eigene Gefahr</disclaimer>
+        <description lang="de_DE">Telekom Sport ist ein Portal für Live Eishockey, Basketball, 3. Lig, Sky Handball, Sky Bundeliga/Champions-League Konferenzen &amp; Frauenfußball Bundesliga Übertragungen.</description>
+        <disclaimer lang="de_DE">Inoffizielles Addon - Benutzung auf eigene Gefahr. Das Plugin wurde nicht von der Deutschen Telekom beauftragt &amp; bereitgestellt.</disclaimer>
         <summary lang="en_GB">Telekom Sport</summary>
-        <description lang="en_GB">Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue &amp; womans football matches.</description>
-        <disclaimer lang="en_GB">Unofficial Addon - Use at your own risk</disclaimer>
+        <description lang="en_GB">Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences &amp; womans football matches.</description>
+        <disclaimer lang="en_GB">Unofficial Addon - Use at your own risk. The plugin is not commisioned by Deutsche Telekom.</disclaimer>
+        <language>en de</language>
         <platform>all</platform>
         <license>MIT</license>
         <website>https://www.telekomsport.de/</website>
-        <email>[public] at [asciidisco] dot [com]</email>
+        <email>public at asciidisco dot com</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
-        <news>
-- Fixes on retrieving event lanes and stream urls
-        </news>        
-    </extension>    
+        <forum>https://www.kodinerds.net/index.php/Thread/57586-PreRelease-Telekom-Sport/</forum>
+        <news>v1.2.0 (2017-9-22)
+        - Fixes livestream playback
+        - Fixes playback issues with FC Bayern TV
+        - Improves video start time with Inputstream.Adaptive</news>
+    </extension>
 </addon>

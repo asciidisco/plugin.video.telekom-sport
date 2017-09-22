@@ -37,50 +37,24 @@ class ItemHelper(object):
         sports = self.constants.get_sports_list()
         base_url = self.constants.get_base_url()
         list_item.setProperty('fanart_image', addon_data.get('fanart'))
-        try:
-            list_item.setArt({
-                'poster': sports.get(sport).get('image'),
-                'landscape': sports.get(sport).get('image'),
-                'thumb': sports.get(sport).get('image'),
-                'fanart': sports.get(sport).get('image')
-            })
-        except RuntimeError:
-            self.utils.log('`setArt` not available')
+        list_item = self.__get_sports_art(
+            list_item=list_item,
+            sport=sport,
+            sports=sports)
         if item is not None:
+            metatdata = item.get('metadata', {})
             if item.get('images'):
                 images = item.get('images', {})
-                image = ''
-                if images.get('fallback'):
-                    image = base_url + '/' + images.get('fallback')
-                if images.get('editorial'):
-                    image = base_url + '/' + images.get('editorial')
-                if image != '':
-                    try:
-                        list_item.setArt({
-                            'poster': image,
-                            'landscape': image,
-                            'thumb': image,
-                            'fanart': image
-                        })
-                    except RuntimeError:
-                        self.utils.log('`setArt` not available')
-            if item.get('metadata', {}).get('images'):
-                images = item.get('metadata', {}).get('images')
-                image = ''
-                if images.get('fallback'):
-                    image = base_url + '/' + images.get('fallback')
-                if images.get('editorial'):
-                    image = base_url + '/' + images.get('editorial')
-                if image != '':
-                    try:
-                        list_item.setArt({
-                            'poster': image,
-                            'landscape': image,
-                            'thumb': image,
-                            'fanart': image
-                        })
-                    except RuntimeError:
-                        self.utils.log('`setArt` not available')
+                list_item = self.__get_editorial_art(
+                    list_item=list_item,
+                    base_url=base_url,
+                    images=images)
+            if metatdata.get('images'):
+                images = metatdata.get('images')
+                list_item = self.__get_editorial_art(
+                    list_item=list_item,
+                    base_url=base_url,
+                    images=images)
         return list_item
 
     def build_page_leave(self, target_url, details, match_time, shorts=None):
@@ -107,6 +81,38 @@ class ItemHelper(object):
             elif name_full is None and home.get('name_short') is not None:
                 title += self.__build_match_title_short(details=details)
         return self.__build_fallback_title(title=title, metadata=metadata)
+
+    def __get_editorial_art(self, list_item, base_url, images):
+        """ADD ME"""
+        image = ''
+        if images.get('fallback'):
+            image = base_url + '/' + images.get('fallback')
+        if images.get('editorial'):
+            image = base_url + '/' + images.get('editorial')
+        if image != '':
+            try:
+                list_item.setArt({
+                    'poster': image,
+                    'landscape': image,
+                    'thumb': image,
+                    'fanart': image
+                })
+            except RuntimeError:
+                self.utils.log('`setArt` not available')
+        return list_item
+
+    def __get_sports_art(self, list_item, sport, sports):
+        """ADD ME"""
+        try:
+            list_item.setArt({
+                'poster': sports.get(sport).get('image'),
+                'landscape': sports.get(sport).get('image'),
+                'thumb': sports.get(sport).get('image'),
+                'fanart': sports.get(sport).get('image')
+            })
+        except RuntimeError:
+            self.utils.log('`setArt` not available')
+        return list_item
 
     @classmethod
     def __build_fallback_title(cls, title, metadata):

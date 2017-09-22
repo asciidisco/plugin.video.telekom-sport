@@ -2,7 +2,7 @@
 # Module: Constants
 # Author: asciidisco
 # Created on: 24.07.2017
-# License: MIT https://goo.gl/xF5sC4
+# License: MIT https://goo.gl/WA1kby
 
 """Static links & list of sports"""
 

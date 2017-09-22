@@ -161,40 +161,21 @@ class ContentLoader(object):
                 events.append((headline.get_text().encode(
                     'utf-8'), event_lane.attrs.get('prop-url')))
 
+        # add directory item for each event
         for event in events:
             url = self.utils.build_url({'for': sport, 'lane': event[1]})
             list_item = xbmcgui.ListItem(label=self.utils.capitalize(event[0]))
-            try:
-                list_item.setArt({
-                    'poster': sports.get(sport, {}).get('image'),
-                    'landscape': sports.get(sport, {}).get('image'),
-                    'thumb': sports.get(sport, {}).get('image'),
-                    'fanart': sports.get(sport, {}).get('image')
-                })
-            except RuntimeError:
-                self.utils.log('`setArt` not available')
+            list_item = self.item_helper.set_art(
+                list_item=list_item,
+                sport=sport)
             xbmcplugin.addDirectoryItem(
                 handle=self.plugin_handle,
                 url=url,
                 listitem=list_item,
                 isFolder=True)
 
-        # add static folder items (if available)
-        # if statics.get(sport):
-        #    static_lanes = statics.get(sport)
-        #    if static_lanes.get('categories'):
-        #        lanes = static_lanes.get('categories')
-        #        for lane in lanes:
-        #            url = build_url(
-        # {'for': sport, 'static': True, 'lane': lane.get('id')})
-        #            li = xbmcgui.ListItem(label=lane.get('name'))
-        #            li.setProperty('fanart_image', addon_data.get('fanart'))
-        #            xbmcplugin.addDirectoryItem(
-        # handle=plugin_handle,
-        # url=url,
-        # listitem=li,
-        # isFolder=True)
-
+        # Add static folder items (if available)
+        # self.__add_static_folders()
         xbmcplugin.addSortMethod(
             handle=self.plugin_handle,
             sortMethod=xbmcplugin.SORT_METHOD_LABEL)
@@ -292,6 +273,7 @@ class ContentLoader(object):
         plugin_handle = self.plugin_handle
         _session = self.session.get_session()
         epg_url = self.constants.get_epg_url()
+
         # load sport page from telekom
         url = epg_url + '/' + target
         raw_data = _session.get(url).text
@@ -300,34 +282,33 @@ class ContentLoader(object):
         data = json.loads(raw_data)
         data = data.get('data', [])
 
-        if data.get('content'):
-            for videos in data.get('content', []):
-                vids = videos.get('group_elements', [{}])[0].get('data')
-                for video in vids:
-                    if isinstance(video, dict):
-                        if 'videoID' in video.keys():
-                            list_item = xbmcgui.ListItem(
-                                label=video.get('title'))
-                            list_item = self.item_helper.set_art(
-                                list_item,
-                                _for,
-                                video)
-                            list_item.setProperty('IsPlayable', 'true')
-                            is_livestream = 'False'
-                            if video.get('islivestream', False) is True:
-                                is_livestream = 'True'
-                            url = self.utils.build_url({
-                                'for': _for,
-                                'lane': lane,
-                                'target': target,
-                                'is_livestream': is_livestream,
-                                'video_id': str(video.get('videoID'))})
+        # check if content is available
+        if data.get('content') is None:
+            xbmcplugin.endOfDirectory(plugin_handle)
+            return None
 
-                            xbmcplugin.addDirectoryItem(
-                                handle=plugin_handle,
-                                url=url,
-                                listitem=list_item,
-                                isFolder=False)
+        for videos in data.get('content', []):
+            vids = videos.get('group_elements', [{}])[0].get('data')
+            for video in vids:
+                if self.__is_playable_video_item(video=video):
+                    list_item = xbmcgui.ListItem(
+                        label=video.get('title'))
+                    list_item = self.item_helper.set_art(
+                        list_item=list_item,
+                        sport=_for,
+                        item=video)
+                    list_item.setProperty('IsPlayable', 'true')
+                    url = self.utils.build_url({
+                        'for': _for,
+                        'lane': lane,
+                        'target': target,
+                        'video_id': str(video.get('videoID'))})
+
+                    xbmcplugin.addDirectoryItem(
+                        handle=plugin_handle,
+                        url=url,
+                        listitem=list_item,
+                        isFolder=False)
         xbmcplugin.endOfDirectory(plugin_handle)
 
     def play(self, video_id):
@@ -380,9 +361,38 @@ class ContentLoader(object):
                             shorts=shorts))
         return events
 
+    def __add_static_folders(self, statics, sport, addon_data):
+        """Add static folder items (if available)"""
+        if statics.get(sport):
+            static_lanes = statics.get(sport)
+            if static_lanes.get('categories'):
+                lanes = static_lanes.get('categories')
+                for lane in lanes:
+                    url = self.utils.build_url({
+                        'for': sport,
+                        'static': True,
+                        'lane': lane.get('id')})
+                    list_item = xbmcgui.ListItem(label=lane.get('name'))
+                    list_item.setProperty(
+                        'fanart_image',
+                        addon_data.get('fanart'))
+                    xbmcplugin.addDirectoryItem(
+                        handle=self.plugin_handle,
+                        url=url,
+                        listitem=list_item,
+                        isFolder=True)
+
     @classmethod
     def __use_slots(cls, data):
         """ADD ME"""
         if data.get('elements') is None:
             return False
         return True
+
+    @classmethod
+    def __is_playable_video_item(cls, video):
+        """ADD ME"""
+        if isinstance(video, dict):
+            if 'videoID' in video.keys():
+                return True
+        return False

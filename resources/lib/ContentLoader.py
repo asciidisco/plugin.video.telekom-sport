@@ -364,7 +364,7 @@ class ContentLoader(object):
                             shorts=shorts))
         return events
 
-    def __add_static_folders(self, statics, sport, addon_data):
+    def __add_static_folders(self, statics, sport):
         """Add static folder items (if available)"""
         if statics.get(sport):
             static_lanes = statics.get(sport)
@@ -405,12 +405,12 @@ class ContentLoader(object):
                 elements.append(slot_event)
         else:
             target_url = element.get('target_url', '')
-            return [self.__parse_regular_event(
-                    target_url=target_url,
-                    details=details,
-                    match_time=match_time)]
+            slot = self.__parse_regular_event(
+                target_url=target_url,
+                details=details,
+                match_time=match_time)
+            elements.append(slot)
         return elements
-
 
     @classmethod
     def __set_item_playable(cls, list_item, title):

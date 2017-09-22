@@ -30,7 +30,7 @@ clean-docs:
 	mkdir $(DOCS_DIR)
 
 clean-coverage:
-	rm $(COVERAGE_FILE)
+	rm $(COVERAGE_FILE) || exit 0
 	rm -rf $(COVERAGE_DIR)
 	mkdir $(COVERAGE_DIR)
 

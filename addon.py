@@ -50,11 +50,8 @@ def router(paramstring, user, password):
     """
     params = dict(parse_qsl(paramstring))
     keys = params.keys()
-    UTILS.log(params)
-    UTILS.log(keys)
     # settings action routes
     processed = __settings_action(params=params)
-    UTILS.log('__settings_action ' + str(processed))
     # check login
     if __login_failed_action(user=user, password=password) is False:
         return False

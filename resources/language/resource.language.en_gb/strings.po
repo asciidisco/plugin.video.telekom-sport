@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: Telekom Sport
 # Addon id: plugin.video.telekom-sport
-# Addon version: 1.2.0
+# Addon version: 1.2.1
 # Addon Provider: asciidisco
 msgid ""
 msgstr ""
@@ -64,3 +64,7 @@ msgstr "Error fetching device id"
 msgctxt "#32009"
 msgid "Match not yet available"
 msgstr "Match not yet available"
+
+msgctxt "#32010"
+msgid "Encrypt credentials"
+msgstr "Encrypt credentials"

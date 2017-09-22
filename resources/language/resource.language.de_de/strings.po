@@ -1,7 +1,7 @@
 # Kodi Media Center language file
 # Addon Name: Telekom Sport
 # Addon id: plugin.video.telekom-sport
-# Addon version: 1.2.0
+# Addon version: 1.2.1
 # Addon Provider: asciidisco
 msgid ""
 msgstr ""
@@ -61,7 +61,10 @@ msgctxt "#32008"
 msgid "Error fetching device id"
 msgstr "Device ID konnte nicht geladen werden"
 
-
 msgctxt "#32009"
 msgid "Match not yet available"
 msgstr "Das Spiel ist zur Zeit (noch) nicht verfügbar"
+
+msgctxt "#32010"
+msgid "Encrypt credentials"
+msgstr "Anmeldedaten verschlüsseln"

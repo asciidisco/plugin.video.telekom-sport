@@ -101,10 +101,11 @@ class ItemHelper(object):
         if metadata.get('details') is not None:
             details = metadata.get('details')
             home = details.get('home', {})
-            if home.get('name_full') is not None:
-                 title += self.__build_match_title_full(details=details)
-            elif home.get('name_short') is not None:
-                 title += self.__build_match_title_short(details=details)
+            name_full = home.get('name_full')
+            if name_full is not None:
+                title += self.__build_match_title_full(details=details)
+            elif name_full is None and home.get('name_short') is not None:
+                title += self.__build_match_title_short(details=details)
         return self.__build_fallback_title(title=title, metadata=metadata)
 
     @classmethod

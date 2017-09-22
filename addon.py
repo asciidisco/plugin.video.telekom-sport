@@ -131,9 +131,10 @@ def __event_lane_action(params, processed):
 
 def __categories_action(params, processed):
     """ADD ME"""
-    if params.get('for') is not None and processed is False:
+    _for = params.get('for')
+    if _for is not None and processed is False:
         CONTENT_LOADER.show_sport_categories(
-            sport=params.get('for'))
+            sport=_for)
         return True
     return False
 

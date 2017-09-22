@@ -94,29 +94,46 @@ class ItemHelper(object):
             'shorts': shorts,
         }
 
-    @classmethod
-    def build_title(cls, item):
+    def build_title(self, item):
         """ADD ME"""
         title = ''
         metadata = item.get('metadata')
         if metadata.get('details') is not None:
-            if metadata.get('details').get('home', {}).get('name_full'):
-                details = metadata.get('details')
-                title += details.get('home', {}).get('name_full')
-                title += ' - '
-                title += details.get('away', {}).get('name_full')
-            else:
-                if metadata.get('details').get('home', {}).get('name_short'):
-                    details = metadata.get('details')
-                    title += details.get('home', {}).get('name_short')
-                    title += ' - '
-                    title += details.get('away', {}).get('name_short')
-        if title == '':
-            title = metadata.get('title', '')
-        if title == '':
-            title = metadata.get('description_regular', '')
-        if title == '':
-            title = metadata.get('description_bold', '')
+            details = metadata.get('details')
+            home = details.get('home', {})
+            if home.get('name_full') is not None:
+                 title += self.__build_match_title_full(details=details)
+            elif home.get('name_short') is not None:
+                 title += self.__build_match_title_short(details=details)
+        return self.__build_fallback_title(title=title, metadata=metadata)
+
+    @classmethod
+    def __build_fallback_title(cls, title, metadata):
+        """ADD ME"""
+        fallback_title = ''
+        if title != '':
+            return title
+        fallback_title += metadata.get('title', '')
+        if fallback_title == '':
+            fallback_title += metadata.get('description_regular', '')
+        if fallback_title == '':
+            fallback_title += metadata.get('description_bold', '')
+        return fallback_title
+
+    @classmethod
+    def __build_match_title_short(cls, details):
+        """ADD ME"""
+        title = details.get('home', {}).get('name_short')
+        title += ' - '
+        title += details.get('away', {}).get('name_short')
+        return title
+
+    @classmethod
+    def __build_match_title_full(cls, details):
+        """ADD ME"""
+        title = details.get('home', {}).get('name_full')
+        title += ' - '
+        title += details.get('away', {}).get('name_full')
         return title
 
     @classmethod

@@ -50,23 +50,27 @@ def router(paramstring, user, password):
     """
     params = dict(parse_qsl(paramstring))
     keys = params.keys()
+    UTILS.log(params)
+    UTILS.log(keys)
     # settings action routes
     processed = __settings_action(params=params)
+    UTILS.log('__settings_action ' + str(processed))
     # check login
-    processed = __login_failed_action(user=user, password=password)
+    if __login_failed_action(user=user, password=password) is False:
+        return False
     # plugin list & video routes
-    # show main menue, selection of sport categories
-    processed = __sport_selection_action(keys=keys, processed=processed)
     # play a video
     processed = __play_action(params=params, processed=processed)
     # show details of the match found (gamereport, relive, interviews...)
     processed = __match_details_action(params=params, processed=processed)
-    # show list of found matches/videos
-    processed = __match_details_action(params=params, processed=processed)
-    # show contents scraped from the api (with website scraped id)
-    processed = __matches_list_action(params=params, processed=processed)
+    # show main menue, selection of sport categories
+    processed = __sport_selection_action(keys=keys, processed=processed)
     # show contents (lanes) scraped from the website
     processed = __event_lane_action(params=params, processed=processed)
+    # show list of found matches/videos
+    processed = __categories_action(params=params, processed=processed)
+    # show contents scraped from the api (with website scraped id)
+    processed = __matches_list_action(params=params, processed=processed)
     return processed
 
 
@@ -86,8 +90,8 @@ def __login_failed_action(user, password):
     if SESSION.login(user, password) is False:
         # show login failed dialog if login didn't succeed
         DIALOGS.show_login_failed_notification()
-        return True
-    return False
+        return False
+    return True
 
 
 def __sport_selection_action(keys, processed):

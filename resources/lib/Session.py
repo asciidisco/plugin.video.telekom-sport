@@ -89,11 +89,10 @@ class Session(object):
             data=payload)
         soup = BeautifulSoup(login_res.text, 'html.parser')
         success = 'Sport' in soup.find('title').get_text()
-        if success:
+        if success is True:
             self.save_session()
             return True
-        else:
-            return False
+        return False
 
     def logout(self):
         """ADD ME"""

@@ -61,21 +61,16 @@ class ContentLoader(object):
             # check if we have already matches scheduled for that date
             if page_tree.get(match_date) is None:
                 page_tree[match_date] = []
-            # determine event type & parse
-            if use_slots is True:
-                slot_events = self.__parse_slot_events(
-                    element=element,
-                    details=details,
-                    match_time=match_time)
-                for slot_event in slot_events:
-                    page_tree[match_date].append(slot_event)
-            else:
-                target_url = element.get('target_url', '')
-                page_tree.get(match_date).append(
-                    self.__parse_regular_event(
-                        target_url=target_url,
-                        details=details,
-                        match_time=match_time))
+
+            matches = self.__parse_epg_element(
+                use_slots=use_slots,
+                element=element,
+                details=details,
+                match_time=match_time)
+
+            for match in matches:
+                page_tree.get(match_date).append(match)
+
             return page_tree
 
     def fetch_epg(self, _for, _session):
@@ -114,8 +109,9 @@ class ContentLoader(object):
         _session = self.session.get_session()
         root = ET.fromstring(_session.get(stream_url).text)
         for child in root:
-            m3u_url = child.attrib.get(
-                'url') + '?hdnea=' + child.attrib.get('auth')
+            m3u_url += child.attrib.get('url', '')
+            m3u_url += '?hdnea='
+            m3u_url += child.attrib.get('auth', '')
         return m3u_url
 
     def show_sport_selection(self):
@@ -158,8 +154,9 @@ class ContentLoader(object):
             headline = content_group.find('h2')
             event_lane = content_group.find('event-lane')
             if headline:
-                events.append((headline.get_text().encode(
-                    'utf-8'), event_lane.attrs.get('prop-url')))
+                if event_lane is not None:
+                    events.append((headline.get_text().encode(
+                        'utf-8'), event_lane.attrs.get('prop-url')))
 
         # add directory item for each event
         for event in events:
@@ -247,7 +244,7 @@ class ContentLoader(object):
 
     def show_matches_list(self, game_date, _for):
         """ADD ME"""
-        self.utils.log('Matches list')
+        self.utils.log('Matches list: ' + _for)
         addon_data = self.utils.get_addon_data()
         plugin_handle = self.plugin_handle
         epg = self.get_epg(_for)
@@ -270,7 +267,6 @@ class ContentLoader(object):
     def show_match_details(self, target, lane, _for):
         """ADD ME"""
         self.utils.log('Matches details')
-        plugin_handle = self.plugin_handle
         _session = self.session.get_session()
         epg_url = self.constants.get_epg_url()
 
@@ -284,32 +280,33 @@ class ContentLoader(object):
 
         # check if content is available
         if data.get('content') is None:
-            xbmcplugin.endOfDirectory(plugin_handle)
+            xbmcplugin.endOfDirectory(self.plugin_handle)
             return None
 
         for videos in data.get('content', []):
             vids = videos.get('group_elements', [{}])[0].get('data')
             for video in vids:
                 if self.__is_playable_video_item(video=video):
+                    title = video.get('title', '')
                     list_item = xbmcgui.ListItem(
-                        label=video.get('title'))
+                        label=title)
                     list_item = self.item_helper.set_art(
                         list_item=list_item,
                         sport=_for,
                         item=video)
-                    list_item.setProperty('IsPlayable', 'true')
+                    list_item = self.__set_item_playable(
+                        list_item=list_item,
+                        title=title)
                     url = self.utils.build_url({
                         'for': _for,
                         'lane': lane,
                         'target': target,
                         'video_id': str(video.get('videoID'))})
-
-                    xbmcplugin.addDirectoryItem(
-                        handle=plugin_handle,
-                        url=url,
-                        listitem=list_item,
-                        isFolder=False)
-        xbmcplugin.endOfDirectory(plugin_handle)
+                    self.__add_video_item(
+                        video=video,
+                        list_item=list_item,
+                        url=url)
+        xbmcplugin.endOfDirectory(handle=self.plugin_handle)
 
     def play(self, video_id):
         """ADD ME"""
@@ -321,6 +318,12 @@ class ContentLoader(object):
             play_item = xbmcgui.ListItem(
                 path=self.get_m3u_url(streams.get(stream)))
             if use_inputstream is True:
+                # pylint: disable=E1101
+                play_item.setContentLookup(False)
+                play_item.setMimeType('application/vnd.apple.mpegurl')
+                play_item.setProperty(
+                    'inputstream.adaptive.stream_headers',
+                    'user-agent=' + self.utils.get_user_agent())
                 play_item.setProperty(
                     'inputstream.adaptive.manifest_type', 'hls')
                 play_item.setProperty('inputstreamaddon',
@@ -373,14 +376,50 @@ class ContentLoader(object):
                         'static': True,
                         'lane': lane.get('id')})
                     list_item = xbmcgui.ListItem(label=lane.get('name'))
-                    list_item.setProperty(
-                        'fanart_image',
-                        addon_data.get('fanart'))
                     xbmcplugin.addDirectoryItem(
                         handle=self.plugin_handle,
                         url=url,
                         listitem=list_item,
                         isFolder=True)
+
+    def __add_video_item(self, video, list_item, url):
+        """ADD ME"""
+        if video.get('islivestream', True) is True:
+            xbmcplugin.addDirectoryItem(
+                handle=self.plugin_handle,
+                url=url,
+                listitem=list_item,
+                isFolder=False)
+
+    def __parse_epg_element(self, use_slots, element, details, match_time):
+        """ADD ME"""
+        elements = []
+
+        # determine event type & parse
+        if use_slots is True:
+            slot_events = self.__parse_slot_events(
+                element=element,
+                details=details,
+                match_time=match_time)
+            for slot_event in slot_events:
+                elements.append(slot_event)
+        else:
+            target_url = element.get('target_url', '')
+            return [self.__parse_regular_event(
+                    target_url=target_url,
+                    details=details,
+                    match_time=match_time)]
+        return elements
+
+
+    @classmethod
+    def __set_item_playable(cls, list_item, title):
+        """ADD ME"""
+        list_item.setProperty('IsPlayable', 'true')
+        list_item.setInfo('video', {
+            'title': title,
+            'genre': 'Sports'})
+        return list_item
 
     @classmethod
     def __use_slots(cls, data):

@@ -37,9 +37,9 @@ class Settings(object):
     def encode(self, data):
         """ADD ME"""
         key_handle = pyDes.triple_des(
-            key=self.uniq_id(delay=2),
-            mode=pyDes.CBC,
-            pad='\0\0\0\0\0\0\0\0',
+            self.uniq_id(delay=2),
+            pyDes.CBC,
+            '\0\0\0\0\0\0\0\0',
             padmode=pyDes.PAD_PKCS5)
         encrypted = key_handle.encrypt(
             data=data)
@@ -48,9 +48,9 @@ class Settings(object):
     def decode(self, data):
         """ADD ME"""
         key_handle = pyDes.triple_des(
-            key=self.uniq_id(delay=2),
-            mode=pyDes.CBC,
-            pad='\0\0\0\0\0\0\0\0',
+            self.uniq_id(delay=2),
+            pyDes.CBC,
+            '\0\0\0\0\0\0\0\0',
             padmode=pyDes.PAD_PKCS5)
         decrypted = key_handle.decrypt(
             data=base64.b64decode(s=data))

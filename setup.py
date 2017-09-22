@@ -38,6 +38,7 @@ EXTRA_DEPENDENCIES = {
         'requests',
         'beautifulsoup4',
         'pyDes',
+        'radon',
     ]
 }
 

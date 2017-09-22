@@ -11,3 +11,4 @@ mock==1.0.1
 requests==2.12.4
 beautifulsoup4==4.3.2
 pydes==2.0.1
+radon==2.1.1

@@ -17,8 +17,9 @@ import xbmcaddon
 class Utils(object):
     """ADD ME"""
 
-    def __init__(self, kodi_base_url):
+    def __init__(self, kodi_base_url, constants):
         """ADD ME"""
+        self.constants = constants
         self.kodi_base_url = kodi_base_url
 
     def get_addon_data(self):
@@ -65,10 +66,9 @@ class Utils(object):
             use_inputstream = True
         return use_inputstream
 
-    @classmethod
-    def get_addon(cls):
+    def get_addon(self):
         """ADD ME"""
-        return xbmcaddon.Addon()
+        return xbmcaddon.Addon(self.constants.get_addon_id())
 
     @classmethod
     def generate_hash(cls, text):
@@ -80,9 +80,12 @@ class Utils(object):
         """ADD ME"""
         cap = ''
         words = sentence.decode('utf-8').split(' ')
+        i = 0
         for word in words:
+            if i > 0:
+                cap += ' '
             cap += word[:1].upper() + word[1:].lower()
-            cap += ' '
+            i += 1
         return cap.encode('utf-8')
 
     @classmethod

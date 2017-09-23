@@ -25,7 +25,7 @@ KODI_BASE_URL = argv[0]
 # init plugin object structure
 CONSTANTS = Constants()
 CACHE = Cache()
-UTILS = Utils(kodi_base_url=KODI_BASE_URL)
+UTILS = Utils(constants=CONSTANTS, kodi_base_url=KODI_BASE_URL)
 DIALOGS = Dialogs(utils=UTILS)
 ITEM_HELPER = ItemHelper(constants=CONSTANTS, utils=UTILS)
 SETTINGS = Settings(utils=UTILS, dialogs=DIALOGS, constants=CONSTANTS)

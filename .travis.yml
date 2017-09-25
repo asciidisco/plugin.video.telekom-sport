@@ -5,6 +5,7 @@ python:
 
 script:
   - make all
+  - touch ./_build/.nojekyll
   - codeclimate-test-reporter
 
 addons:

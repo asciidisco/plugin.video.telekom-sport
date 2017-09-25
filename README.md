@@ -15,11 +15,13 @@ Any trademarks used belong to their owning companies & organisations.
 
 ## Install
 
-Use the [Kodinerds Repo](https://github.com/kodinerds/repo/raw/master/repository.kodinerds.zip) to install the plugin. This way you´ll get updtes automatically
+Use the [Kodinerds Repo](https://github.com/kodinerds/repo/raw/master/repository.kodinerds.zip)
+to install the plugin. This way you´ll get updtes automatically
 and all dependencies can be satisfied.
 
 If you´d like to install the plugin manually, download the [latest Release](https://github.com/asciidisco/plugin.video.telekom-sport/releases)
-as well as the [pyDes](https://github.com/kodinerds/repo/blob/master/script.module.pydes/script.module.pydes-2.0.1.zip) dependency. pydes must be installed first.
+as well as the [pyDes](https://github.com/kodinerds/repo/blob/master/script.module.pydes/script.module.pydes-2.0.1.zip)
+dependency. pydes must be installed first.
 
 ## Contribute
 

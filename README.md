@@ -5,12 +5,21 @@
 [![Test Coverage](https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/badges/coverage.svg)](https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/coverage)
 [![Issue Count](https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/badges/issue_count.svg)](https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport)
 [![GitHub release](https://img.shields.io/github/release/asciidisco/plugin.video.telekom-sport.svg)](https://github.com/asciidisco/plugin.video.telekom-sport/releases)
+[![Docs](https://media.readthedocs.org/static/projects/badges/passing.svg)](https://asciidisco.github.io/plugin.video.telekom-sport/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Disclaimer
 
 This plugin is not officially commisioned/supported by Deutsche Telekom.
 Any trademarks used belong to their owning companies & organisations.
+
+## Install
+
+Use the [Kodinerds Repo](https://github.com/kodinerds/repo/raw/master/repository.kodinerds.zip) to install the plugin. This way you´ll get updtes automatically
+and all dependencies can be satisfied.
+
+If you´d like to install the plugin manually, download the [latest Release](https://github.com/asciidisco/plugin.video.telekom-sport/releases)
+as well as the [pyDes](https://github.com/kodinerds/repo/blob/master/script.module.pydes/script.module.pydes-2.0.1.zip) dependency. pydes must be installed first.
 
 ## Contribute
 

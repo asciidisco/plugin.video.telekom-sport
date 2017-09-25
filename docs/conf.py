@@ -11,18 +11,10 @@ import sphinx_rtd_theme
 BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
 ROOT_PATH = os.path.dirname(BASE_PATH) + os.path.sep
 
-sys.path.insert(
-    index=0,
-    object=BASE_PATH)
-sys.path.insert(
-    index=0,
-    object=ROOT_PATH)
-sys.path.insert(
-    index=0,
-    object=ROOT_PATH + 'resources' + os.path.sep)
-sys.path.insert(
-    index=0,
-    object=ROOT_PATH + 'resources' + os.path.sep + 'lib' + os.path.sep)
+sys.path.insert(0, BASE_PATH)
+sys.path.insert(0, ROOT_PATH)
+sys.path.insert(0, ROOT_PATH + 'resources' + os.path.sep)
+sys.path.insert(0, ROOT_PATH + 'resources' + os.path.sep + 'lib' + os.path.sep)
 
 print sys.path
 

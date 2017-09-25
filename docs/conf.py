@@ -9,7 +9,7 @@ import sys
 import sphinx_rtd_theme
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
-ROOT_PATH = os.path.dirname(BASE_PATH) + os.path.sep
+ROOT_PATH = os.path.dirname(os.path.dirname(BASE_PATH)) + os.path.sep
 
 sys.path.insert(0, BASE_PATH)
 sys.path.insert(0, ROOT_PATH)

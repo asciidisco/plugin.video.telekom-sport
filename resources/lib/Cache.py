@@ -69,5 +69,9 @@ class Cache(object):
 
     @classmethod
     def __get_window_instance(cls):
-        """Returns the current window instance from KODI"""
+        """
+        Returns the current window instance from KODI
+
+        :returns: xmbcguiWindow -- Window instance
+        """
         return xbmcgui.Window(xbmcgui.getCurrentWindowId())

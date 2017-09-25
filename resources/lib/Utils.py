@@ -31,8 +31,7 @@ class Utils(object):
             version=addon.getAddonInfo('version'),
             fanart=addon.getAddonInfo('fanart'),
             base_data_path=base_data_path,
-            cookie_path=base_data_path + 'COOKIE'
-        )
+            cookie_path=base_data_path + 'COOKIE')
 
     def log(self, msg, level=xbmc.LOGNOTICE):
         """ADD ME"""

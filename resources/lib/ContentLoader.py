@@ -4,7 +4,7 @@
 # Created on: 24.07.2017
 # License: MIT https://goo.gl/WA1kby
 
-"""ADD ME"""
+"""Fetches and parses content from the Telekom Sport API & website"""
 
 import re
 import json
@@ -16,9 +16,20 @@ from bs4 import BeautifulSoup
 
 
 class ContentLoader(object):
-    """ADD ME"""
+    """Fetches and parses content from the Telekom Sport API & website"""
 
     def __init__(self, cache, session, item_helper, handle):
+        """Injects instances & the plugin handle
+
+        :param cache: Cache instance
+        :type cache: resources.lib.Cache
+        :param session: Session instance
+        :type session: resources.lib.Session
+        :param item_helper: ItemHelper instance
+        :type item_helper: resources.lib.ItemHelper
+        :param handle: Kodis plugin handle
+        :type handle: int
+        """
         self.constants = session.constants
         self.utils = session.utils
         self.cache = cache
@@ -26,21 +37,28 @@ class ContentLoader(object):
         self.item_helper = item_helper
         self.plugin_handle = handle
 
-    def get_epg(self, _for):
-        """ADD ME"""
+    def get_epg(self, sport):
+        """
+        Returns the parsed or cached epg data
+        for an selected sport
+
+        :param sport: Cache instance
+        :type sport: resources.lib.Cache
+        :returns:  dict - Parsed EPG
+        """
         _session = self.session.get_session()
         # check for cached epg data
-        cached_epg = self.cache.get_cached_item('epg' + _for)
+        cached_epg = self.cache.get_cached_item('epg' + sport)
         if cached_epg is not None:
             return cached_epg
-        return self.load_epg(_for=_for, _session=_session)
+        return self.load_epg(sport=sport, _session=_session)
 
-    def load_epg(self, _for, _session):
+    def load_epg(self, sport, _session):
         """ADD ME"""
-        epg = self.fetch_epg(_for=_for, _session=_session)
+        epg = self.fetch_epg(sport=sport, _session=_session)
         if epg.get('status') == 'success':
             page_tree = self.parse_epg(epg=epg)
-            self.cache.add_cached_item('epg' + _for, page_tree)
+            self.cache.add_cached_item('epg' + sport, page_tree)
         return page_tree
 
     def parse_epg(self, epg):
@@ -73,10 +91,10 @@ class ContentLoader(object):
 
             return page_tree
 
-    def fetch_epg(self, _for, _session):
+    def fetch_epg(self, sport, _session):
         """ADD ME"""
         _epg_url = self.constants.get_epg_url()
-        _epg_url += self.constants.get_sports().get(_for, {}).get('epg', '')
+        _epg_url += self.constants.get_sports().get(sport, {}).get('epg', '')
         return json.loads(_session.get(_epg_url).text)
 
     @classmethod

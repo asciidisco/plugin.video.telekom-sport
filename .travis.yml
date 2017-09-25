@@ -16,3 +16,12 @@ notifications:
   email:
     on_success: change
     on_failure: always
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: _build
+  target_branch: gh-pages
+  on:
+    branch: master

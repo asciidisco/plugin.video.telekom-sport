@@ -12,6 +12,7 @@ ratings:
    - "**.py"
    - "**.md"
 exclude_paths:
+  - "docs"
   - "resources/test/"
   - "resources/language/"
   - "resources/media/"

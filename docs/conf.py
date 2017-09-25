@@ -3,7 +3,16 @@
 # plugin.video.telekom-sport documentation build configuration file, created by
 # sphinx-quickstart on Wed Apr 26 16:27:25 2017.
 
+
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + os.path.sep)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep + 'lib' + os.path.sep)
 import sphinx_rtd_theme
+
+
 
 # -- General configuration ------------------------------------------------
 

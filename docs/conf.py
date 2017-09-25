@@ -7,12 +7,13 @@
 import os
 import sys
 import sphinx_rtd_theme
-from setup import get_addon_data
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + os.path.sep)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep + 'lib' + os.path.sep)
+
+from setup import get_addon_data
 
 # load data from ADDON XML
 ADDON_DATA = get_addon_data()

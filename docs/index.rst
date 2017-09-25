@@ -5,9 +5,6 @@
 
 :github_url: https://github.com/asciidisco/plugin.video.telekom-sport
 
-Welcome to plugin.video.telekom-sport's documentation!
-======================================================
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -18,6 +15,10 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+Code Docs
+=========
 
 .. autoclass:: resources.lib.Cache.Cache
   :members:
@@ -50,3 +51,6 @@ Indices and tables
 .. autoclass:: resources.lib.Utils.Utils
   :members:
   :private-members:
+
+.. mdinclude:: ../Code_of_Conduct.md
+.. mdinclude:: ../Contributing.md

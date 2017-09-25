@@ -14,3 +14,4 @@ pydes==2.0.1
 radon==2.1.1
 Sphinx==1.5.5
 sphinx_rtd_theme==0.2.4
+m2r==0.1.12

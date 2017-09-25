@@ -39,6 +39,9 @@ EXTRA_DEPENDENCIES = {
         'beautifulsoup4',
         'pyDes',
         'radon',
+        'Sphinx',
+        'sphinx_rtd_theme',
+        'm2r',
     ]
 }
 

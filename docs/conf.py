@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) +
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + os.path.sep + 'resources' + os.path.sep + 'lib' + os.path.sep)
 import sphinx_rtd_theme
-
+from recommonmark.parser import CommonMarkParser
 
 
 # -- General configuration ------------------------------------------------
@@ -28,7 +28,8 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.coverage',
     'sphinx.ext.imgmath',
-    'sphinx.ext.viewcode']
+    'sphinx.ext.viewcode',
+    'm2r']
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -73,7 +74,7 @@ pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
-
+source_suffix = ['.rst', '.md']
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -82,6 +83,8 @@ todo_include_todos = False
 #
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_static_path = ['../resources/icon.png']
+html_logo = '_static/icon.png'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

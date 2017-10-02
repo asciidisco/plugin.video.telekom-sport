@@ -1,3 +1,4 @@
+sudo: false
 language: python
 
 python:
@@ -7,6 +8,10 @@ script:
   - make all
   - touch ./_build/.nojekyll
   - codeclimate-test-reporter
+  - if ["$TRAVIS_TAG"] echo $TRAVIS_TAG
+  - echo $TRAVIS_TAG
+#  - kodi-release -c -o Changelog.md
+#  - kodi-release -u
 
 addons:
   apt:
@@ -19,10 +24,19 @@ notifications:
     on_failure: always
 
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: _build
-  target_branch: gh-pages
-  on:
-    branch: master
+  - provider: releases
+    github_token: $GITHUB_TOKEN
+    tag_name: $CURRENT_VERSION
+    name: $CURRENT_VERSION
+    body: $LAST_CHANGES
+    on:
+      tags: true
+      branch: master
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    local_dir: _build
+    target_branch: gh-pages
+    on:
+      tags: true
+      branch: master

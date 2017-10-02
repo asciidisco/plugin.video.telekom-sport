@@ -10,10 +10,8 @@ script:
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
   - if [ $TRAVIS_TAG != "" ]; then
-    echo 'foo'
+    echo 'foo';
     fi
-#  - kodi-release -c -o Changelog.md
-#  - kodi-release -u
 
 addons:
   apt:

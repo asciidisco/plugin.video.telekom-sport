@@ -51,13 +51,14 @@ tag:
 tag-release:
 		kodi-release -a -o ./Authors.md
 		kodi-release -c -o ./Changelog.md
-		NEXT_VERSION=`kodi-release -n`
-		CURRENT_VERSION=`kodi-release -p`
-		LAST_CHANGES=`kodi-release -l`
-		echo "$NEXT_VERSION"
-		echo "$CURRENT_VERSION"		
-		echo "$LAST_CHANGES"
+		kodi-release -n -o ./.next_version
+		kodi-release -p -o ./.current_version
+		kodi-release -l -o ./.last_changes
 		kodi-release -u
+		cat ./.next_version
+		cat ./.current_version
+		cat ./.last_changes
+		NEXT_VERSION=$(<./.next_version)
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json

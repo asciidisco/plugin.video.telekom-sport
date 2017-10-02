@@ -46,7 +46,7 @@ test:
 		nosetests $(TEST_DIR) $(TEST_OPTIONS) --cover-html --cover-html-dir=$(COVERAGE_DIR)
 
 tag:
-		if [ -z "$TRAVIS_TAG" ]; then echo "bar"; else echo "foo"; fi
+		if [ "$TRAVIS_TAG" != "" ]; then echo "bar"; else echo "foo"; fi
 
 docs:
 	@$(SPHINXBUILD) $(DOCS_DIR) $(BUILDDIR) -T -c ./docs

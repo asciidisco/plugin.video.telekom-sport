@@ -30,7 +30,7 @@ jobs:
       on:
         branch: foobar
     - stage: release
-      - provider: releases
+        provider: releases
         github_token: $GITHUB_TOKEN
         tag_name: $CURRENT_VERSION
         name: $CURRENT_VERSION
@@ -39,7 +39,7 @@ jobs:
           tags: true
           branch: master
     - stage: deploy
-      - provider: pages
+        provider: pages
         skip_cleanup: true
         github_token: $GITHUB_TOKEN
         local_dir: _build

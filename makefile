@@ -58,13 +58,12 @@ tag-release:
 		echo "$CURRENT_VERSION"		
 		echo "$LAST_CHANGES"
 		kodi-release -u
-		git remote add origin remote=https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
 		git add addon.xml
 		git status
-		git commit -m "chore(version): Version bump"
+		git commit -m "chore(version): Version bump  [ci skip]"
 		git tag ${NEXT_VERSION}
 		git status
 

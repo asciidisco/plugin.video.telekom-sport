@@ -1,7 +1,6 @@
 # Kodi Media Center language file
 # Addon Name: Telekom Sport
 # Addon id: plugin.video.telekom-sport
-# Addon version: 1.2.2
 # Addon Provider: asciidisco
 msgid ""
 msgstr ""
@@ -19,7 +18,7 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Telekom Sport"
-msgstr "Telekom Sport"
+msgstr ""
 
 msgctxt "Addon Description"
 msgid "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences & womans football matches."
@@ -31,11 +30,11 @@ msgstr "Inoffizielles Addon - Benutzung auf eigene Gefahr. Das Plugin wurde nich
 
 msgctxt "#32001"
 msgid "Account"
-msgstr "Account"
+msgstr ""
 
 msgctxt "#32002"
 msgid "Logout"
-msgstr "Logout"
+msgstr ""
 
 msgctxt "#32003"
 msgid "Change user account"

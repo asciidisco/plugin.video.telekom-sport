@@ -1,7 +1,6 @@
 # Kodi Media Center language file
 # Addon Name: Telekom Sport
 # Addon id: plugin.video.telekom-sport
-# Addon version: 1.2.2
 # Addon Provider: asciidisco
 msgid ""
 msgstr ""
@@ -19,52 +18,52 @@ msgstr ""
 
 msgctxt "Addon Summary"
 msgid "Telekom Sport"
-msgstr "Telekom Sport"
+msgstr ""
 
 msgctxt "Addon Description"
 msgid "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences & womans football matches."
-msgstr "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences & womans football matches."
+msgstr ""
 
 msgctxt "Addon Disclaimer"
 msgid "Unofficial Addon - Use at your own risk. The plugin is not commisioned by Deutsche Telekom."
-msgstr "Unofficial Addon - Use at your own risk. The plugin is not commisioned by Deutsche Telekom."
+msgstr ""
 
 msgctxt "#32001"
 msgid "Account"
-msgstr "Account"
+msgstr ""
 
 msgctxt "#32002"
 msgid "Logout"
-msgstr "Logout"
+msgstr ""
 
 msgctxt "#32003"
 msgid "Change user account"
-msgstr "Change user account"
+msgstr ""
 
 msgctxt "#32004"
 msgid "Enter password"
-msgstr "Enter password"
+msgstr ""
 
 msgctxt "#32005"
 msgid "Enter e-mail"
-msgstr "Enter e-mail"
+msgstr ""
 
 msgctxt "#32006"
 msgid "Login failed"
-msgstr "Login failed"
+msgstr ""
 
 msgctxt "#32007"
 msgid "Check your credentials"
-msgstr "Check your credentials"
+msgstr ""
 
 msgctxt "#32008"
 msgid "Error fetching device id"
-msgstr "Error fetching device id"
+msgstr ""
 
 msgctxt "#32009"
 msgid "Match not yet available"
-msgstr "Match not yet available"
+msgstr ""
 
 msgctxt "#32010"
 msgid "Encrypt credentials"
-msgstr "Encrypt credentials"
+msgstr ""

@@ -59,13 +59,15 @@ tag-release:
 		cat ./.current_version
 		cat ./.last_changes
 		NEXT_VERSION=$(<./.next_version)
+		CURRENT_VERSION=$(<./.current_version)
+		LATEST_CHANGES=$(<./.last_changes)				
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
 		git add addon.xml
 		git status
 		git commit -m "chore(version): Version bump  [ci skip]"
-		git tag ${NEXT_VERSION}
+		git tag "$NEXT_VERSION"
 		git status
 
 kodi-release:

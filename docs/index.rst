@@ -6,8 +6,26 @@
 :github_url: https://github.com/asciidisco/plugin.video.telekom-sport
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
+
+.. image:: https://travis-ci.org/asciidisco/plugin.video.telekom-sport.svg?branch=master
+   :target: https://travis-ci.org/asciidisco/plugin.video.telekom-sport
+
+.. image:: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/badges/gpa.svg
+   :target: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport
+
+.. image:: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/badges/coverage.svg
+   :target: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/coverage
+
+.. image:: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport/badges/issue_count.svg
+   :target: https://codeclimate.com/github/asciidisco/plugin.video.telekom-sport
+
+.. image:: https://img.shields.io/github/release/asciidisco/plugin.video.telekom-sport.svg
+   :target: https://github.com/asciidisco/plugin.video.telekom-sport/releases
+
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+   :target: https://opensource.org/licenses/MIT
 
 Indices and tables
 ==================
@@ -15,7 +33,6 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
 
 Code Docs
 =========
@@ -54,3 +71,17 @@ Code Docs
 
 .. mdinclude:: ../Code_of_Conduct.md
 .. mdinclude:: ../Contributing.md
+.. mdinclude:: ../Changelog.md
+
+Lint Report
+===========
+
+.. raw:: html
+   :file: ../report/lint.html
+
+Coverage Report
+===============
+
+.. raw:: html
+
+  <iframe src="./coverage.html" height="500" width="100%"/>

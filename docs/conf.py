@@ -6,6 +6,7 @@
 
 import os
 import sys
+from shutil import copyfile
 import sphinx_rtd_theme
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__)) + os.path.sep
@@ -15,8 +16,6 @@ sys.path.insert(0, BASE_PATH)
 sys.path.insert(0, ROOT_PATH)
 sys.path.insert(0, ROOT_PATH + 'resources' + os.path.sep)
 sys.path.insert(0, ROOT_PATH + 'resources' + os.path.sep + 'lib' + os.path.sep)
-
-print sys.path
 
 from setup import get_addon_data
 
@@ -85,3 +84,9 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['../resources/icon.png']
 html_logo = '_static/icon.png'
+
+# load contents of coverage dir and copy to _build dir
+COVERAGE_CONTENTS = os.listdir(ROOT_PATH + 'coverage')
+for item in COVERAGE_CONTENTS:
+    copyfile(os.path.abspath('../coverage/' + item), ROOT_PATH + '_build/' + item)
+copyfile(os.path.abspath('../coverage/index.html'), ROOT_PATH + '_build/coverage.html')

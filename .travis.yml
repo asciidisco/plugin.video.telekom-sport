@@ -9,48 +9,53 @@ addons:
     packages:
       - make
 
+stages:
+  - lint
+  - test
+  - docs
+  - tag
+  - foo
+  - deploy
+  - release
+
 jobs:
   include:
     - stage: test
-      script: make test
-    -
-      script: codeclimate-test-reporter
+      script: make test && codeclimate-test-reporter
     - stage: lint
       script: make lint
     - stage: docs
-      script: make lint
-    -
-      script: touch ./_build/.nojekyll
+      script: make docs && touch ./_build/.nojekyll
     - stage: tag
-      script: echo bar
+      script: echo "bar"
       on:
         branch: master
     - stage: foo
-      script: echo foo
+      script: echo "foo"
       on:
         branch: foobar
     - stage: release
-        script: echo "Deploying to GitHub releases ..."
-        - deploy:
-          provider: releases
-          github_token: $GITHUB_TOKEN
-          tag_name: $CURRENT_VERSION
-          name: $CURRENT_VERSION
-          body: $LAST_CHANGES
-          on:
-            tags: true
-            branch: master
+      script: echo "Deploying to GitHub releases ..."
+      deploy:
+        provider: releases
+        github_token: $GITHUB_TOKEN
+        tag_name: $CURRENT_VERSION
+        name: $CURRENT_VERSION
+        body: $LAST_CHANGES
+      on:
+        tags: true
+        branch: master
     - stage: deploy
-        script: echo "Deploying to GitHub pages ..."
-        - deploy:
-          provider: pages
-          skip_cleanup: true
-          github_token: $GITHUB_TOKEN
-          local_dir: _build
-          target_branch: gh-pages
-          on:
-            tags: true
-            branch: master
+      script: echo "Deploying to GitHub pages ..."
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_TOKEN
+        local_dir: _build
+        target_branch: gh-pages
+        on:
+          tags: true
+          branch: master
 
 notifications:
   email:

@@ -10,6 +10,7 @@ addons:
       - make
 
 stages:
+  - setup
   - lint
   - test
   - docs
@@ -20,6 +21,8 @@ stages:
 
 jobs:
   include:
+    - stage: setup
+      script: make clean
     - stage: test
       script: make test && codeclimate-test-reporter
     - stage: lint

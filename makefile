@@ -1,4 +1,4 @@
-.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage
+.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage tag tag-release kodi-release
 .DEFAULT_GOAL := all
 
 SPHINXBUILD = sphinx-build
@@ -46,7 +46,33 @@ test:
 		nosetests $(TEST_DIR) $(TEST_OPTIONS) --cover-html --cover-html-dir=$(COVERAGE_DIR)
 
 tag:
-		if [ "$TRAVIS_TAG" != "" ]; then echo "bar"; else echo "foo"; fi
+		if [ "$TRAVIS_TAG" != "" ]; then make tag-release; else make kodi-release; fi
+
+tag-release:
+		kodi-release -a -o ./Authors.md
+		kodi-release -c -o ./Changelog.md
+		NEXT_VERSION=`kodi-release -n`
+		CURRENT_VERSION=`kodi-release -p`
+		LAST_CHANGES=`kodi-release -l`
+		echo "$NEXT_VERSION"
+		echo "$CURRENT_VERSION"		
+		echo "$LAST_CHANGES"
+		kodi-release -u
+		git remote add origin remote=https://${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}
+		git add -f ./Changelog.md
+		git add -f ./Authors.md
+		git add package.json
+		git add addon.xml
+		git status
+		git commit -m "chore(version): Version bump"
+		git tag ${NEXT_VERSION}
+		git status
+
+kodi-release:
+	CURRENT_VERSION=`kodi-release -p`
+	LAST_CHANGES=`kodi-release -l`
+	echo "$CURRENT_VERSION"		
+	echo "$LAST_CHANGES"
 
 docs:
 	@$(SPHINXBUILD) $(DOCS_DIR) $(BUILDDIR) -T -c ./docs

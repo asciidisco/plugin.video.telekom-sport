@@ -72,6 +72,7 @@ Code Docs
 .. mdinclude:: ../Code_of_Conduct.md
 .. mdinclude:: ../Contributing.md
 .. mdinclude:: ../Changelog.md
+.. mdinclude:: ../Authors.md
 
 Lint Report
 ===========

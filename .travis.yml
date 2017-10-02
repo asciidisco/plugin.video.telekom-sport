@@ -20,7 +20,6 @@ deploy:
     body: "$LAST_CHANGES"
     on:
       tags: true
-      branch: master
   - provider: pages
     skip_cleanup: true
     github_token: "$GITHUB_TOKEN"
@@ -28,7 +27,6 @@ deploy:
     target_branch: gh-pages
     on:
       tags: true
-      branch: master
 
 notifications:
   email:

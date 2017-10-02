@@ -24,6 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 Changelog.md
+Authors.md
 node_modules/
 package-lock.json
 # PyInstaller

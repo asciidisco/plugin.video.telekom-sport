@@ -9,10 +9,11 @@ script:
   - touch ./_build/.nojekyll
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
-  - if [ $TRAVIS_TAG !=: "" ]; then
+  - if [ $TRAVIS_TAG != "" ]; then
     echo 'foo';
     fi
-  - if [ $TRAVIS_TAG ==: "" ]; then
+
+  - if [ $TRAVIS_TAG == "" ]; then
     echo 'bar';
     fi
 

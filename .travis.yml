@@ -15,15 +15,6 @@ script:
       echo "foo"
     fi
 
-addons:
-  apt:
-    packages:
-      - make
-
-notifications:
-  email:
-    on_success: change
-    on_failure: always
 
 deploy:
   - provider: releases
@@ -42,3 +33,8 @@ deploy:
     on:
       tags: true
       branch: master
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always

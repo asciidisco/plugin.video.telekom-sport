@@ -9,7 +9,9 @@ script:
   - touch ./_build/.nojekyll
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
-  - 'if ["$TRAVIS_TAG"] echo $TRAVIS_TAG fi'
+  - if [ $TRAVIS_TAG != "" ]; then
+    echo 'foo'
+    fi
 #  - kodi-release -c -o Changelog.md
 #  - kodi-release -u
 

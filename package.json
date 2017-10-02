@@ -1,0 +1,30 @@
+{
+  "name": "plugin.video.telekom-sport",
+  "version": "1.2.2",
+  "description": "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences &amp; womans football matches.",
+  "scripts": {
+    "precommit": "make lint",
+    "prepush": "make test",
+    "gcz": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asciidisco/plugin.video.telekom-sport.git"
+  },
+  "author": "Sebastian Golasch <public@asciidisco.com> (http://asciidisco.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asciidisco/plugin.video.telekom-sport/issues"
+  },
+  "homepage": "https://github.com/asciidisco/plugin.video.telekom-sport#readme",
+  "devDependencies": {
+    "commitizen": "2.9.6",
+    "cz-conventional-changelog": "2.0.0",
+    "husky": "0.14.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

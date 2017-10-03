@@ -9,9 +9,11 @@ script:
   - touch ./_build/.nojekyll
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
-  - export BAR="foo"
+  - export NEXT_VERSION=$(kodi-release -n)
+  - export CURRENT_VERSION=$(kodi-release -p)
+  - export LATEST_CHANGES=$(kodi-release -l)
   - make tag
-
+  - export BAR="foo"
 
 deploy:
   - provider: releases

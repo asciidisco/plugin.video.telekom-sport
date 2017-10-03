@@ -51,33 +51,23 @@ tag:
 tag-release:
 		kodi-release -a -o ./Authors.md
 		kodi-release -c -o ./Changelog.md
-		kodi-release -n -o ./.next_version
-		kodi-release -p -o ./.current_version
-		kodi-release -l -o ./.last_changes
 		kodi-release -u
-		export NEXT_VERSION=$(kodi-release -n)
-		export CURRENT_VERSION=$(cat ./.current_version)
-		#export LATEST_CHANGES=`cat ./.last_changes`
-	  echo "BRANCH: ${TRAVIS_BRANCH}"
-	  echo "BAR: ${BAR}"	
 	  echo "Next version: ${NEXT_VERSION}"
 	  echo "Current version: ${CURRENT_VERSION}"
-	  #echo "Latest changes: ${LATEST_CHANGES}"			
+	  echo "Latest changes: ${LATEST_CHANGES}"			
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
 		git add addon.xml
 		git status
 		git commit -m "chore(version): Version bump  [ci skip]"
-		git tag $NEXT_VERSION
+		git tag ${NEXT_VERSION}
 		git tag
 		git status
 
 kodi-release:
-	CURRENT_VERSION=`kodi-release -p`
-	LAST_CHANGES=`kodi-release -l`
-	echo "$CURRENT_VERSION"		
-	echo "$LAST_CHANGES"
+  echo "Current version: ${CURRENT_VERSION}"
+  echo "Latest changes: ${LATEST_CHANGES}"
 
 docs:
 	@$(SPHINXBUILD) $(DOCS_DIR) $(BUILDDIR) -T -c ./docs

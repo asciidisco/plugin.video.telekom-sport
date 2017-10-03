@@ -55,12 +55,9 @@ tag-release:
 		kodi-release -p -o ./.current_version
 		kodi-release -l -o ./.last_changes
 		kodi-release -u
-		cat ./.next_version
-		cat ./.current_version
-		cat ./.last_changes
-		NEXT_VERSION=$(<./.next_version)
-		CURRENT_VERSION=$(<./.current_version)
-		LATEST_CHANGES=$(<./.last_changes)				
+		export NEXT_VERSION=$(<./.next_version)
+		export CURRENT_VERSION=$(<./.current_version)
+		export LATEST_CHANGES=$(<./.last_changes)			
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json

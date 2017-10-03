@@ -55,7 +55,6 @@ tag-release:
 		kodi-release -p -o ./.current_version
 		kodi-release -l -o ./.last_changes
 		kodi-release -u
-		export BAR="foo"
 		export NEXT_VERSION=$(kodi-release -n)
 		export CURRENT_VERSION=$(cat ./.current_version)
 		#export LATEST_CHANGES=`cat ./.last_changes`

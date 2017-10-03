@@ -9,6 +9,7 @@ script:
   - touch ./_build/.nojekyll
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
+  - export BAR="foo"
   - make tag
 
 

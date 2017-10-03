@@ -55,11 +55,12 @@ tag-release:
 		kodi-release -p -o ./.current_version
 		kodi-release -l -o ./.last_changes
 		kodi-release -u
-		export NEXT_VERSION=`kodi-release -n`
-		export CURRENT_VERSION=`cat ./.current_version`
+		export BAR="foo"
+		export NEXT_VERSION=$(kodi-release -n)
+		export CURRENT_VERSION=$(cat ./.current_version)
 		#export LATEST_CHANGES=`cat ./.last_changes`
 	  echo "BRANCH: ${TRAVIS_BRANCH}"
-	  echo "BRANCH: $TRAVIS_BRANCH"	
+	  echo "BAR: ${BAR}"	
 	  echo "Next version: ${NEXT_VERSION}"
 	  echo "Current version: ${CURRENT_VERSION}"
 	  #echo "Latest changes: ${LATEST_CHANGES}"			

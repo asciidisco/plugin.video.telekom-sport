@@ -65,10 +65,6 @@ tag-release:
 		git tag
 		git status
 
-kodi-release:
-  echo "Current version: ${CURRENT_VERSION}"
-  echo "Latest changes: ${LATEST_CHANGES}"
-
 docs:
 	@$(SPHINXBUILD) $(DOCS_DIR) $(BUILDDIR) -T -c ./docs
 

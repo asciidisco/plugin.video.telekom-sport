@@ -60,7 +60,7 @@ tag-release:
 		git add package.json
 		git add addon.xml
 		git status
-		git commit -m "chore(version): Version bump  [ci skip]"
+		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
 		git tag
 		git status

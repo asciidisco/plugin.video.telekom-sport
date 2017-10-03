@@ -54,7 +54,8 @@ tag-release:
 		kodi-release -u
 	  echo "Next version: ${NEXT_VERSION}"
 	  echo "Current version: ${CURRENT_VERSION}"
-	  echo "Latest changes: ${LATEST_CHANGES}"			
+	  echo "Latest changes:"
+		kodi-release -l
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json

@@ -10,9 +10,6 @@ script:
   - codeclimate-test-reporter
   - echo $TRAVIS_TAG
   - make tag
-  - echo "Next version: ${NEXT_VERSION}"
-  - echo "Current version: ${CURRENT_VERSION}"
-  - echo "Latest changes: ${LATEST_CHANGES}"
 
 
 deploy:

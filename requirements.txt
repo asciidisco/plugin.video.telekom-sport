@@ -18,3 +18,4 @@ m2r==0.1.12
 git+https://github.com/asciidisco/kodi-release-helper.git#egg=kodi-release-helper
 dennis==0.9
 blessings==1.6
+demjson==2.2.4

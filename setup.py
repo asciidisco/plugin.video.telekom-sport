@@ -40,10 +40,10 @@ EXTRA_DEPENDENCIES = {
         'Sphinx',
         'sphinx_rtd_theme',
         'm2r',
-        'semver',
-        'gitchangelog',
+        'kodi-release-helper',
         'dennis',
         'blessings',
+        'demjson',
     ]
 }
 

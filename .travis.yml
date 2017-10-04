@@ -15,9 +15,9 @@ script:
 deploy:
   - provider: releases
     github_token: $GITHUB_TOKEN
-    tag_name: $CURRENT_VERSION
-    name: $CURRENT_VERSION
-    body: $LAST_CHANGES
+    tag_name: $(kodi-release -p)
+    name: $(kodi-release -p)
+    body: $(kodi-release -l)
     on:
       branch: master
   - provider: pages

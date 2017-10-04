@@ -6,7 +6,6 @@ python:
 
 script:
   - make all
-  - touch ./_build/.nojekyll
   - codeclimate-test-reporter
   - export NEXT_VERSION=$(kodi-release -n)
   - export CURRENT_VERSION=$(kodi-release -p)

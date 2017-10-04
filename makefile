@@ -65,6 +65,7 @@ tag-release:
 		kodi-release -c -o ./Changelog.md
 		kodi-release -u
 		make docs
+		touch ./_build/.nojekyll		
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json

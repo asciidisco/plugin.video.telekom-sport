@@ -73,7 +73,7 @@ tag:
 		git add addon.xml
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
-		git push
+		git push origin master
 		git push --tags
 
 help:

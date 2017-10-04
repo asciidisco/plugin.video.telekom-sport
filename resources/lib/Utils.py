@@ -90,6 +90,9 @@ class Utils(object):
 
         :returns:  bool - Use inputstream to play videos
         """
+        raw_setting = self.get_addon().getSetting('use_inputstream')
+        if raw_setting == 'false':
+            return False
         kodi_version = int(self.get_kodi_version())
         inputstream_version_raw = self.get_inputstream_version()
         inputstream_version = int(inputstream_version_raw.replace('.', ''))

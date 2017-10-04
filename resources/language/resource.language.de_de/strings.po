@@ -67,3 +67,7 @@ msgstr "Das Spiel ist zur Zeit (noch) nicht verfügbar"
 msgctxt "#32010"
 msgid "Encrypt credentials"
 msgstr "Anmeldedaten verschlüsseln"
+
+msgctxt "#32011"
+msgid "Use Inputstream (if available)"
+msgstr "Nutze Inputstream zum abspielen (falls verfügbar)"

@@ -67,3 +67,7 @@ msgstr ""
 msgctxt "#32010"
 msgid "Encrypt credentials"
 msgstr ""
+
+msgctxt "#32011"
+msgid "Use Inputstream (if available)"
+msgstr ""

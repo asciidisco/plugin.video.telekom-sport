@@ -4,20 +4,29 @@
 # Created on: 24.07.2017
 # License: MIT https://goo.gl/WA1kby
 
-"""ADD ME"""
+
+"""Displays localized dialogs for Kodi"""
 
 import xbmcgui
 
 
 class Dialogs(object):
-    """ADD ME"""
+    """Displays localized dialogs for Kodi"""
 
     def __init__(self, utils):
-        """ADD ME"""
+        """Injects the utils instance
+
+        :param utils: Plugin utils
+        :type utils: resources.lib.Utils
+        """
         self.utils = utils
 
     def show_password_dialog(self):
-        """ADD ME"""
+        """
+        Shows password input
+
+        :returns:  string - Password characters
+        """
         dlg = xbmcgui.Dialog()
         return dlg.input(
             self.utils.get_local_string(string_id=32004),
@@ -25,14 +34,22 @@ class Dialogs(object):
             option=xbmcgui.ALPHANUM_HIDE_INPUT)
 
     def show_email_dialog(self):
-        """ADD ME"""
+        """
+        Shows email input
+
+        :returns:  string - Email characters
+        """
         dlg = xbmcgui.Dialog()
         return dlg.input(
             self.utils.get_local_string(string_id=32005),
             type=xbmcgui.INPUT_ALPHANUM)
 
     def show_not_available_dialog(self):
-        """ADD ME"""
+        """
+        Shows "video not playable/available" modal
+
+        :returns:  bool - Dialog shown
+        """
         addon_data = self.utils.get_addon_data()
         dlg = xbmcgui.Dialog()
         return dlg.ok(
@@ -40,7 +57,11 @@ class Dialogs(object):
             self.utils.get_local_string(string_id=32009))
 
     def show_login_failed_notification(self):
-        """ADD ME"""
+        """
+        Shows login failed notification for 5 sec
+
+        :returns:  bool - Notification shown
+        """
         dialog = xbmcgui.Dialog()
         dialog.notification(
             self.utils.get_local_string(string_id=32006),
@@ -48,7 +69,11 @@ class Dialogs(object):
             xbmcgui.NOTIFICATION_ERROR, 5000)
 
     def show_storing_credentials_failed(self):
-        """ADD ME"""
+        """
+        Shows "storing credentials failed" modal
+
+        :returns:  bool - Dialog shown
+        """
         dialog = xbmcgui.Dialog()
         dialog.ok(
             self.utils.get_addon_data().get('plugin'),

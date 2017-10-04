@@ -19,8 +19,12 @@ from resources.lib.Utils import Utils
 
 
 # setup plugin base stuff
-PLUGIN_HANDLE = int(argv[1])
-KODI_BASE_URL = argv[0]
+try:
+    PLUGIN_HANDLE = int(argv[1])
+    KODI_BASE_URL = argv[0]
+except ValueError:
+    PLUGIN_HANDLE = 1
+    KODI_BASE_URL = ''
 
 # init plugin object structure
 CONSTANTS = Constants()
@@ -43,9 +47,9 @@ def router(paramstring, user, password):
     method should be called in order to display contents
 
     :param user: Telekom account email address or user id
-    :type user: str.
+    :type user: string
     :param password: Telekom account password
-    :type password: str.
+    :type password: string
     :returns:  bool -- Matching route found
     """
     params = dict(parse_qsl(paramstring))
@@ -72,7 +76,14 @@ def router(paramstring, user, password):
 
 
 def __settings_action(params):
-    """ADD ME"""
+    """
+    Operates on actions from within the settings pane
+    Can logout the user, can switch users account
+
+    :param params: Route paramters
+    :type params: dict
+    :returns:  bool -- Route matched
+    """
     if params.get('action') is not None:
         if params.get('action') == 'logout':
             SESSION.logout()
@@ -83,7 +94,15 @@ def __settings_action(params):
 
 
 def __login_failed_action(user, password):
-    """ADD ME"""
+    """
+    Veryfies the users login & shows a notification if it failes
+
+    :param user: Telekom account email address or user id
+    :type user: string
+    :param password: Telekom account password
+    :type password: string
+    :returns:  bool -- Login succeeded
+    """
     if SESSION.login(user, password) is False:
         # show login failed dialog if login didn't succeed
         DIALOGS.show_login_failed_notification()
@@ -92,7 +111,15 @@ def __login_failed_action(user, password):
 
 
 def __sport_selection_action(keys, processed):
-    """ADD ME"""
+    """
+    Show sport selection
+
+    :param keys: Route paramters keys
+    :type keys: list
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     if len(keys) == 0 and processed is False:
         CONTENT_LOADER.show_sport_selection()
         return True
@@ -100,7 +127,15 @@ def __sport_selection_action(keys, processed):
 
 
 def __match_details_action(params, processed):
-    """ADD ME"""
+    """
+    Show match details selection
+
+    :param params: Route paramters
+    :type params: dict
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     if params.get('target') is not None and processed is False:
         CONTENT_LOADER.show_match_details(
             params.get('target'),
@@ -111,7 +146,15 @@ def __match_details_action(params, processed):
 
 
 def __matches_list_action(params, processed):
-    """ADD ME"""
+    """
+    Show matches list selection
+
+    :param params: Route paramters
+    :type params: dict
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     if params.get('date') is not None and processed is False:
         CONTENT_LOADER.show_matches_list(
             params.get('date'),
@@ -121,7 +164,15 @@ def __matches_list_action(params, processed):
 
 
 def __event_lane_action(params, processed):
-    """ADD ME"""
+    """
+    Show event lane selection
+
+    :param params: Route paramters
+    :type params: dict
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     if params.get('lane') is not None and processed is False:
         CONTENT_LOADER.show_event_lane(
             sport=params.get('for'),
@@ -131,7 +182,15 @@ def __event_lane_action(params, processed):
 
 
 def __categories_action(params, processed):
-    """ADD ME"""
+    """
+    Show categories selection
+
+    :param params: Route paramters
+    :type params: dict
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     _for = params.get('for')
     if _for is not None and processed is False:
         CONTENT_LOADER.show_sport_categories(
@@ -141,7 +200,15 @@ def __categories_action(params, processed):
 
 
 def __play_action(params, processed):
-    """ADD ME"""
+    """
+   Play an item
+
+    :param params: Route paramters
+    :type params: dict
+    :param processed: Other route already matched
+    :type processed: bool
+    :returns:  bool -- Route matched
+    """
     video_id = params.get('video_id')
     if video_id is not None and processed is False:
         CONTENT_LOADER.play(video_id=video_id)

@@ -4,21 +4,34 @@
 # Created on: 24.07.2017
 # License: MIT https://goo.gl/WA1kby
 
-"""ADD ME"""
+"""Interface for matching API data with the Kodi item interface"""
 
 from datetime import datetime
 
 
 class ItemHelper(object):
-    """ADD ME"""
+    """Interface for matching API data with the Kodi item interface"""
 
     def __init__(self, constants, utils):
-        """ADD ME"""
+        """
+        Injects instances
+
+        :param constants: Constants instance
+        :type constants: resources.lib.Constants
+        :param utils: Utils instance
+        :type utils: resources.lib.Utils
+        """
         self.constants = constants
         self.utils = utils
 
     def build_description(self, item):
-        """ADD ME"""
+        """
+        Generates an item description
+
+        :param item: Item to be described
+        :type item: dict
+        :returns:  string -- Item description
+        """
         desc = ''
         if item.get('metadata', {}).get('description_bold'):
             desc += item.get('metadata', {}).get('description_bold') + ' '
@@ -32,7 +45,17 @@ class ItemHelper(object):
         return desc
 
     def set_art(self, list_item, sport, item=None):
-        """ADD ME"""
+        """
+        Sets art for the given item
+
+        :param list_item: Kodi list item
+        :type list_item: xbmcgui.ListItem
+        :param sport: Chosen sport
+        :type sport: string
+        :param item: Item to set art for
+        :type item: dict
+        :returns:  xbmcgui.ListItem -- Kodi list item
+        """
         addon_data = self.utils.get_addon_data()
         sports = self.constants.get_sports_list()
         base_url = self.constants.get_base_url()
@@ -58,7 +81,19 @@ class ItemHelper(object):
         return list_item
 
     def build_page_leave(self, target_url, details, match_time, shorts=None):
-        """ADD ME"""
+        """
+        Builds the data for an Kodi folder item
+
+        :param target_url: Plugin target url
+        :type target_url: string
+        :param details: EPG element details
+        :type details: dict
+        :param match_time: Events match time
+        :type match_time: string
+        :param shorts: Add shorts desc
+        :type shorts: dict
+        :returns:  dict -- List item info properties
+        """
         return {
             'hash': self.utils.generate_hash(target_url),
             'url': self.constants.get_base_url() + target_url,
@@ -69,7 +104,13 @@ class ItemHelper(object):
         }
 
     def build_title(self, item):
-        """ADD ME"""
+        """
+        Generates an title for an item
+
+        :param item: Item to be described
+        :type item: dict
+        :returns:  string -- Item title
+        """
         title = ''
         metadata = item.get('metadata')
         if metadata.get('details') is not None:
@@ -83,7 +124,17 @@ class ItemHelper(object):
         return self.__build_fallback_title(title=title, metadata=metadata)
 
     def __get_editorial_art(self, list_item, base_url, images):
-        """ADD ME"""
+        """
+        Sets editorial art for the given item
+
+        :param list_item: Kodi list item
+        :type list_item: xbmcgui.ListItem
+        :param base_url: Image base url
+        :type base_url: string
+        :param images: Map of usable images
+        :type images: dict
+        :returns:  xbmcgui.ListItem -- Kodi list item
+        """
         image = ''
         if images.get('fallback'):
             image = base_url + '/' + images.get('fallback')
@@ -102,7 +153,17 @@ class ItemHelper(object):
         return list_item
 
     def __get_sports_art(self, list_item, sport, sports):
-        """ADD ME"""
+        """
+        Sets editorial art for static sport item
+
+        :param list_item: Kodi list item
+        :type list_item: xbmcgui.ListItem
+        :param sport: Chosen sport
+        :type sport: string
+        :param sports: Map of available sports
+        :type sports: dict
+        :returns:  xbmcgui.ListItem -- Kodi list item
+        """
         try:
             list_item.setArt({
                 'poster': sports.get(sport).get('image'),
@@ -116,7 +177,15 @@ class ItemHelper(object):
 
     @classmethod
     def __build_fallback_title(cls, title, metadata):
-        """ADD ME"""
+        """
+        Generates a fallback title
+
+        :param title: Original title
+        :type title: string
+        :param metadata: Item metadata
+        :type metadata: dict
+        :returns:  string -- Fallback title
+        """
         fallback_title = ''
         if title != '':
             return title
@@ -129,7 +198,13 @@ class ItemHelper(object):
 
     @classmethod
     def __build_match_title_short(cls, details):
-        """ADD ME"""
+        """
+        Generates a short match title
+
+        :param details: Item details
+        :type details: dict
+        :returns:  string -- Match title (short)
+        """
         title = details.get('home', {}).get('name_short')
         title += ' - '
         title += details.get('away', {}).get('name_short')
@@ -137,7 +212,13 @@ class ItemHelper(object):
 
     @classmethod
     def __build_match_title_full(cls, details):
-        """ADD ME"""
+        """
+        Generates a long match title
+
+        :param details: Item details
+        :type details: dict
+        :returns:  string -- Match title (long)
+        """
         title = details.get('home', {}).get('name_full')
         title += ' - '
         title += details.get('away', {}).get('name_full')
@@ -145,7 +226,15 @@ class ItemHelper(object):
 
     @classmethod
     def build_epg_title(cls, details, match_time):
-        """ADD ME"""
+        """
+        Generates a epg title
+
+        :param details: Item details
+        :type details: dict
+        :param match_time: Events match time
+        :type match_time: string
+        :returns:  string -- EPG item title
+        """
         title = details.get('home', {}).get('name_full', '')
         title += ' - '
         title += details.get('away', {}).get('name_full', '')
@@ -154,7 +243,15 @@ class ItemHelper(object):
 
     @classmethod
     def datetime_from_utc(cls, metadata, element=None):
-        """ADD ME"""
+        """
+        Generates a homan readable time from an items UTC timestamp
+
+        :param metadata: Item metadata
+        :type metadata: dict
+        :param details: Item details
+        :type details: dict
+        :returns:  tuple -- Match date & match time
+        """
         date_container = None
         if metadata.get('scheduled_start'):
             date_container = metadata.get('scheduled_start', {})

@@ -22,7 +22,8 @@ and all dependencies can be satisfied.
 
 If you´d like to install the plugin manually, download the [latest Release](https://github.com/asciidisco/plugin.video.telekom-sport/releases)
 as well as the [pyDes](https://github.com/kodinerds/repo/blob/master/script.module.pydes/script.module.pydes-2.0.1.zip)
-dependency. pydes must be installed first.
+dependency. pydes must be installed first, if you want to have encrypted credentials.
+You do want encrypted credentials.
 
 ## Contribute
 

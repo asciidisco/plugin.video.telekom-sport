@@ -4,7 +4,7 @@
 # Created on: 24.07.2017
 # License: MIT https://goo.gl/WA1kby
 
-"""ADD ME"""
+"""Stores, loads & builds up a request session object. Provides login"""
 
 try:
     import cPickle as pickle
@@ -16,10 +16,19 @@ from bs4 import BeautifulSoup
 
 
 class Session(object):
-    """ADD ME"""
+    """Stores, loads & builds up a request session object. Provides login"""
 
     def __init__(self, constants, util, settings):
-        """ADD ME"""
+        """
+        Injects instances, sets session file & loads initial session
+
+        :param constants: Constants instance
+        :type constants: resources.lib.Constants
+        :param util: Utils instance
+        :type util: resources.lib.Utils
+        :param settings: Settings instance
+        :type settings: resources.lib.Settings
+        """
         self.constants = constants
         self.utils = util
         self.settings = settings
@@ -27,23 +36,32 @@ class Session(object):
         self._session = self.load_session()
 
     def get_session(self):
-        """ADD ME"""
+        """
+        Returns the build up session object
+
+        :returns:  requests.session -- Session object
+        """
         return self._session
 
     def clear_session(self):
-        """ADD ME"""
+        """Clears the session, e.g. removes Cookie file"""
         if path.isfile(self.session_file):
             remove(self.session_file)
 
     def save_session(self):
-        """ADD ME"""
+        """Persists the session, e.g. generates Cookie file"""
         with open(self.session_file, 'w') as handle:
             pickle.dump(
                 utils.dict_from_cookiejar(self._session.cookies),
                 handle)
 
     def load_session(self):
-        """ADD ME"""
+        """
+        Generates the build up session object,
+        loads & deserializes Cookie file if exists
+
+        :returns:  requests.session -- Session object
+        """
         _session = session()
         _session.headers.update({
             'User-Agent': self.utils.get_user_agent(),
@@ -56,7 +74,16 @@ class Session(object):
         return _session
 
     def login(self, user, password):
-        """ADD ME"""
+        """
+        Logs in to the platform, fetches cookie headers and checks
+        if the login succeeded
+
+        :param user: Username/E-Mail
+        :type user: string
+        :param password: Password
+        :type password: string
+        :returns:  bool -- Login succeeded
+        """
         payload = {}
         # check if the suer is already logged in
         check_res = self.get_session().get(self.constants.get_base_url())
@@ -95,10 +122,10 @@ class Session(object):
         return False
 
     def logout(self):
-        """ADD ME"""
+        """Clears the session"""
         self.clear_session()
 
     def switch_account(self):
-        """ADD ME"""
+        """Clears the session & opens up credentials dialogs"""
         self.clear_session()
         self.settings.set_credentials()

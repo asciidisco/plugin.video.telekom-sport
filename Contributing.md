@@ -128,6 +128,22 @@ git remote add upstream https://github.com/asciidisco/plugin.video.telekom-sport
    git push origin <topic-branch-name>
    ```
 
+* Note: We follow Angular style commit guildelines
+
+  Best to install NodeJS & use commitizen for that, all you need to do is
+
+   ```bash
+   npm install
+   ```
+
+   initially in the root directiory & then use
+
+   ```bash
+   make commit
+   ```
+
+   to commit changes.
+
 * [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
     with a clear title and description.
 

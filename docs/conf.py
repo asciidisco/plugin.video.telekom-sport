@@ -88,5 +88,9 @@ html_logo = '_static/icon.png'
 # load contents of coverage dir and copy to _build dir
 COVERAGE_CONTENTS = os.listdir(ROOT_PATH + 'coverage')
 for item in COVERAGE_CONTENTS:
-    copyfile(os.path.abspath('../coverage/' + item), ROOT_PATH + '_build/' + item)
-copyfile(os.path.abspath('../coverage/index.html'), ROOT_PATH + '_build/coverage.html')
+    copyfile(
+        src=os.path.abspath('../coverage/' + item),
+        dst=ROOT_PATH + '_build/' + item)
+copyfile(
+    src=os.path.abspath('../coverage/index.html'),
+    dst=ROOT_PATH + '_build/coverage.html')

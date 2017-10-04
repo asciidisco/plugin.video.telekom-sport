@@ -37,6 +37,10 @@ Indices and tables
 Code Docs
 =========
 
+.. automodule:: addon
+  :members:
+  :private-members:
+
 .. autoclass:: resources.lib.Cache.Cache
   :members:
   :private-members:

@@ -69,7 +69,7 @@ tag:
 		git add addon.xml
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
-		git push --tags --dry-run
+		git push git@github.com:asciidisco/plugin.video.telekom-sport.git --tags --dry-run
 
 help:
 		@echo "    clean-pyc"

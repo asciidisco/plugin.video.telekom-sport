@@ -65,13 +65,15 @@ tag:
 		touch ./_build/.nojekyll
 		git config user.name "travis-ci"
 		git config user.email "public@asciidisco.com"
+		git remote rm origin
+		git remote add origin https://asciidisco:${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git		
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
 		git add addon.xml
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
-		git "https://${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git" push --tags
+		git push --tags
 
 help:
 		@echo "    clean-pyc"

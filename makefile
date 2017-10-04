@@ -1,4 +1,4 @@
-.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage tag-release commit
+.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage tag commit
 .DEFAULT_GOAL := all
 
 SPHINXBUILD = sphinx-build
@@ -53,9 +53,9 @@ docs:
 commit:
 		npm run gcz
 
-tag-release:
-  	echo "Current version: ${CURRENT_VERSION}"
-  	echo "Next version: ${NEXT_VERSION}"
+tag:
+		echo "Current version: ${CURRENT_VERSION}"
+		echo "Next version: ${NEXT_VERSION}"
 		echo "Latest changes:"
 		kodi-release -l	
 		kodi-release -a -o ./Authors.md
@@ -89,8 +89,6 @@ help:
 		@echo "    docs"
 		@echo "        Generate sphinx docs"
 		@echo "    commit"
-		@echo "        Commit stage changes using commitizen (needs Node)"		
+		@echo "        Commit stage changes using commitizen (needs Node)"
 		@echo "    tag"
-		@echo "        Only used by Travis, determines if a new release should be build"
-		@echo "    tag-release"
-		@echo "        Builds an publishes a new release"				
+		@echo "        Builds an publishes a new release (Travis only)"				

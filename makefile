@@ -58,16 +58,17 @@ tag:
 		echo "Next version: ${NEXT_VERSION}"
 		echo "Latest changes:"
 		kodi-release -l
+		kodi-release -l -o .changes
 		make docs
 		touch ./_build/.nojekyll
 		git config user.name "travis-ci"
 		git config user.email "public@asciidisco.com"
+		kodi-release -a -o ./Authors.md
+		kodi-release -c -o ./Changelog.md		
 		git remote rm origin
 		git remote add origin https://asciidisco:${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git
 		git checkout master
-		kodi-release -a -o ./Authors.md
-		kodi-release -c -o ./Changelog.md
-		kodi-release -u		
+		kodi-release -u	
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
@@ -76,6 +77,7 @@ tag:
 		git tag ${NEXT_VERSION}
 		git push origin master
 		git push --tags
+		git fetch --all --tags --prune --progress
 
 help:
 		@echo "    clean-pyc"

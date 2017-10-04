@@ -10,7 +10,7 @@ script:
   - export NEXT_VERSION=$(kodi-release -n)
   - export CURRENT_VERSION=$(kodi-release -p)
   - export LATEST_CHANGES=$(kodi-release -l)
-  - make tag
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then make tag-release; fi
 
 deploy:
   - provider: releases

@@ -1,4 +1,4 @@
-.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage tag tag-release commit
+.PHONY: all test clean docs clean-pyc clean-report clean-docs clean-coverage tag-release commit
 .DEFAULT_GOAL := all
 
 SPHINXBUILD = sphinx-build
@@ -52,9 +52,6 @@ docs:
 
 commit:
 		npm run gcz
-
-tag:
-		if [ "$TRAVIS_BRANCH" == "master" ]; then make tag-release; fi
 
 tag-release:
   	echo "Current version: ${CURRENT_VERSION}"

@@ -62,14 +62,17 @@ tag:
 		kodi-release -c -o ./Changelog.md
 		kodi-release -u
 		make docs
-		touch ./_build/.nojekyll		
+		touch ./_build/.nojekyll
+		git config user.name "travis-ci"
+		git config user.email "public@asciidisco.com"
+		git remote add upstream "https://$GH_TOKEN@github.com/asciidisco/plugin.video.telekom-sport.git"
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
 		git add addon.xml
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
-		git push git@github.com:asciidisco/plugin.video.telekom-sport.git --tags --dry-run
+		git push --tags --dry-run
 
 help:
 		@echo "    clean-pyc"

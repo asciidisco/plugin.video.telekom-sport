@@ -19,14 +19,14 @@ deploy:
     name: "$CURRENT_VERSION"
     body: "$LAST_CHANGES"
     on:
-      tags: true
+      branch: master
   - provider: pages
     skip_cleanup: true
     github_token: "$GITHUB_TOKEN"
     local_dir: _build
     target_branch: gh-pages
     on:
-      tags: true
+      branch: master
 
 notifications:
   email:

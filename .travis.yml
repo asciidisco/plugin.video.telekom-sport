@@ -14,15 +14,15 @@ script:
 
 deploy:
   - provider: releases
-    github_token: "$GITHUB_TOKEN"
-    tag_name: "$CURRENT_VERSION"
-    name: "$CURRENT_VERSION"
-    body: "$LAST_CHANGES"
+    github_token: $GITHUB_TOKEN
+    tag_name: $CURRENT_VERSION
+    name: $CURRENT_VERSION
+    body: $LAST_CHANGES
     on:
       branch: master
   - provider: pages
     skip_cleanup: true
-    github_token: "$GITHUB_TOKEN"
+    github_token: $GITHUB_TOKEN
     local_dir: _build
     target_branch: gh-pages
     on:

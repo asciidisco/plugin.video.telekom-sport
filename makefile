@@ -65,7 +65,7 @@ tag:
 		touch ./_build/.nojekyll
 		git config user.name "travis-ci"
 		git config user.email "public@asciidisco.com"
-		git remote add upstream "https://$GH_TOKEN@github.com/asciidisco/plugin.video.telekom-sport.git"
+		git remote add upstream "https://${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git"
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json

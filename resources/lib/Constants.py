@@ -10,18 +10,21 @@
 ADDON_ID = 'plugin.video.telekom-sport'
 
 # urls for login & data retrival
-BASE_URL = 'https://www.telekomsport.de'
+PRL = 'https://'
+BASE_URL = PRL + 'www.telekomsport.de'
 LOGIN_LINK = BASE_URL + '/service/auth/web/login?headto=' + BASE_URL + '/info'
-LOGIN_ENDPOINT = 'https://accounts.login.idm.telekom.com/sso'
+LOGIN_ENDPOINT = PRL + 'accounts.login.idm.telekom.com/sso'
 EPG_URL = BASE_URL + '/api/v1/'
 STREAM_ROUTE = '/service/player/streamAccess'
 STREAM_PARAMS = 'videoId=%VIDEO_ID%&label=2780_hls'
 STREAM_DEFINITON_URL = BASE_URL + STREAM_ROUTE + '?' + STREAM_PARAMS
+FANART_URL = PRL + 'raw.githubusercontent.com/hubsif/kodi-telekomsport/master'
 
 # core event types
 SPORTS = {
     'liga3': {
         'image': BASE_URL + '/images/packete/3liga.png',
+        'fanart': FANART_URL + '/resources/fanart/3.liga.jpg',
         'name': '3. Liga',
         'indicators': ['3. Liga'],
         'page': 'fussball/3-liga',
@@ -29,6 +32,7 @@ SPORTS = {
     },
     'del': {
         'image': BASE_URL + '/images/packete/del.png',
+        'fanart': FANART_URL + '/resources/fanart/del.jpg',
         'name': 'Deutsche Eishockey Liga',
         'indicators': [''],
         'page': 'eishockey/del',
@@ -36,6 +40,7 @@ SPORTS = {
     },
     'ffb': {
         'image': BASE_URL + '/images/packete/frauenbundesliga.png',
+        'fanart': FANART_URL + '/resources/fanart/frauen-bundesliga.jpg',
         'name': 'Frauen-Bundesliga',
         'indicators': [''],
         'page': 'fussball/frauen-bundesliga',
@@ -43,6 +48,7 @@ SPORTS = {
     },
     'fcb': {
         'image': BASE_URL + '/images/packete/fcbayerntv.png',
+        'fanart': FANART_URL + '/resources/fanart/fcbtv.jpg',
         'name': 'FC Bayern.TV',
         'indicators': [''],
         'page': 'fc-bayern-tv-live',
@@ -50,6 +56,7 @@ SPORTS = {
     },
     'bbl': {
         'image': BASE_URL + '/images/packete/easyCredit.png',
+        'fanart': FANART_URL + '/resources/fanart/bbl.jpg',
         'name': 'Easycredit BBL',
         'indicators': [''],
         'page': 'basketball/bbl',
@@ -57,6 +64,7 @@ SPORTS = {
     },
     'bel': {
         'image': BASE_URL + '/images/packete/euroleague.png',
+        'fanart': FANART_URL + '/resources/fanart/euroleague.jpg',
         'name': 'Basketball Turkish Airlines Euroleague',
         'indicators': [''],
         'page': 'basketball/euroleague',
@@ -64,6 +72,7 @@ SPORTS = {
     },
     'eurobasket': {
         'image': 'http://www.fiba.basketball/img/12104_logo_landscape.png',
+        'fanart': FANART_URL + '/resources/fanart/eurobasket.jpg',
         'name': 'FIBA Eurobasket',
         'indicators': [''],
         'page': 'basketball/eurobasket2017',
@@ -71,6 +80,7 @@ SPORTS = {
     },
     'skybuli': {
         'image': BASE_URL + '/images/packete/sky-bundesliga.png',
+        'fanart': FANART_URL + '/resources/fanart/bundesliga.jpg',
         'name': 'Sky Bundesliga',
         'indicators': [''],
         'page': 'sky/bundesliga',
@@ -78,6 +88,7 @@ SPORTS = {
     },
     'skychamp': {
         'image': BASE_URL + '/images/packete/sky-cl.png',
+        'fanart': FANART_URL + '/resources/fanart/uefa.jpg',
         'name': 'Sky Champions League',
         'indicators': [''],
         'page': 'sky/champions-league',
@@ -85,6 +96,7 @@ SPORTS = {
     },
     'skyhandball': {
         'image': BASE_URL + '/images/packete/DKB.png',
+        'fanart': FANART_URL + '/resources/fanart/hbl.jpg',
         'name': 'Handball Bundesliga',
         'indicators': [''],
         'page': 'sky/handball-bundesliga',

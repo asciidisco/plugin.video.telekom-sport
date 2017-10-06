@@ -56,10 +56,8 @@ class ItemHelper(object):
         :type item: dict
         :returns:  xbmcgui.ListItem -- Kodi list item
         """
-        addon_data = self.utils.get_addon_data()
         sports = self.constants.get_sports_list()
         base_url = self.constants.get_base_url()
-        list_item.setProperty('fanart_image', addon_data.get('fanart'))
         list_item = self.__get_sports_art(
             list_item=list_item,
             sport=sport,
@@ -166,10 +164,10 @@ class ItemHelper(object):
         """
         try:
             list_item.setArt({
-                'poster': sports.get(sport).get('image'),
-                'landscape': sports.get(sport).get('image'),
+                'poster': sports.get(sport).get('fanart'),
+                'landscape': sports.get(sport).get('fanart'),
                 'thumb': sports.get(sport).get('image'),
-                'fanart': sports.get(sport).get('image')
+                'fanart': sports.get(sport).get('fanart')
             })
         except RuntimeError:
             self.utils.log('`setArt` not available')

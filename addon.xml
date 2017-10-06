@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.telekom-sport" version="1.2.4" name="Telekom Sport" provider-name="asciidisco">
+<addon id="plugin.video.telekom-sport" version="1.2.5" name="Telekom Sport" provider-name="asciidisco">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.pydes" version="2.0.1"/>
@@ -30,8 +30,12 @@
         <email>public at asciidisco dot com</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
         <forum>https://www.kodinerds.net/index.php/Thread/57586-PreRelease-Telekom-Sport/</forum>
-        <news>v1.2.4 (2017-10-04):
-- Fixes release script.
-- Adds setting to deactivate inputstream, even if available.</news>
+        <news>v1.2.5 (2017-10-06):
+- Upping test coverage.
+- Fixing tests for envs with different timezone settings.
+- Reintruducing ARM based user agent.
+- Fixing release script.
+- asciidisco/plugin.video.telekomsport.
+- Version bump</news>
     </extension>
 </addon>

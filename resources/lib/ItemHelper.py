@@ -112,7 +112,7 @@ class ItemHelper(object):
         :returns:  string -- Item title
         """
         title = ''
-        metadata = item.get('metadata')
+        metadata = item.get('metadata', {})
         if metadata.get('details') is not None:
             details = metadata.get('details')
             home = details.get('home', {})

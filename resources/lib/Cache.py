@@ -23,9 +23,13 @@ class Cache(object):
     def setup_memcache(self):
         """Setup in memory cache"""
         window = self.__get_window_instance()
-        cached_items = window.getProperty('memcache')
+        try:
+            cached_items = pickle.loads(window.getProperty('memcache'))
+        except EOFError:
+            cached_items = {}
         if len(cached_items) < 1:
             window.setProperty('memcache', pickle.dumps({}))
+        return cached_items
 
     def has_cached_item(self, cache_id):
         """

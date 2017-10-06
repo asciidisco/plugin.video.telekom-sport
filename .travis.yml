@@ -17,7 +17,6 @@ deploy:
     github_token: $GITHUB_TOKEN
     tag_name: $(kodi-release -p)
     name: $(kodi-release -p)
-    body: $(cat ./.changes)
     on:
       branch: master
   - provider: pages

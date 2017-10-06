@@ -214,5 +214,8 @@ class Utils(object):
         # Windows
         if system == 'Windows':
             return base.replace('%PL%', '(Windows NT 6.1; WOW64)')
+        # ARM based Linux
+        if platform.machine().startswith('arm'):
+            return base.replace('%PL%', '(X11; CrOS armv7l 7647.78.0)')
         # x86 Linux
         return base.replace('%PL%', '(X11; Linux x86_64)')

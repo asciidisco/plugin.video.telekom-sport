@@ -14,9 +14,11 @@ script:
 
 deploy:
   - provider: releases
-    github_token: $GITHUB_TOKEN
+    api_key:
+      secure: $GITHUB_TOKEN
     tag_name: $(kodi-release -p)
     name: $(kodi-release -p)
+    skip_cleanup: true
     on:
       branch: master
   - provider: pages

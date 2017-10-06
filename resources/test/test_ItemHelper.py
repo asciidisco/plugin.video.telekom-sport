@@ -76,7 +76,9 @@ class ItemHelperTestCase(unittest.TestCase):
             constants=Constants(),
             utils=Utils(constants=Constants(), kodi_base_url=''))
         item = {'scheduled_start': {'date': '1507232762'}}
-        self.assertEqual(item_helper.datetime_from_utc(metadata=item), ('05.10.2017', '21:46'))
+        datetime = item_helper.datetime_from_utc(metadata=item)
+        self.assertEqual(datetime[0], '05.10.2017')
+        self.assertIn(':46', datetime[1])
 
     def test_datetime_from_utc_element(self):
         """ADD ME"""
@@ -85,7 +87,9 @@ class ItemHelperTestCase(unittest.TestCase):
             utils=Utils(constants=Constants(), kodi_base_url=''))
         item = {}
         element = {'scheduled_start': {'date': '1507232762'}}
-        self.assertEqual(item_helper.datetime_from_utc(metadata=item, element=element), ('05.10.2017', '21:46'))
+        datetime = item_helper.datetime_from_utc(metadata=item, element=element)
+        self.assertEqual(datetime[0], '05.10.2017')
+        self.assertIn(':46', datetime[1])
 
     def test_datetime_from_utc_element_none(self):
         """ADD ME"""

@@ -66,15 +66,15 @@ tag:
 		kodi-release -a -o ./Authors.md
 		kodi-release -c -o ./Changelog.md
 		kodi-release -u	
-		git add -f ./Changelog.md
-		git add -f ./Authors.md
-		git add package.json
-		git add addon.xml
 		git stash
 		git remote rm origin
 		git remote add origin https://asciidisco:${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git
 		git checkout master
 		git stash pop
+		git add -f ./Changelog.md
+		git add -f ./Authors.md
+		git add package.json
+		git add addon.xml		
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
 		git push origin master

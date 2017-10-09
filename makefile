@@ -58,8 +58,6 @@ tag:
 		echo "Next version: ${NEXT_VERSION}"
 		echo "Latest changes:"
 		kodi-release -l
-		make docs
-		touch ./_build/.nojekyll
 		git config user.name "travis-ci"
 		git config user.email "public@asciidisco.com"
 		git remote rm origin
@@ -71,7 +69,9 @@ tag:
 		git add -f ./Changelog.md
 		git add -f ./Authors.md
 		git add package.json
-		git add addon.xml		
+		git add addon.xml
+		make docs
+		touch ./_build/.nojekyll
 		git commit -m "chore(version): Version bump [ci skip]"
 		git tag ${NEXT_VERSION}
 		git push origin master

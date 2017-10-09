@@ -32,7 +32,10 @@ class Session(object):
         self.constants = constants
         self.utils = util
         self.settings = settings
+        addon = self.utils.get_addon()
+        verify_ssl = True if addon.getSetting('verifyssl') == 'True' else False
         self.session_file = self.utils.get_addon_data().get('cookie_path')
+        self.verify_ssl = verify_ssl
         self._session = self.load_session()
 
     def get_session(self):
@@ -69,7 +72,10 @@ class Session(object):
         })
         if path.isfile(self.session_file):
             with open(self.session_file, 'r') as handle:
-                _cookies = utils.cookiejar_from_dict(pickle.load(handle))
+                try:
+                    _cookies = utils.cookiejar_from_dict(pickle.load(handle))
+                except EOFError:
+                    _cookies = utils.cookiejar_from_dict({})
                 _session.cookies = _cookies
         return _session
 
@@ -95,7 +101,9 @@ class Session(object):
         self._session = self.load_session()
         _session = self.get_session()
         # get contents of login page
-        res = _session.get(self.constants.get_login_link())
+        res = _session.get(
+            self.constants.get_login_link(),
+            verify=self.verify_ssl)
         login_page_html = res.text
         soup = BeautifulSoup(login_page_html, 'html.parser')
         # find all <input/> items in the login form & grep their data
@@ -113,6 +121,7 @@ class Session(object):
         # attribute to determine of the login was successfull
         login_res = _session.post(
             self.constants.get_login_endpoint(),
+            verify=self.verify_ssl,
             data=payload)
         soup = BeautifulSoup(login_res.text, 'html.parser')
         success = 'Sport' in soup.find('title').get_text()

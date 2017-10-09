@@ -54,10 +54,12 @@
 
 [Please include a link to your debug log (use something like [http://sprunge.us/](http://sprunge.us/)) or similar, please do not paste]
 
-## Other information 
+## Other information
 
 [e.g. detailed explanation, related issues, suggestions how to fix, links for us to have context, etc.]
 
 ### Screenshots
 
 [Please add a screenshot if that helps understanding your problem]
+
+[You can erase any parts of this template not applicable to your Issue.]

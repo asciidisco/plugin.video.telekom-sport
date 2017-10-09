@@ -43,6 +43,8 @@ lint:
 		radon cc $(RADON_FILES)
 		dennis-cmd lint $(I18N_FILES)
 		jsonlint $(JSON_FILES)
+		rst-lint docs/index.rst --level=severe
+		yamllint .travis.yml .codeclimate.yml
 
 test:
 		nosetests $(TEST_DIR) $(TEST_OPTIONS) --cover-html --cover-html-dir=$(COVERAGE_DIR)

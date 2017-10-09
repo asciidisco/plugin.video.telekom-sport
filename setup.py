@@ -44,6 +44,8 @@ EXTRA_DEPENDENCIES = {
         'dennis',
         'blessings',
         'demjson',
+        'restructuredtext_lint',
+        'yamllint',
     ]
 }
 

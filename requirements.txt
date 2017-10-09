@@ -19,3 +19,5 @@ git+https://github.com/asciidisco/kodi-release-helper.git#egg=kodi-release-helpe
 dennis==0.9
 blessings==1.6
 demjson==2.2.4
+yamllint==1.8.1
+restructuredtext_lint==1.1.1

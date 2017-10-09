@@ -1,3 +1,4 @@
+---
 sudo: false
 language: python
 
@@ -19,14 +20,14 @@ deploy:
     tag_name: $(kodi-release -p)
     name: $(kodi-release -p)
     skip_cleanup: true
-    on:
+    "on":
       branch: master
   - provider: pages
     skip_cleanup: true
     github_token: $GITHUB_TOKEN
     local_dir: _build
     target_branch: gh-pages
-    on:
+    "on":
       branch: master
 
 notifications:

@@ -1,3 +1,4 @@
+---
 engines:
   pep8:
     enabled: true
@@ -8,9 +9,9 @@ engines:
   markdownlint:
     enabled: true
 ratings:
-   paths:
-   - "**.py"
-   - "**.md"
+  paths:
+    - "**.py"
+    - "**.md"
 exclude_paths:
   - "docs"
   - "resources/test/"
@@ -30,3 +31,5 @@ exclude_paths:
   - "LICENSE"
   - "makefile"
   - "requirements.txt"
+  - "ISSUE_TEMPLATE.md"
+  - "PULL_REQUEST_TEMPLATE.md"

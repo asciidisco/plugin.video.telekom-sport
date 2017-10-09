@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="32001">
+        <setting id="logout" type="action" label="32002" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=logout)"/>
+        <setting id="switch_account" type="action" label="32003" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=switch_account)"/>        <setting label="32010" type="bool" id="encrypt_credentials" default="true"/>
         <setting label="32010" type="bool" id="encrypt_credentials" default="true"/>
         <setting label="32011" type="bool" id="use_inputstream" default="true"/>
-        <setting id="logout" type="action" label="32002" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=logout)"/>
-        <setting id="switch_account" type="action" label="32003" action="RunPlugin(plugin://plugin.video.telekom-sport/?action=switch_account)"/>
+        <setting label="32012" type="bool" id="verifyssl" default="true"/>
         <setting id="email" type="text" default="" visible="false"/>
         <setting id="password" type="text"  default="" visible="false"/>
         <setting id="settings_asked" type="bool" default="false" visible="false"/>

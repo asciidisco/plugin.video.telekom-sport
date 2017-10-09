@@ -37,6 +37,9 @@ class ContentLoader(object):
         self.session = session
         self.item_helper = item_helper
         self.plugin_handle = handle
+        addon = self.utils.get_addon()
+        verify_ssl = True if addon.getSetting('verifyssl') == 'True' else False
+        self.verify_ssl = verify_ssl
 
     def get_epg(self, sport):
         """
@@ -117,7 +120,7 @@ class ContentLoader(object):
         """
         _epg_url = self.constants.get_epg_url()
         _epg_url += self.constants.get_sports().get(sport, {}).get('epg', '')
-        return json.loads(_session.get(_epg_url).text)
+        return json.loads(_session.get(_epg_url).text, verify=self.verify_ssl)
 
     def get_stream_urls(self, video_id):
         """
@@ -132,7 +135,8 @@ class ContentLoader(object):
         stream_access = json.loads(_session.post(
             self.constants.get_stream_definition_url().replace(
                 '%VIDEO_ID%',
-                str(video_id))
+                str(video_id)),
+            verify=self.verify_ssl
             ).text)
         if stream_access.get('status') == 'success':
             stream_urls['Live'] = 'https:' + \
@@ -152,7 +156,8 @@ class ContentLoader(object):
         """
         m3u_url = ''
         _session = self.session.get_session()
-        root = ET.fromstring(_session.get(stream_url).text)
+        xml_content = _session.get(stream_url, verify=self.verify_ssl)
+        root = ET.fromstring(xml_content.text)
         for child in root:
             m3u_url += child.attrib.get('url', '')
             m3u_url += '?hdnea='
@@ -195,7 +200,7 @@ class ContentLoader(object):
 
         # load sport page from telekom
         url = base_url + '/' + sports.get(sport, {}).get('page')
-        html = _session.get(url).text
+        html = _session.get(url, verify=self.verify_ssl).text
 
         # parse sport page data
         events = []
@@ -283,7 +288,7 @@ class ContentLoader(object):
 
         # load sport page from telekom
         url = epg_url + '/' + lane
-        raw_data = _session.get(url).text
+        raw_data = _session.get(url, verify=self.verify_ssl).text
 
         # parse data
         data = json.loads(raw_data)
@@ -354,7 +359,7 @@ class ContentLoader(object):
 
         # load sport page from telekom
         url = epg_url + '/' + target
-        raw_data = _session.get(url).text
+        raw_data = _session.get(url, verify=self.verify_ssl).text
 
         # parse data
         data = json.loads(raw_data)

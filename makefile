@@ -54,15 +54,17 @@ commit:
 		npm run gcz
 
 tag:
-		echo "Current version: ${CURRENT_VERSION}"
-		echo "Next version: ${NEXT_VERSION}"
-		echo "Latest changes:"
-		kodi-release -l
 		git config user.name "travis-ci"
 		git config user.email "public@asciidisco.com"
 		git remote rm origin
 		git remote add origin https://asciidisco:${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git
 		git checkout master
+		git fetch --all --tags --prune --progress
+		git pull
+		echo "Current version: ${CURRENT_VERSION}"
+		echo "Next version: ${NEXT_VERSION}"
+		echo "Latest changes:"
+		kodi-release -l		
 		kodi-release -a -o ./Authors.md
 		kodi-release -c -o ./Changelog.md
 		kodi-release -u

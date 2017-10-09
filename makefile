@@ -60,7 +60,7 @@ tag:
 		git remote add origin https://asciidisco:${GITHUB_TOKEN}@github.com/asciidisco/plugin.video.telekom-sport.git
 		git checkout master
 		git fetch --all --tags --prune --progress
-		git pull
+		git pull origin master
 		echo "Current version: ${CURRENT_VERSION}"
 		echo "Next version: ${NEXT_VERSION}"
 		echo "Latest changes:"

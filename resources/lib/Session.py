@@ -124,7 +124,7 @@ class Session(object):
             verify=self.verify_ssl,
             data=payload)
         soup = BeautifulSoup(login_res.text, 'html.parser')
-        success = 'Sport' in soup.find('title').get_text()
+        success = 'sport' in soup.find('title').get_text().lower()
         if success is True:
             self.save_session()
             return True

@@ -1,0 +1,836 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>resources.lib.ContentLoader &mdash; plugin.video.telekom-sport 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="plugin.video.telekom-sport 1.2.8 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> plugin.video.telekom-sport
+          
+
+          
+            
+            <img src="../../../_static/icon.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">plugin.video.telekom-sport</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>resources.lib.ContentLoader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for resources.lib.ContentLoader</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Module: ContentLoader</span>
+<span class="c1"># Author: asciidisco</span>
+<span class="c1"># Created on: 24.07.2017</span>
+<span class="c1"># License: MIT https://goo.gl/WA1kby</span>
+
+<span class="sd">&quot;&quot;&quot;Fetches and parses content from the Telekom Sport API &amp; website&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span>
+<span class="kn">import</span> <span class="nn">xbmcgui</span>
+<span class="kn">import</span> <span class="nn">xbmcplugin</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
+
+
+<div class="viewcode-block" id="ContentLoader"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader">[docs]</a><span class="k">class</span> <span class="nc">ContentLoader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Fetches and parses content from the Telekom Sport API &amp; website&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">item_helper</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Injects instances &amp; the plugin handle</span>
+
+<span class="sd">        :param cache: Cache instance</span>
+<span class="sd">        :type cache: resources.lib.Cache</span>
+<span class="sd">        :param session: Session instance</span>
+<span class="sd">        :type session: resources.lib.Session</span>
+<span class="sd">        :param item_helper: ItemHelper instance</span>
+<span class="sd">        :type item_helper: resources.lib.ItemHelper</span>
+<span class="sd">        :param handle: Kodis plugin handle</span>
+<span class="sd">        :type handle: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constants</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">constants</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">utils</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span> <span class="o">=</span> <span class="n">item_helper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span> <span class="o">=</span> <span class="n">handle</span>
+        <span class="n">addon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_addon</span><span class="p">()</span>
+        <span class="n">verify_ssl</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">addon</span><span class="o">.</span><span class="n">getSetting</span><span class="p">(</span><span class="s1">&#39;verifyssl&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span> <span class="o">=</span> <span class="n">verify_ssl</span>
+
+<div class="viewcode-block" id="ContentLoader.get_epg"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.get_epg">[docs]</a>    <span class="k">def</span> <span class="nf">get_epg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sport</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads EPG either from cache or starts fetching it</span>
+
+<span class="sd">        :param sport: Cache instance</span>
+<span class="sd">        :type sport: resources.lib.Cache</span>
+<span class="sd">        :returns:  dict - Parsed EPG</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="c1"># check for cached epg data</span>
+        <span class="n">cached_epg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">get_cached_item</span><span class="p">(</span><span class="s1">&#39;epg&#39;</span> <span class="o">+</span> <span class="n">sport</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">cached_epg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cached_epg</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_epg</span><span class="p">(</span><span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">_session</span><span class="o">=</span><span class="n">_session</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.load_epg"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.load_epg">[docs]</a>    <span class="k">def</span> <span class="nf">load_epg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">_session</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches EPG &amp; appends it to the cache</span>
+
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        :param _session: Requests session instance</span>
+<span class="sd">        :type _session: requests.session</span>
+<span class="sd">        :returns:  dict - EPG</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">epg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_epg</span><span class="p">(</span><span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span> <span class="n">_session</span><span class="o">=</span><span class="n">_session</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">epg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;success&#39;</span><span class="p">:</span>
+            <span class="n">page_tree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_epg</span><span class="p">(</span><span class="n">epg</span><span class="o">=</span><span class="n">epg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">add_cached_item</span><span class="p">(</span><span class="s1">&#39;epg&#39;</span> <span class="o">+</span> <span class="n">sport</span><span class="p">,</span> <span class="n">page_tree</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">page_tree</span></div>
+
+<div class="viewcode-block" id="ContentLoader.parse_epg"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.parse_epg">[docs]</a>    <span class="k">def</span> <span class="nf">parse_epg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses the raw EPG</span>
+
+<span class="sd">        :param epg: Raw epg</span>
+<span class="sd">        :type epg: dict</span>
+<span class="sd">        :returns:  dict - Parsed EPG</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">page_tree</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">epg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elements&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="n">use_slots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__use_slots</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># iterate over every match in the epg</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+            <span class="c1"># get details &amp; metadata for the current event</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;details&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="c1"># get matchtime</span>
+            <span class="n">match_date</span><span class="p">,</span> <span class="n">match_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">datetime_from_utc</span><span class="p">(</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+                <span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
+            <span class="c1"># check if we have already matches scheduled for that date</span>
+            <span class="k">if</span> <span class="n">page_tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">page_tree</span><span class="p">[</span><span class="n">match_date</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_epg_element</span><span class="p">(</span>
+                <span class="n">use_slots</span><span class="o">=</span><span class="n">use_slots</span><span class="p">,</span>
+                <span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+                <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="n">page_tree</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">match_date</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">page_tree</span></div>
+
+<div class="viewcode-block" id="ContentLoader.fetch_epg"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.fetch_epg">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_epg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">_session</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds the EPG URL &amp; fetches the EPG</span>
+
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        :param _session: Requests session instance</span>
+<span class="sd">        :type _session: requests.session</span>
+<span class="sd">        :returns:  dict - Parsed EPG</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_epg_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_epg_url</span><span class="p">()</span>
+        <span class="n">_epg_url</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_sports</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epg&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_epg_url</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.get_stream_urls"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.get_stream_urls">[docs]</a>    <span class="k">def</span> <span class="nf">get_stream_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches the stream urls document &amp; parses them as well</span>
+
+<span class="sd">        :param video_id: Id of the video to fetch stream urls for</span>
+<span class="sd">        :type video_id: string</span>
+<span class="sd">        :returns:  dict - Stream urls</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stream_urls</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="n">stream_access</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_stream_definition_url</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="s1">&#39;%VIDEO_ID%&#39;</span><span class="p">,</span>
+                <span class="nb">str</span><span class="p">(</span><span class="n">video_id</span><span class="p">)),</span>
+            <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stream_access</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;success&#39;</span><span class="p">:</span>
+            <span class="n">stream_urls</span><span class="p">[</span><span class="s1">&#39;Live&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;https:&#39;</span> <span class="o">+</span> \
+                <span class="n">stream_access</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s1">&#39;stream-access&#39;</span><span class="p">,</span>
+                    <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">stream_urls</span></div>
+
+<div class="viewcode-block" id="ContentLoader.get_m3u_url"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.get_m3u_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_m3u_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream_url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fetches the m3u description XML, parses the attributes &amp; builds</span>
+<span class="sd">        the m3u url</span>
+
+<span class="sd">        :param stream_url: Url to fetch the m3u description XML from</span>
+<span class="sd">        :type stream_url: string</span>
+<span class="sd">        :returns:  string - m3u url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m3u_url</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="n">xml_content</span> <span class="o">=</span> <span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">stream_url</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xml_content</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+            <span class="n">m3u_url</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">m3u_url</span> <span class="o">+=</span> <span class="s1">&#39;?hdnea=&#39;</span>
+            <span class="n">m3u_url</span> <span class="o">+=</span> <span class="n">child</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m3u_url</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_sport_selection"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_sport_selection">[docs]</a>    <span class="k">def</span> <span class="nf">show_sport_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the KODI list items for the static sport selection&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Sport selection&#39;</span><span class="p">)</span>
+        <span class="n">sports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_sports_list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">sport</span> <span class="ow">in</span> <span class="n">sports</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">({</span><span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">sport</span><span class="p">})</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">set_art</span><span class="p">(</span>
+                <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addSortMethod</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">sortMethod</span><span class="o">=</span><span class="n">xbmcplugin</span><span class="o">.</span><span class="n">SORT_METHOD_DATE</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_sport_categories"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_sport_categories">[docs]</a>    <span class="k">def</span> <span class="nf">show_sport_categories</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sport</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the KODI list items for the contents of a sport selection.</span>
+<span class="sd">        It loads the sport html page &amp; parses the event lanes given</span>
+
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">sport</span> <span class="o">+</span> <span class="s1">&#39;) Main Menu&#39;</span><span class="p">)</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="n">base_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_base_url</span><span class="p">()</span>
+        <span class="n">sports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_sports_list</span><span class="p">()</span>
+
+        <span class="c1"># load sport page from telekom</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1"># parse sport page data</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">check_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+        <span class="n">content_groups</span> <span class="o">=</span> <span class="n">check_soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;content-group&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">content_group</span> <span class="ow">in</span> <span class="n">content_groups</span><span class="p">:</span>
+            <span class="n">headline</span> <span class="o">=</span> <span class="n">content_group</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
+            <span class="n">event_lane</span> <span class="o">=</span> <span class="n">content_group</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;event-lane&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">headline</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event_lane</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">headline</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+                        <span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">event_lane</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;prop-url&#39;</span><span class="p">)))</span>
+
+        <span class="c1"># add directory item for each event</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">({</span><span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">sport</span><span class="p">,</span> <span class="s1">&#39;lane&#39;</span><span class="p">:</span> <span class="n">event</span><span class="p">[</span><span class="mi">1</span><span class="p">]})</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">set_art</span><span class="p">(</span>
+                <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Add static folder items (if available)</span>
+        <span class="c1"># self.__add_static_folders()</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addSortMethod</span><span class="p">(</span>
+            <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+            <span class="n">sortMethod</span><span class="o">=</span><span class="n">xbmcplugin</span><span class="o">.</span><span class="n">SORT_METHOD_LABEL</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_date_list"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_date_list">[docs]</a>    <span class="k">def</span> <span class="nf">show_date_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_for</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the KODI list items for a list of dates with contents</span>
+<span class="sd">        based on the current date &amp; syndication.</span>
+
+<span class="sd">        :param _for: Chosen sport</span>
+<span class="sd">        :type _for: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Main menu&#39;</span><span class="p">)</span>
+        <span class="n">plugin_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span>
+        <span class="n">addon_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_addon_data</span><span class="p">()</span>
+        <span class="n">epg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_epg</span><span class="p">(</span><span class="n">_for</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">epg</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">epg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_date</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="o">+</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Uhr&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                        <span class="s1">&#39; &#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">({</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span> <span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">_for</span><span class="p">})</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">_date</span><span class="p">)</span>
+            <span class="n">list_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;fanart_image&#39;</span><span class="p">,</span> <span class="n">addon_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fanart&#39;</span><span class="p">))</span>
+            <span class="n">list_item</span><span class="o">.</span><span class="n">setInfo</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+                <span class="s1">&#39;plot&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="p">})</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addSortMethod</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">sortMethod</span><span class="o">=</span><span class="n">xbmcplugin</span><span class="o">.</span><span class="n">SORT_METHOD_DATE</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_event_lane"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_event_lane">[docs]</a>    <span class="k">def</span> <span class="nf">show_event_lane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">lane</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the KODI list items with the contents of an event-lanes</span>
+<span class="sd">        for a selected sport &amp; lane</span>
+
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        :param lane: Chosen event-lane</span>
+<span class="sd">        :type lane: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">sport</span> <span class="o">+</span> <span class="s1">&#39;) Lane &#39;</span> <span class="o">+</span> <span class="n">lane</span><span class="p">)</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="n">epg_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_epg_url</span><span class="p">()</span>
+        <span class="n">plugin_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span>
+
+        <span class="c1"># load sport page from telekom</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">epg_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">lane</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1"># parse data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># generate entries</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">):</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">sport</span><span class="p">,</span> <span class="s1">&#39;lane&#39;</span><span class="p">:</span> <span class="n">lane</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)})</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">build_title</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">set_art</span><span class="p">(</span><span class="n">list_item</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;plot&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">build_description</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">list_item</span><span class="o">.</span><span class="n">setInfo</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_matches_list"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_matches_list">[docs]</a>    <span class="k">def</span> <span class="nf">show_matches_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game_date</span><span class="p">,</span> <span class="n">_for</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the KODI list items with the contents of available matches</span>
+<span class="sd">        for a given date</span>
+
+<span class="sd">        :param game_date: Chosen event-lane</span>
+<span class="sd">        :type game_date: string</span>
+<span class="sd">        :param _for: Chosen sport</span>
+<span class="sd">        :type _for: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Matches list: &#39;</span> <span class="o">+</span> <span class="n">_for</span><span class="p">)</span>
+        <span class="n">addon_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_addon_data</span><span class="p">()</span>
+        <span class="n">plugin_handle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span>
+        <span class="n">epg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_epg</span><span class="p">(</span><span class="n">_for</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">epg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">game_date</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;hash&#39;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;hash&#39;</span><span class="p">),</span> <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">game_date</span><span class="p">,</span> <span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">_for</span><span class="p">})</span>
+            <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">))</span>
+            <span class="n">list_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;fanart_image&#39;</span><span class="p">,</span> <span class="n">addon_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fanart&#39;</span><span class="p">))</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addSortMethod</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">sortMethod</span><span class="o">=</span><span class="n">xbmcplugin</span><span class="o">.</span><span class="n">SORT_METHOD_NONE</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.show_match_details"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.show_match_details">[docs]</a>    <span class="k">def</span> <span class="nf">show_match_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">lane</span><span class="p">,</span> <span class="n">_for</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the KODI list items with the contents of a matche</span>
+<span class="sd">        (Gamereport, Interviews, Rematch, etc.)</span>
+
+<span class="sd">        :param target: Chosen match</span>
+<span class="sd">        :type target: string</span>
+<span class="sd">        :param lane: Chosen event-lane</span>
+<span class="sd">        :type lane: string</span>
+<span class="sd">        :param _for: Chosen sport</span>
+<span class="sd">        :type _for: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Matches details&#39;</span><span class="p">)</span>
+        <span class="n">_session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_session</span><span class="p">()</span>
+        <span class="n">epg_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_epg_url</span><span class="p">()</span>
+
+        <span class="c1"># load sport page from telekom</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">epg_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">target</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="c1"># parse data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># check if content is available</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">videos</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">vids</span> <span class="o">=</span> <span class="n">videos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;group_elements&#39;</span><span class="p">,</span> <span class="p">[{}])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">vids</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__is_playable_video_item</span><span class="p">(</span><span class="n">video</span><span class="o">=</span><span class="n">video</span><span class="p">):</span>
+                    <span class="n">title</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span>
+                        <span class="n">label</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+                    <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">set_art</span><span class="p">(</span>
+                        <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                        <span class="n">sport</span><span class="o">=</span><span class="n">_for</span><span class="p">,</span>
+                        <span class="n">item</span><span class="o">=</span><span class="n">video</span><span class="p">)</span>
+                    <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__set_item_playable</span><span class="p">(</span>
+                        <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+                    <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">({</span>
+                        <span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">_for</span><span class="p">,</span>
+                        <span class="s1">&#39;lane&#39;</span><span class="p">:</span> <span class="n">lane</span><span class="p">,</span>
+                        <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
+                        <span class="s1">&#39;video_id&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;videoID&#39;</span><span class="p">))})</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__add_video_item</span><span class="p">(</span>
+                        <span class="n">video</span><span class="o">=</span><span class="n">video</span><span class="p">,</span>
+                        <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">endOfDirectory</span><span class="p">(</span><span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ContentLoader.play"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plays a video by Video ID</span>
+
+<span class="sd">        :param target: Video ID</span>
+<span class="sd">        :type target: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Play video: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">video_id</span><span class="p">))</span>
+        <span class="n">use_inputstream</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">use_inputstream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Using inputstream: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_inputstream</span><span class="p">))</span>
+        <span class="n">streams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stream_urls</span><span class="p">(</span><span class="n">video_id</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">stream</span> <span class="ow">in</span> <span class="n">streams</span><span class="p">:</span>
+            <span class="n">play_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span>
+                <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_m3u_url</span><span class="p">(</span><span class="n">streams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">stream</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">use_inputstream</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="c1"># pylint: disable=E1101</span>
+                <span class="n">play_item</span><span class="o">.</span><span class="n">setContentLookup</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">play_item</span><span class="o">.</span><span class="n">setMimeType</span><span class="p">(</span><span class="s1">&#39;application/vnd.apple.mpegurl&#39;</span><span class="p">)</span>
+                <span class="n">play_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span>
+                    <span class="s1">&#39;inputstream.adaptive.stream_headers&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;user-agent=&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_user_agent</span><span class="p">())</span>
+                <span class="n">play_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span>
+                    <span class="s1">&#39;inputstream.adaptive.manifest_type&#39;</span><span class="p">,</span> <span class="s1">&#39;hls&#39;</span><span class="p">)</span>
+                <span class="n">play_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;inputstreamaddon&#39;</span><span class="p">,</span>
+                                      <span class="s1">&#39;inputstream.adaptive&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">setResolvedUrl</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">play_item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">__parse_regular_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_url</span><span class="p">,</span> <span class="n">details</span><span class="p">,</span> <span class="n">match_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses a regular event (one that´s not part of a slot)</span>
+
+<span class="sd">        :param target_url: Events target url</span>
+<span class="sd">        :type target_url: string</span>
+<span class="sd">        :param details: Events details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :param match_time: Events match time</span>
+<span class="sd">        :type match_time: string</span>
+<span class="sd">        :returns:  dict - Parsed event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">build_page_leave</span><span class="p">(</span>
+            <span class="n">target_url</span><span class="o">=</span><span class="n">target_url</span><span class="p">,</span>
+            <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+            <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__parse_slot_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">details</span><span class="p">,</span> <span class="n">match_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses an event</span>
+
+<span class="sd">        :param element: Raw element info</span>
+<span class="sd">        :type element: dict</span>
+<span class="sd">        :param details: Events details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :param match_time: Events match time</span>
+<span class="sd">        :type match_time: string</span>
+<span class="sd">        :returns:  dict - Parsed event</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;slots&#39;</span><span class="p">)</span>
+        <span class="c1"># get data for home and away teams</span>
+        <span class="n">home</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">away</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;away&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">slots</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">slot</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+                <span class="n">target_url</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target_url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">shorts</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">home</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_mini&#39;</span><span class="p">),</span>
+                        <span class="n">away</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_mini&#39;</span><span class="p">))</span>
+                    <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">item_helper</span><span class="o">.</span><span class="n">build_page_leave</span><span class="p">(</span>
+                            <span class="n">target_url</span><span class="o">=</span><span class="n">target_url</span><span class="p">,</span>
+                            <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+                            <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">,</span>
+                            <span class="n">shorts</span><span class="o">=</span><span class="n">shorts</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">events</span>
+
+    <span class="k">def</span> <span class="nf">__add_static_folders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statics</span><span class="p">,</span> <span class="n">sport</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds static folder items to Kodi (if available)</span>
+
+<span class="sd">        :param statics: All static entries</span>
+<span class="sd">        :type statics: dict</span>
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">statics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">):</span>
+            <span class="n">static_lanes</span> <span class="o">=</span> <span class="n">statics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">static_lanes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;categories&#39;</span><span class="p">):</span>
+                <span class="n">lanes</span> <span class="o">=</span> <span class="n">static_lanes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;categories&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">lane</span> <span class="ow">in</span> <span class="n">lanes</span><span class="p">:</span>
+                    <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">build_url</span><span class="p">({</span>
+                        <span class="s1">&#39;for&#39;</span><span class="p">:</span> <span class="n">sport</span><span class="p">,</span>
+                        <span class="s1">&#39;static&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s1">&#39;lane&#39;</span><span class="p">:</span> <span class="n">lane</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)})</span>
+                    <span class="n">list_item</span> <span class="o">=</span> <span class="n">xbmcgui</span><span class="o">.</span><span class="n">ListItem</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="n">lane</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+                    <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                        <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                        <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                        <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                        <span class="n">isFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__add_video_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">video</span><span class="p">,</span> <span class="n">list_item</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a playable video item to Kodi</span>
+
+<span class="sd">        :param video: Video details</span>
+<span class="sd">        :type video: dict</span>
+<span class="sd">        :param list_item: Kodi list item</span>
+<span class="sd">        :type list_item: xbmcgui.ListItem</span>
+<span class="sd">        :param url: Video url</span>
+<span class="sd">        :type url: string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">video</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;islivestream&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">xbmcplugin</span><span class="o">.</span><span class="n">addDirectoryItem</span><span class="p">(</span>
+                <span class="n">handle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plugin_handle</span><span class="p">,</span>
+                <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+                <span class="n">listitem</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                <span class="n">isFolder</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__parse_epg_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">use_slots</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">details</span><span class="p">,</span> <span class="n">match_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses an EPG element &amp; returns a list of parsed elements</span>
+
+<span class="sd">        :param use_slots: Slot item</span>
+<span class="sd">        :type use_slots: bool</span>
+<span class="sd">        :param element: Raw EPG element</span>
+<span class="sd">        :type element: dict</span>
+<span class="sd">        :param details: EPG element details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :param match_time: Events match time</span>
+<span class="sd">        :type match_time: string</span>
+<span class="sd">        :returns:  list - EPG element list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># determine event type &amp; parse</span>
+        <span class="k">if</span> <span class="n">use_slots</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">slot_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_slot_events</span><span class="p">(</span>
+                <span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+                <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">slot_event</span> <span class="ow">in</span> <span class="n">slot_events</span><span class="p">:</span>
+                <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slot_event</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target_url</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target_url&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">slot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__parse_regular_event</span><span class="p">(</span>
+                <span class="n">target_url</span><span class="o">=</span><span class="n">target_url</span><span class="p">,</span>
+                <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+                <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">)</span>
+            <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">elements</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ContentLoader.get_player_ids"><a class="viewcode-back" href="../../../index.html#resources.lib.ContentLoader.ContentLoader.get_player_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_player_ids</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses the player id HTML &amp; returns stream &amp; customer ids</span>
+
+<span class="sd">        :param src: Raw HTML</span>
+<span class="sd">        :type src: string</span>
+<span class="sd">        :returns:  tuple - Stream &amp; customer id</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stream_id_raw</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;stream-id=.*&#39;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stream_id_raw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">stream_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;stream-id=.*&#39;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">customer_id</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;customer-id=.*&#39;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">stream_id</span><span class="p">,</span> <span class="n">customer_id</span><span class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__set_item_playable</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">list_item</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets an Kodi item playable</span>
+
+<span class="sd">        :param list_item: Kodi list item</span>
+<span class="sd">        :type list_item: xbmcgui.ListItem</span>
+<span class="sd">        :param title: Title of the video</span>
+<span class="sd">        :type title: string</span>
+<span class="sd">        :returns:  bool - EPG has slot type elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">list_item</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s1">&#39;IsPlayable&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">)</span>
+        <span class="n">list_item</span><span class="o">.</span><span class="n">setInfo</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;genre&#39;</span><span class="p">:</span> <span class="s1">&#39;Sports&#39;</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">list_item</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__use_slots</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if the EPG uses slot type events</span>
+
+<span class="sd">        :param data: Raw EPG data</span>
+<span class="sd">        :type data: dict</span>
+<span class="sd">        :returns:  bool - EPG has slot type elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elements&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__is_playable_video_item</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">video</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if the item is playable</span>
+
+<span class="sd">        :param video: Raw video data</span>
+<span class="sd">        :type data: dict</span>
+<span class="sd">        :returns:  bool - Video is playable</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;videoID&#39;</span> <span class="ow">in</span> <span class="n">video</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, asciidisco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.2.8',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>resources.lib.ItemHelper &mdash; plugin.video.telekom-sport 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="plugin.video.telekom-sport 1.2.8 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> plugin.video.telekom-sport
+          
+
+          
+            
+            <img src="../../../_static/icon.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">plugin.video.telekom-sport</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>resources.lib.ItemHelper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for resources.lib.ItemHelper</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Module: ItemHelper</span>
+<span class="c1"># Author: asciidisco</span>
+<span class="c1"># Created on: 24.07.2017</span>
+<span class="c1"># License: MIT https://goo.gl/WA1kby</span>
+
+<span class="sd">&quot;&quot;&quot;Interface for matching API data with the Kodi item interface&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+
+<div class="viewcode-block" id="ItemHelper"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper">[docs]</a><span class="k">class</span> <span class="nc">ItemHelper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interface for matching API data with the Kodi item interface&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">utils</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Injects instances</span>
+
+<span class="sd">        :param constants: Constants instance</span>
+<span class="sd">        :type constants: resources.lib.Constants</span>
+<span class="sd">        :param utils: Utils instance</span>
+<span class="sd">        :type utils: resources.lib.Utils</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constants</span> <span class="o">=</span> <span class="n">constants</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">utils</span> <span class="o">=</span> <span class="n">utils</span>
+
+<div class="viewcode-block" id="ItemHelper.build_description"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.build_description">[docs]</a>    <span class="k">def</span> <span class="nf">build_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates an item description</span>
+
+<span class="sd">        :param item: Item to be described</span>
+<span class="sd">        :type item: dict</span>
+<span class="sd">        :returns:  string -- Item description</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_bold&#39;</span><span class="p">):</span>
+            <span class="n">desc</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_bold&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_regular&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">desc</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">desc</span> <span class="o">+=</span> <span class="s1">&#39;- &#39;</span>
+            <span class="n">desc</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_regular&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">desc</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">desc</span> <span class="o">+=</span> <span class="s1">&#39;:</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">desc</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_title</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span>
+        <span class="k">return</span> <span class="n">desc</span></div>
+
+<div class="viewcode-block" id="ItemHelper.set_art"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.set_art">[docs]</a>    <span class="k">def</span> <span class="nf">set_art</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_item</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets art for the given item</span>
+
+<span class="sd">        :param list_item: Kodi list item</span>
+<span class="sd">        :type list_item: xbmcgui.ListItem</span>
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        :param item: Item to set art for</span>
+<span class="sd">        :type item: dict</span>
+<span class="sd">        :returns:  xbmcgui.ListItem -- Kodi list item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sports</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_sports_list</span><span class="p">()</span>
+        <span class="n">base_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_base_url</span><span class="p">()</span>
+        <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_sports_art</span><span class="p">(</span>
+            <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+            <span class="n">sport</span><span class="o">=</span><span class="n">sport</span><span class="p">,</span>
+            <span class="n">sports</span><span class="o">=</span><span class="n">sports</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">metatdata</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">):</span>
+                <span class="n">images</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_editorial_art</span><span class="p">(</span>
+                    <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                    <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+                    <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">metatdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">):</span>
+                <span class="n">images</span> <span class="o">=</span> <span class="n">metatdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">)</span>
+                <span class="n">list_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_editorial_art</span><span class="p">(</span>
+                    <span class="n">list_item</span><span class="o">=</span><span class="n">list_item</span><span class="p">,</span>
+                    <span class="n">base_url</span><span class="o">=</span><span class="n">base_url</span><span class="p">,</span>
+                    <span class="n">images</span><span class="o">=</span><span class="n">images</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list_item</span></div>
+
+<div class="viewcode-block" id="ItemHelper.build_page_leave"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.build_page_leave">[docs]</a>    <span class="k">def</span> <span class="nf">build_page_leave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_url</span><span class="p">,</span> <span class="n">details</span><span class="p">,</span> <span class="n">match_time</span><span class="p">,</span> <span class="n">shorts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds the data for an Kodi folder item</span>
+
+<span class="sd">        :param target_url: Plugin target url</span>
+<span class="sd">        :type target_url: string</span>
+<span class="sd">        :param details: EPG element details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :param match_time: Events match time</span>
+<span class="sd">        :type match_time: string</span>
+<span class="sd">        :param shorts: Add shorts desc</span>
+<span class="sd">        :type shorts: dict</span>
+<span class="sd">        :returns:  dict -- List item info properties</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;hash&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">generate_hash</span><span class="p">(</span><span class="n">target_url</span><span class="p">),</span>
+            <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">get_base_url</span><span class="p">()</span> <span class="o">+</span> <span class="n">target_url</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_epg_title</span><span class="p">(</span>
+                <span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">,</span>
+                <span class="n">match_time</span><span class="o">=</span><span class="n">match_time</span><span class="p">),</span>
+            <span class="s1">&#39;shorts&#39;</span><span class="p">:</span> <span class="n">shorts</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="ItemHelper.build_title"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.build_title">[docs]</a>    <span class="k">def</span> <span class="nf">build_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates an title for an item</span>
+
+<span class="sd">        :param item: Item to be described</span>
+<span class="sd">        :type item: dict</span>
+<span class="sd">        :returns:  string -- Item title</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;details&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;details&#39;</span><span class="p">)</span>
+            <span class="n">home</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">name_full</span> <span class="o">=</span> <span class="n">home</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_full&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name_full</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__build_match_title_full</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">name_full</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">home</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_short&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">title</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__build_match_title_short</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__build_fallback_title</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__get_editorial_art</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_item</span><span class="p">,</span> <span class="n">base_url</span><span class="p">,</span> <span class="n">images</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets editorial art for the given item</span>
+
+<span class="sd">        :param list_item: Kodi list item</span>
+<span class="sd">        :type list_item: xbmcgui.ListItem</span>
+<span class="sd">        :param base_url: Image base url</span>
+<span class="sd">        :type base_url: string</span>
+<span class="sd">        :param images: Map of usable images</span>
+<span class="sd">        :type images: dict</span>
+<span class="sd">        :returns:  xbmcgui.ListItem -- Kodi list item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fallback&#39;</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fallback&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;editorial&#39;</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">images</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;editorial&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">list_item</span><span class="o">.</span><span class="n">setArt</span><span class="p">({</span>
+                    <span class="s1">&#39;poster&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span>
+                    <span class="s1">&#39;landscape&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span>
+                    <span class="s1">&#39;thumb&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span>
+                    <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">image</span>
+                <span class="p">})</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;`setArt` not available&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list_item</span>
+
+    <span class="k">def</span> <span class="nf">__get_sports_art</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_item</span><span class="p">,</span> <span class="n">sport</span><span class="p">,</span> <span class="n">sports</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets editorial art for static sport item</span>
+
+<span class="sd">        :param list_item: Kodi list item</span>
+<span class="sd">        :type list_item: xbmcgui.ListItem</span>
+<span class="sd">        :param sport: Chosen sport</span>
+<span class="sd">        :type sport: string</span>
+<span class="sd">        :param sports: Map of available sports</span>
+<span class="sd">        :type sports: dict</span>
+<span class="sd">        :returns:  xbmcgui.ListItem -- Kodi list item</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">list_item</span><span class="o">.</span><span class="n">setArt</span><span class="p">({</span>
+                <span class="s1">&#39;poster&#39;</span><span class="p">:</span> <span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fanart&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;landscape&#39;</span><span class="p">:</span> <span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fanart&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;thumb&#39;</span><span class="p">:</span> <span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">sports</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sport</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fanart&#39;</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;`setArt` not available&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list_item</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__build_fallback_title</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a fallback title</span>
+
+<span class="sd">        :param title: Original title</span>
+<span class="sd">        :type title: string</span>
+<span class="sd">        :param metadata: Item metadata</span>
+<span class="sd">        :type metadata: dict</span>
+<span class="sd">        :returns:  string -- Fallback title</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fallback_title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">title</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">title</span>
+        <span class="n">fallback_title</span> <span class="o">+=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fallback_title</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">fallback_title</span> <span class="o">+=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_regular&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fallback_title</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">fallback_title</span> <span class="o">+=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description_bold&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fallback_title</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__build_match_title_short</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a short match title</span>
+
+<span class="sd">        :param details: Item details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :returns:  string -- Match title (short)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_short&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="s1">&#39; - &#39;</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;away&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_short&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">title</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__build_match_title_full</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a long match title</span>
+
+<span class="sd">        :param details: Item details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :returns:  string -- Match title (long)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_full&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="s1">&#39; - &#39;</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;away&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_full&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">title</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ItemHelper.build_epg_title"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.build_epg_title">[docs]</a>    <span class="k">def</span> <span class="nf">build_epg_title</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">details</span><span class="p">,</span> <span class="n">match_time</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a epg title</span>
+
+<span class="sd">        :param details: Item details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :param match_time: Events match time</span>
+<span class="sd">        :type match_time: string</span>
+<span class="sd">        :returns:  string -- EPG item title</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_full&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="s1">&#39; - &#39;</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;away&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name_full&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">+=</span> <span class="s1">&#39; (&#39;</span> <span class="o">+</span> <span class="n">match_time</span> <span class="o">+</span> <span class="s1">&#39; Uhr)&#39;</span>
+        <span class="k">return</span> <span class="n">title</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ItemHelper.datetime_from_utc"><a class="viewcode-back" href="../../../index.html#resources.lib.ItemHelper.ItemHelper.datetime_from_utc">[docs]</a>    <span class="k">def</span> <span class="nf">datetime_from_utc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">element</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a homan readable time from an items UTC timestamp</span>
+
+<span class="sd">        :param metadata: Item metadata</span>
+<span class="sd">        :type metadata: dict</span>
+<span class="sd">        :param details: Item details</span>
+<span class="sd">        :type details: dict</span>
+<span class="sd">        :returns:  tuple -- Match date &amp; match time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">date_container</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scheduled_start&#39;</span><span class="p">):</span>
+            <span class="n">date_container</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scheduled_start&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">elif</span> <span class="n">element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">date_container</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scheduled_start&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">date_container</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">date_container</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">))</span>
+        <span class="n">match_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+        <span class="n">match_date</span> <span class="o">=</span> <span class="n">match_datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">.%m.%Y&#39;</span><span class="p">)</span>
+        <span class="n">match_time</span> <span class="o">=</span> <span class="n">match_datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%H:%M&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">match_date</span><span class="p">,</span> <span class="n">match_time</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, asciidisco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.2.8',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>addon &mdash; plugin.video.telekom-sport 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="plugin.video.telekom-sport 1.2.8 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> plugin.video.telekom-sport
+          
+
+          
+            
+            <img src="../_static/icon.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">plugin.video.telekom-sport</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>addon</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for addon</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Module: default</span>
+<span class="c1"># Author: asciidisco</span>
+<span class="c1"># Created on: 24.07.2017</span>
+<span class="c1"># License: MIT https://goo.gl/WA1kby</span>
+
+<span class="sd">&quot;&quot;&quot;Kodi plugin for Telekom Sport (https://telekomsport.de)&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">argv</span>
+<span class="kn">from</span> <span class="nn">urlparse</span> <span class="k">import</span> <span class="n">parse_qsl</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Cache</span> <span class="k">import</span> <span class="n">Cache</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Constants</span> <span class="k">import</span> <span class="n">Constants</span>
+<span class="kn">from</span> <span class="nn">resources.lib.ContentLoader</span> <span class="k">import</span> <span class="n">ContentLoader</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Dialogs</span> <span class="k">import</span> <span class="n">Dialogs</span>
+<span class="kn">from</span> <span class="nn">resources.lib.ItemHelper</span> <span class="k">import</span> <span class="n">ItemHelper</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Session</span> <span class="k">import</span> <span class="n">Session</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Settings</span> <span class="k">import</span> <span class="n">Settings</span>
+<span class="kn">from</span> <span class="nn">resources.lib.Utils</span> <span class="k">import</span> <span class="n">Utils</span>
+
+
+<span class="c1"># setup plugin base stuff</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">PLUGIN_HANDLE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">KODI_BASE_URL</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="n">PLUGIN_HANDLE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">KODI_BASE_URL</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="c1"># init plugin object structure</span>
+<span class="n">CONSTANTS</span> <span class="o">=</span> <span class="n">Constants</span><span class="p">()</span>
+<span class="n">CACHE</span> <span class="o">=</span> <span class="n">Cache</span><span class="p">()</span>
+<span class="n">UTILS</span> <span class="o">=</span> <span class="n">Utils</span><span class="p">(</span><span class="n">constants</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="p">,</span> <span class="n">kodi_base_url</span><span class="o">=</span><span class="n">KODI_BASE_URL</span><span class="p">)</span>
+<span class="n">DIALOGS</span> <span class="o">=</span> <span class="n">Dialogs</span><span class="p">(</span><span class="n">utils</span><span class="o">=</span><span class="n">UTILS</span><span class="p">)</span>
+<span class="n">ITEM_HELPER</span> <span class="o">=</span> <span class="n">ItemHelper</span><span class="p">(</span><span class="n">constants</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="p">,</span> <span class="n">utils</span><span class="o">=</span><span class="n">UTILS</span><span class="p">)</span>
+<span class="n">SETTINGS</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">(</span><span class="n">utils</span><span class="o">=</span><span class="n">UTILS</span><span class="p">,</span> <span class="n">dialogs</span><span class="o">=</span><span class="n">DIALOGS</span><span class="p">,</span> <span class="n">constants</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="p">)</span>
+<span class="n">SESSION</span> <span class="o">=</span> <span class="n">Session</span><span class="p">(</span><span class="n">constants</span><span class="o">=</span><span class="n">CONSTANTS</span><span class="p">,</span> <span class="n">util</span><span class="o">=</span><span class="n">UTILS</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="n">SETTINGS</span><span class="p">)</span>
+<span class="n">CONTENT_LOADER</span> <span class="o">=</span> <span class="n">ContentLoader</span><span class="p">(</span>
+    <span class="n">session</span><span class="o">=</span><span class="n">SESSION</span><span class="p">,</span>
+    <span class="n">item_helper</span><span class="o">=</span><span class="n">ITEM_HELPER</span><span class="p">,</span>
+    <span class="n">cache</span><span class="o">=</span><span class="n">CACHE</span><span class="p">,</span>
+    <span class="n">handle</span><span class="o">=</span><span class="n">PLUGIN_HANDLE</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="router"><a class="viewcode-back" href="../index.html#addon.router">[docs]</a><span class="k">def</span> <span class="nf">router</span><span class="p">(</span><span class="n">paramstring</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts paramstrings into dicts &amp; decides which</span>
+<span class="sd">    method should be called in order to display contents</span>
+
+<span class="sd">    :param user: Telekom account email address or user id</span>
+<span class="sd">    :type user: string</span>
+<span class="sd">    :param password: Telekom account password</span>
+<span class="sd">    :type password: string</span>
+<span class="sd">    :returns:  bool -- Matching route found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">parse_qsl</span><span class="p">(</span><span class="n">paramstring</span><span class="p">))</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="c1"># settings action routes</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__settings_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+    <span class="c1"># check login</span>
+    <span class="k">if</span> <span class="n">__login_failed_action</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="c1"># plugin list &amp; video routes</span>
+    <span class="c1"># play a video</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__play_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="c1"># show details of the match found (gamereport, relive, interviews...)</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__match_details_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="c1"># show main menue, selection of sport categories</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__sport_selection_action</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="n">keys</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="c1"># show contents (lanes) scraped from the website</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__event_lane_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="c1"># show list of found matches/videos</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__categories_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="c1"># show contents scraped from the api (with website scraped id)</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="n">__matches_list_action</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="o">=</span><span class="n">processed</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">processed</span></div>
+
+
+<div class="viewcode-block" id="__settings_action"><a class="viewcode-back" href="../index.html#addon.__settings_action">[docs]</a><span class="k">def</span> <span class="nf">__settings_action</span><span class="p">(</span><span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Operates on actions from within the settings pane</span>
+<span class="sd">    Can logout the user, can switch users account</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;logout&#39;</span><span class="p">:</span>
+            <span class="n">SESSION</span><span class="o">.</span><span class="n">logout</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">SESSION</span><span class="o">.</span><span class="n">switch_account</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__login_failed_action"><a class="viewcode-back" href="../index.html#addon.__login_failed_action">[docs]</a><span class="k">def</span> <span class="nf">__login_failed_action</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Veryfies the users login &amp; shows a notification if it failes</span>
+
+<span class="sd">    :param user: Telekom account email address or user id</span>
+<span class="sd">    :type user: string</span>
+<span class="sd">    :param password: Telekom account password</span>
+<span class="sd">    :type password: string</span>
+<span class="sd">    :returns:  bool -- Login succeeded</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">SESSION</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="c1"># show login failed dialog if login didn&#39;t succeed</span>
+        <span class="n">DIALOGS</span><span class="o">.</span><span class="n">show_login_failed_notification</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="__sport_selection_action"><a class="viewcode-back" href="../index.html#addon.__sport_selection_action">[docs]</a><span class="k">def</span> <span class="nf">__sport_selection_action</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show sport selection</span>
+
+<span class="sd">    :param keys: Route paramters keys</span>
+<span class="sd">    :type keys: list</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">show_sport_selection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__match_details_action"><a class="viewcode-back" href="../index.html#addon.__match_details_action">[docs]</a><span class="k">def</span> <span class="nf">__match_details_action</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show match details selection</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">show_match_details</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lane&#39;</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;for&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__matches_list_action"><a class="viewcode-back" href="../index.html#addon.__matches_list_action">[docs]</a><span class="k">def</span> <span class="nf">__matches_list_action</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show matches list selection</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">show_matches_list</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">),</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;for&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__event_lane_action"><a class="viewcode-back" href="../index.html#addon.__event_lane_action">[docs]</a><span class="k">def</span> <span class="nf">__event_lane_action</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show event lane selection</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lane&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">show_event_lane</span><span class="p">(</span>
+            <span class="n">sport</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;for&#39;</span><span class="p">),</span>
+            <span class="n">lane</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lane&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__categories_action"><a class="viewcode-back" href="../index.html#addon.__categories_action">[docs]</a><span class="k">def</span> <span class="nf">__categories_action</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Show categories selection</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_for</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;for&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_for</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">show_sport_categories</span><span class="p">(</span>
+            <span class="n">sport</span><span class="o">=</span><span class="n">_for</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="__play_action"><a class="viewcode-back" href="../index.html#addon.__play_action">[docs]</a><span class="k">def</span> <span class="nf">__play_action</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">processed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Play an item</span>
+
+<span class="sd">    :param params: Route paramters</span>
+<span class="sd">    :type params: dict</span>
+<span class="sd">    :param processed: Other route already matched</span>
+<span class="sd">    :type processed: bool</span>
+<span class="sd">    :returns:  bool -- Route matched</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">video_id</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;video_id&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">video_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">processed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">CONTENT_LOADER</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">video_id</span><span class="o">=</span><span class="n">video_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># Load addon data &amp; start plugin</span>
+    <span class="n">ADDON</span> <span class="o">=</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">get_addon</span><span class="p">()</span>
+    <span class="n">ADDON_DATA</span> <span class="o">=</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">get_addon_data</span><span class="p">()</span>
+    <span class="n">UTILS</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Started (Version &#39;</span> <span class="o">+</span> <span class="n">ADDON_DATA</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+    <span class="c1"># show user settings dialog if settings are not complete</span>
+    <span class="c1"># store the credentials if user added them</span>
+    <span class="k">if</span> <span class="n">SETTINGS</span><span class="o">.</span><span class="n">has_credentials</span><span class="p">():</span>
+        <span class="n">USER</span><span class="p">,</span> <span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">SETTINGS</span><span class="o">.</span><span class="n">get_credentials</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">USER</span><span class="p">,</span> <span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">SETTINGS</span><span class="o">.</span><span class="n">set_credentials</span><span class="p">()</span>
+    <span class="c1"># Call the router function and pass</span>
+    <span class="c1"># the plugin call parameters to it.</span>
+    <span class="c1"># We use string slicing to trim the</span>
+    <span class="c1"># leading &#39;?&#39; from the plugin call paramstring</span>
+    <span class="n">router</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span> <span class="n">user</span><span class="o">=</span><span class="n">USER</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">PASSWORD</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, asciidisco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.2.8',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

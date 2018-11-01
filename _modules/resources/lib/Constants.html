@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>resources.lib.Constants &mdash; plugin.video.telekom-sport 1.2.8 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="plugin.video.telekom-sport 1.2.8 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> plugin.video.telekom-sport
+          
+
+          
+            
+            <img src="../../../_static/icon.png" class="logo" />
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.2.8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">plugin.video.telekom-sport</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>resources.lib.Constants</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for resources.lib.Constants</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Module: Constants</span>
+<span class="c1"># Author: asciidisco</span>
+<span class="c1"># Created on: 24.07.2017</span>
+<span class="c1"># License: MIT https://goo.gl/WA1kby</span>
+
+<span class="sd">&quot;&quot;&quot;Static links &amp; list of sports&quot;&quot;&quot;</span>
+
+<span class="c1"># KODI addon id</span>
+<span class="n">ADDON_ID</span> <span class="o">=</span> <span class="s1">&#39;plugin.video.telekom-sport&#39;</span>
+
+<span class="c1"># urls for login &amp; data retrival</span>
+<span class="n">PRL</span> <span class="o">=</span> <span class="s1">&#39;https://&#39;</span>
+<span class="n">BASE_URL</span> <span class="o">=</span> <span class="n">PRL</span> <span class="o">+</span> <span class="s1">&#39;www.telekomsport.de&#39;</span>
+<span class="n">LOGIN_LINK</span> <span class="o">=</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/service/auth/web/login?headto=&#39;</span> <span class="o">+</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/info&#39;</span>
+<span class="n">LOGIN_ENDPOINT</span> <span class="o">=</span> <span class="n">PRL</span> <span class="o">+</span> <span class="s1">&#39;accounts.login.idm.telekom.com/sso&#39;</span>
+<span class="n">EPG_URL</span> <span class="o">=</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/api/v1/&#39;</span>
+<span class="n">STREAM_ROUTE</span> <span class="o">=</span> <span class="s1">&#39;/service/player/streamAccess&#39;</span>
+<span class="n">STREAM_PARAMS</span> <span class="o">=</span> <span class="s1">&#39;videoId=%VIDEO_ID%&amp;label=2780_hls&#39;</span>
+<span class="n">STREAM_DEFINITON_URL</span> <span class="o">=</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="n">STREAM_ROUTE</span> <span class="o">+</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">STREAM_PARAMS</span>
+<span class="n">FANART_URL</span> <span class="o">=</span> <span class="n">PRL</span> <span class="o">+</span> <span class="s1">&#39;raw.githubusercontent.com/hubsif/kodi-telekomsport/master&#39;</span>
+
+<span class="c1"># core event types</span>
+<span class="n">SPORTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;liga3&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/3liga.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/3.liga.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;3. Liga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;3. Liga&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;fussball/3-liga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;del&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/del.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/del.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Deutsche Eishockey Liga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;eishockey/del&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;ffb&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/frauenbundesliga.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/frauen-bundesliga.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Frauen-Bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;fussball/frauen-bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;fcb&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/fcbayerntv.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/fcbtv.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;FC Bayern.TV&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;fc-bayern-tv-live&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;bbl&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/easyCredit.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/bbl.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Easycredit BBL&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;basketball/bbl&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;bel&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/euroleague.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/euroleague.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Basketball Turkish Airlines Euroleague&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;basketball/euroleague&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;eurobasket&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;http://www.fiba.basketball/img/12104_logo_landscape.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/eurobasket.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;FIBA Eurobasket&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;basketball/eurobasket2017&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;skybuli&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/sky-bundesliga.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/bundesliga.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Sky Bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;sky/bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;skychamp&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/sky-cl.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/uefa.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Sky Champions League&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;sky/champions-league&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;skyhandball&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">BASE_URL</span> <span class="o">+</span> <span class="s1">&#39;/images/packete/DKB.png&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fanart&#39;</span><span class="p">:</span> <span class="n">FANART_URL</span> <span class="o">+</span> <span class="s1">&#39;/resources/fanart/hbl.jpg&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Handball Bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;indicators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="s1">&#39;sky/handball-bundesliga&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;epg&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="c1"># static menu items for various lists</span>
+<span class="n">STATICS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;liga3&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;categories&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Alle Spieltage&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;spieltage&#39;</span><span class="p">,</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Suche nach Datum&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="s1">&#39;bydate&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="Constants"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants">[docs]</a><span class="k">class</span> <span class="nc">Constants</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Access methods for static links &amp; list of sports&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_base_url"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_base_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_base_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the Telekom sport base HTTP address</span>
+
+<span class="sd">        :returns:  string -- Base address</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BASE_URL</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_login_link"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_login_link">[docs]</a>    <span class="k">def</span> <span class="nf">get_login_link</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the Telekom Sport login HTTP route</span>
+
+<span class="sd">        :returns:  string -- Login route</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LOGIN_LINK</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_login_endpoint"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_login_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">get_login_endpoint</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the Telekom login SSO endpoint</span>
+
+<span class="sd">        :returns:  string -- SSO login endpoint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LOGIN_ENDPOINT</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_epg_url"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_epg_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_epg_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the EPG API URL</span>
+
+<span class="sd">        :returns:  string -- EPG API URL</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">EPG_URL</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_stream_definition_url"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_stream_definition_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_stream_definition_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the stream defintion URL,</span>
+<span class="sd">        used to get the final stream URL.</span>
+<span class="sd">        It contains a `%VIDEO_ID%` placeholder,</span>
+<span class="sd">        that needs to be replaced in order to</span>
+<span class="sd">        fetch the streams</span>
+
+<span class="sd">        :returns:  string -- EPG API URL</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">STREAM_DEFINITON_URL</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_sports_list"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_sports_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_sports_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the list of available sports</span>
+
+<span class="sd">        :returns:  dict -- List of available sports</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SPORTS</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_statics_list"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_statics_list">[docs]</a>    <span class="k">def</span> <span class="nf">get_statics_list</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns list of static menu items for various categories</span>
+
+<span class="sd">        :returns:  dict -- List of static menu items for various categories</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">STATICS</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Constants.get_addon_id"><a class="viewcode-back" href="../../../index.html#resources.lib.Constants.Constants.get_addon_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_addon_id</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the addon id</span>
+
+<span class="sd">        :returns:  string -- Addon ID</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ADDON_ID</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, asciidisco.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.2.8',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

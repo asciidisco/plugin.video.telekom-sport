@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.telekom-sport" version="1.2.7" name="Telekom Sport" provider-name="asciidisco">
+<addon id="plugin.video.telekom-sport" version="1.2.8" name="Telekom Sport" provider-name="asciidisco">
     <requires>
         <import addon="xbmc.python" version="2.24.0"/>
         <import addon="script.module.pydes" version="2.0.1"/>
@@ -30,12 +30,10 @@
         <email>public at asciidisco dot com</email>
         <source>https://github.com/asciidisco/plugin.video.telekom-sport</source>
         <forum>https://www.kodinerds.net/index.php/Thread/57586-PreRelease-Telekom-Sport/</forum>
-        <news>v1.2.7 (2017-10-09):
-- asciidisco/plugin.video.telekomsport.
-- Fixes issue with old doc versions being uploaded.
-- Fixing build script.
-- Fixes problems with parsing cookie files.
-- Adds ability to enable processing of invalid SSL certs.
-- Version bump</news>
+        <news>v1.2.8 (2018-11-01):
+- Adds issue template [skip ci]
+- Adds restructured test & yaml linter
+- Update Session.py. fixes asciidisco/plugin.video.telekom-sport/issues/7
+- Fixes linting issues in yml files</news>
     </extension>
 </addon>

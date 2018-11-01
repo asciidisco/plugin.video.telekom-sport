@@ -1,9 +1,39 @@
 Changelog
 =========
 
+[1.2.8 (2018-11-01)](https://github.com/asciidisco/plugin.video.telekom-sport/releases/tag/1.2.8)
+------------------
+
+- **chore:**
+  - *github:*
+    - Adds issue template [skip ci]
+      [[asciidisco](https://github.com/asciidisco)]
+  - *dependencies:*
+    - Adds restructured test & yaml
+      linter
+      [[ci skip](https://github.com/ci skip)]
+- **misc:**
+  - *misc:*
+    - Update Session.py. fixes
+      asciidisco/plugin.video.telekom-sport/issues/7
+      [[Benjamin](https://github.com/Benjamin)]
+- **-sport/issues/7style:**
+  - *config:*
+    - Fixes linting issues in yml files
+      [[ci skip](https://github.com/ci skip)]
+
 [1.2.7 (2017-10-09)](https://github.com/asciidisco/plugin.video.telekom-sport/releases/tag/1.2.7)
 ------------------
 
+- **chore:**
+  - *version:*
+    - Version bump [ci skip]
+      [[travis-ci](https://github.com/travis-ci)]
+- **fix:**
+  - *fileio:*
+    - Fixes problems with parsing cookie
+      files.
+      [[asciidisco](https://github.com/asciidisco)]
 - **misc:**
   - *misc:*
     - asciidisco/plugin.video.telekomsport.
@@ -16,20 +46,15 @@ Changelog
   - *travis:*
     - Fixing build script.
       [[asciidisco](https://github.com/asciidisco)]
-- **fix:**
-  - *fileio:*
-    - Fixes problems with parsing cookie
-      files.
-      [[asciidisco](https://github.com/asciidisco)]
+- **-sport:  chore:**
+  - *version:*
+    - Version bump
+      [[ci skip](https://github.com/ci skip)]
 - **feat:**
   - *http:*
     - Adds ability to enable processing
       of invalid SSL certs.
       [[asciidisco](https://github.com/asciidisco)]
-- **-sport:  chore:**
-  - *version:*
-    - Version bump
-      [[ci skip](https://github.com/ci skip)]
 
 [1.2.6 (2017-10-06)](https://github.com/asciidisco/plugin.video.telekom-sport/releases/tag/1.2.6)
 ------------------
@@ -107,10 +132,6 @@ Changelog
 [1.2.3 (2017-10-04)](https://github.com/asciidisco/plugin.video.telekom-sport/releases/tag/1.2.3)
 ------------------
 
-- **chore:**
-  - *version:*
-    - Version bump [ci skip]
-      [[travis-ci](https://github.com/travis-ci)]
 - **docs:**
   - *plugin:*
     - Improves documentation.
@@ -124,6 +145,10 @@ Changelog
   - *travis:*
     - fixes docs generator.
       [[asciidisco](https://github.com/asciidisco)]
+- **chore:**
+  - *version:*
+    - Version bump [ci skip]
+      [[travis-ci](https://github.com/travis-ci)]
 - **build:**
   - *travis:*
     - Fixing release script.

@@ -6,15 +6,11 @@
     "type": "git"
   }, 
   "author": "Sebastian Golasch <public@asciidisco.com> (http://asciidisco.com/)", 
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }, 
+  "homepage": "https://github.com/asciidisco/plugin.video.telekom-sport#readme", 
   "bugs": {
     "url": "https://github.com/asciidisco/plugin.video.telekom-sport/issues"
   }, 
-  "version": "1.2.8", 
+  "version": "1.2.9", 
   "scripts": {
     "precommit": "make lint", 
     "gcz": "git-cz", 
@@ -25,6 +21,10 @@
     "cz-conventional-changelog": "2.0.0", 
     "husky": "0.14.3"
   }, 
-  "homepage": "https://github.com/asciidisco/plugin.video.telekom-sport#readme", 
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }, 
   "description": "Telekom Sport is a portal for live Icehockey, Basketball, German 3rd Ligue, Sky Handball, Sky Bundeliga/Champions-League conferences &amp; womans football matches."
 }
